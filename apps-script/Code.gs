@@ -11,7 +11,7 @@ var HEADERS = [
   'Timestamp', 'Full name', 'Contact', 'Attending',
   'Plus ones (count)', 'Plus one names',
   'Children (count)', 'Children ages',
-  'Dietary', 'Staying the night',
+  'Dietary', 'Staying the night', 'Song request',
   'Singles opt-in', 'Singles: 3 words', 'Singles: ideal date', 'Singles: Instagram', 'Singles consent',
   'Note'
 ];
@@ -31,24 +31,28 @@ function doPost(e) {
     var yesNo = function (x) { return x === 'Yes' ? 'Yes' : 'No'; };
     var going = d.attending === 'Yes';
 
-    sheet.appendRow([
-      Utilities.formatDate(new Date(), 'Asia/Singapore', 'yyyy-MM-dd HH:mm:ss'),
-      clean_(d.name),
-      clean_(d.phone),
-      going ? 'Yes' : 'No',
-      going ? num_(d.plusCount, 2) : 0,
-      clean_(d.plusNames),
-      going ? num_(d.kidsCount, 3) : 0,
-      clean_(d.kidsAges),
-      clean_(d.dietary),
-      yesNo(d.stay),
-      yesNo(d.singles),
-      clean_(d.singlesWords),
-      clean_(d.singlesDate),
-      clean_(d.singlesInstagram),
-      yesNo(d.singlesConsent),
-      clean_(d.note)
-    ]);
+    // values by column name, so the row lines up with whatever order the sheet's headers are in
+    var values = {
+      'Timestamp': Utilities.formatDate(new Date(), 'Asia/Singapore', 'yyyy-MM-dd HH:mm:ss'),
+      'Full name': clean_(d.name),
+      'Contact': clean_(d.phone),
+      'Attending': going ? 'Yes' : 'No',
+      'Plus ones (count)': going ? num_(d.plusCount, 2) : 0,
+      'Plus one names': clean_(d.plusNames),
+      'Children (count)': going ? num_(d.kidsCount, 3) : 0,
+      'Children ages': clean_(d.kidsAges),
+      'Dietary': clean_(d.dietary),
+      'Staying the night': yesNo(d.stay),
+      'Song request': clean_(d.song),
+      'Singles opt-in': yesNo(d.singles),
+      'Singles: 3 words': clean_(d.singlesWords),
+      'Singles: ideal date': clean_(d.singlesDate),
+      'Singles: Instagram': clean_(d.singlesInstagram),
+      'Singles consent': yesNo(d.singlesConsent),
+      'Note': clean_(d.note)
+    };
+    var headers = headers_(sheet);
+    sheet.appendRow(headers.map(function (h) { return values.hasOwnProperty(h) ? values[h] : ''; }));
 
     return json_({ ok: true });
   } catch (err) {
@@ -82,27 +86,41 @@ function ensureSheets_() {
     sheet.appendRow(HEADERS);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold').setBackground('#c6d7b2');
     sheet.setFrozenRows(1);
+  } else {
+    // an older sheet: add any new columns (e.g. "Song request") at the END, so existing rows stay correct
+    var have = headers_(sheet);
+    HEADERS.forEach(function (h) {
+      if (have.indexOf(h) === -1) {
+        var col = have.length + 1;
+        sheet.getRange(1, col).setValue(h).setFontWeight('bold').setBackground('#c6d7b2');
+        have.push(h);
+      }
+    });
   }
 
   if (!ss.getSheetByName(SUMMARY_TAB)) {
     var s = ss.insertSheet(SUMMARY_TAB);
     var r = "'" + RSVP_TAB + "'!";
+    var hs = headers_(sheet);
+    var c = function (name) { return colLetter_(hs.indexOf(name) + 1); };   // column letter for a header
+    var B = c('Full name'), D = c('Attending'), E = c('Plus ones (count)'), G = c('Children (count)'),
+        I = c('Dietary'), J = c('Staying the night'), K = c('Singles opt-in'), O = c('Singles consent');
     var rows = [
       ['What', 'Number'],
-      ['RSVPs received', '=COUNTA(' + r + 'B2:B)'],
-      ['Attending (people who said yes)', '=COUNTIF(' + r + 'D2:D,"Yes")'],
-      ['Not attending', '=COUNTIF(' + r + 'D2:D,"No")'],
-      ['Plus ones', '=SUMIF(' + r + 'D2:D,"Yes",' + r + 'E2:E)'],
-      ['Children', '=SUMIF(' + r + 'D2:D,"Yes",' + r + 'G2:G)'],
+      ['RSVPs received', '=COUNTA(' + r + B + '2:' + B + ')'],
+      ['Attending (people who said yes)', '=COUNTIF(' + r + D + '2:' + D + ',"Yes")'],
+      ['Not attending', '=COUNTIF(' + r + D + '2:' + D + ',"No")'],
+      ['Plus ones', '=SUMIF(' + r + D + '2:' + D + ',"Yes",' + r + E + '2:' + E + ')'],
+      ['Children', '=SUMIF(' + r + D + '2:' + D + ',"Yes",' + r + G + '2:' + G + ')'],
       ['TOTAL GUESTS (attending + plus ones + children)', '=B3+B5+B6'],
-      ['Interested in staying the night', '=COUNTIFS(' + r + 'D2:D,"Yes",' + r + 'J2:J,"Yes")'],
-      ['Singles opted in (with consent)', '=COUNTIFS(' + r + 'K2:K,"Yes",' + r + 'O2:O,"Yes")'],
+      ['Interested in staying the night', '=COUNTIFS(' + r + D + '2:' + D + ',"Yes",' + r + J + '2:' + J + ',"Yes")'],
+      ['Singles opted in (with consent)', '=COUNTIFS(' + r + K + '2:' + K + ',"Yes",' + r + O + '2:' + O + ',"Yes")'],
       ['', ''],
       ['Dietary needs (name → need)', '']
     ];
     s.getRange(1, 1, rows.length, 2).setValues(rows);
     s.getRange('A12').setFormula(
-      '=IFERROR(FILTER({' + r + 'B2:B,' + r + 'I2:I},' + r + 'I2:I<>"",' + r + 'D2:D="Yes"),"None yet")'
+      '=IFERROR(FILTER({' + r + B + '2:' + B + ',' + r + I + '2:' + I + '},' + r + I + '2:' + I + '<>"",' + r + D + '2:' + D + '="Yes"),"None yet")'
     );
     s.getRange('A1:B1').setFontWeight('bold').setBackground('#c6d7b2');
     s.getRange('A7:B7').setFontWeight('bold');
@@ -111,6 +129,20 @@ function ensureSheets_() {
     s.setColumnWidth(2, 220);
   }
   return sheet;
+}
+
+/** The sheet's header row, as a list of names. */
+function headers_(sheet) {
+  var n = sheet.getLastColumn();
+  if (n === 0) return [];
+  return sheet.getRange(1, 1, 1, n).getValues()[0].map(function (h) { return String(h).trim(); });
+}
+
+/** 1 -> A, 27 -> AA */
+function colLetter_(n) {
+  var s = '';
+  while (n > 0) { var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); }
+  return s;
 }
 
 /** Trim, cap the length, and stop text being treated as a formula (e.g. a phone number starting with +). */

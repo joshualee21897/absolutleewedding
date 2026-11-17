@@ -14,7 +14,8 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 |---|---|
 | `index.html` | The whole website. Your settings (the `CONFIG` section) are near the bottom of this file. |
 | `img/groom.png`, `img/bride.png` | Your two characters. |
-| `img/bg.jpg`, `img/bg-desktop.jpg` | The painted meadow backgrounds on the opening maze screen (compressed): the tall one for phones, the wide one for screens wider than 900px. |
+| `img/bg.jpg`, `img/bg-desktop.jpg` | The painted meadow backgrounds behind the whole site (compressed): the tall one for phones, the wide one for screens wider than 900px. |
+| `img/then.jpg`, `img/now.jpg` | *(you add these)* Your childhood photo and a photo of you today, for the "then & now" slider. See Part D. |
 | `img/originals/` | Full-quality copies of both backgrounds, kept as a backup. |
 | `og-image.png` | The picture people see when you share the link on WhatsApp. |
 | `apps-script/Code.gs` | The small Google script that saves RSVPs into your Sheet. |
@@ -64,14 +65,17 @@ You don't need any coding knowledge. Set aside about 20 minutes.
    ```
 3. Save the file.
 
-### 6. If you ever change the script later
-Always update the **existing** deployment. That way the URL stays the same and you don't have to change the website.
-1. In Apps Script, click **Deploy → Manage deployments**.
-2. Select your "RSVP form" deployment and click the **✏️ pencil (Edit)** icon.
-3. Under **Version**, choose **New version**.
-4. Click **Deploy**.
+### 6. If you ever change the script later (redeploy, same URL)
+Whenever `apps-script/Code.gs` changes, paste the new code in and update the **existing** deployment. That way the URL stays the same and you don't have to change the website.
+1. In Apps Script, select everything in `Code.gs`, delete it, paste in the new `apps-script/Code.gs`, and click **💾 Save**.
+2. Click **Deploy → Manage deployments**.
+3. Select your "RSVP form" deployment and click the **✏️ pencil (Edit)** icon.
+4. Under **Version**, choose **New version**.
+5. Click **Deploy**.
 
 (If you click "New deployment" instead, you'll get a *new* URL and would have to paste it into `index.html` again.)
+
+> **Song request update:** the RSVP form now asks "Which song gets you on the dance floor?". Do the 5 steps above once so your Sheet saves it. If your RSVPs tab already has a header row, a **Song request** column is added at the far right, so older rows stay exactly as they are. On a brand-new Sheet it appears right after **Staying the night**. Until you redeploy, RSVPs still save, just without the song.
 
 ### Reading your RSVPs
 - **RSVPs tab:** one row per reply, newest at the bottom, with the time in Singapore time.
@@ -121,8 +125,22 @@ Open `index.html`, search for `const CONFIG`, and fill in or check each line. Ke
 - [ ] **`parkingNote`** (optional): e.g. whether you'll validate parking.
 - [ ] Re-check the **bus timings** in the "Getting there" section closer to the day.
 
+- [ ] Add your **then & now** photos (Part D).
+
 Then do a final test on your phone:
 1. Open the live link from WhatsApp.
 2. Solve the maze.
 3. Send a test RSVP and check that it appears in your Sheet.
 4. Delete the test row before you send the link to guests.
+
+---
+
+## Part D: Then & now photos
+
+The "How it all started" section has a slider guests drag to go from your childhood photos to you today. Until you add photos it shows cream "then" and "now" placeholders.
+
+1. Pick two photos: one of you as kids (**then**) and one of you now (**now**).
+2. Crop both to the **same portrait shape, 4:5** (e.g. 1080 × 1350 pixels). On iPhone: Photos → Edit → Crop → the aspect icon → **4:5**. Try to line your faces up at about the same height in both, so the reveal looks neat.
+3. Name them exactly `then.jpg` and `now.jpg` and put them in the `img` folder.
+4. Keep each under **300KB** so the page loads fast on mobile data. Easiest: send them to me and I'll crop and compress them. Or use [squoosh.app](https://squoosh.app) (MozJPEG, quality about 75).
+5. Re-upload the folder to Netlify (Part B, "Updating the site later"). The photos replace the placeholders automatically.
