@@ -128,40 +128,59 @@ section{position:relative;display:flex;flex-direction:column;align-items:center;
 p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .sec{color:var(--ink2)}
 
-/* hero */
-.hero{min-height:100vh;min-height:100svh;justify-content:center;gap:6px;padding:28px 0 20px;text-shadow:var(--glow)}
-/* arch photo frame; characters stand at its bottom corners */
-.arch{position:relative;width:240px;margin:0 auto 14px}
-.arch-frame{position:relative;display:block;aspect-ratio:4/5;border-radius:120px 120px 16px 16px;overflow:hidden;border:4px solid var(--paper);
-  background:#f6efe2;box-shadow:0 14px 34px rgba(60,70,40,.2)}
-.arch-frame img.photo{display:none;width:100%;height:100%;object-fit:cover}
-.arch.has-img .arch-frame img.photo{display:block}
-.arch-pair{position:absolute;inset:auto 0 10% 0;display:flex;justify-content:center;align-items:flex-end}
-.arch-pair img{height:150px;width:auto}
-.arch.has-img .arch-pair{display:none}
-.arch .side{position:absolute;bottom:-10px;height:84px;width:auto;display:none;filter:drop-shadow(0 4px 6px rgba(60,70,40,.18))}
-.arch .side.l{left:-46px}
-.arch .side.r{right:-46px}
-.arch.has-img .side{display:block}
-@media (max-height:720px) and (max-width:899px){ .arch{width:152px;margin-bottom:10px} .arch-frame{border-radius:76px 76px 12px 12px} .arch-pair img{height:96px} .arch .side{height:62px} .arch .side.l{left:-34px} .arch .side.r{right:-34px} .hero .names{font-size:2.3rem} }
-@media (min-width:900px){ .arch{width:min(300px,29vh)} .arch-frame{border-radius:150px 150px 18px 18px} .arch-pair img{height:190px} .arch .side{height:100px} .arch .side.l{left:-58px} .arch .side.r{right:-58px} }
-.hero .tag{font-weight:500;font-size:1.05rem}
-.hero .names{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(2.4rem,11vw,3.6rem);line-height:1.02;margin:2px 0}
-.hero .names em{display:block;font-size:.55em;margin:2px 0}
-.hero .names:focus{outline:none}
-/* hero countdown */
-.hcd{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:12px}
-.hcd-count{font-variant-numeric:tabular-nums;line-height:1.2;white-space:nowrap}
-.hcd-count .n{font-weight:600;font-size:1.6rem}
-.hcd-count .u{font-weight:400;font-size:.95rem;margin-right:4px}
-.hcd-count .u:last-child{margin-right:0}
-.hcd-sub{font-weight:400;font-size:1rem;line-height:1.3;margin-top:4px}
-.hcd-big{font-family:var(--display);font-style:italic;font-size:2.4rem;line-height:1.05}
-.hcd-date{font-family:var(--display);font-style:italic;font-size:1.3rem;line-height:1.2}
-@media (min-width:900px){ .hcd-count .n{font-size:2rem} .hcd-count .u{font-size:1.1rem} .hcd-sub{font-size:1.1rem} .hcd-big{font-size:3.2rem} }
-.scroll-hint{margin-top:14px;display:inline-flex;flex-direction:column;align-items:center;gap:0;color:var(--ink);text-decoration:none;font-size:.85rem;font-weight:500}
-.scroll-hint svg{width:30px;height:30px;animation:bob 1.8s ease-in-out infinite}
+/* hero: oval countdown, then a scroll-driven proposal scene */
+.hero{text-shadow:var(--glow);gap:0}
+.hcd{display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 0 6px;outline:none}
+.cd-oval{position:relative;display:flex;align-items:flex-start;justify-content:center;gap:2px;padding:22px 26px 20px;font-variant-numeric:tabular-nums}
+.cd-oval .oval{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cd-unit{position:relative;display:flex;flex-direction:column;align-items:center;min-width:2.1ch}
+.cd-unit b{font-weight:500;font-size:clamp(2.05rem,10.2vw,2.6rem);line-height:1.1}
+.cd-unit small{font-size:.75rem;font-weight:400;letter-spacing:.04em}
+.cd-oval i{position:relative;font-style:normal;font-weight:500;font-size:clamp(1.8rem,8.5vw,2.2rem);line-height:1.15;color:#e79aae;padding:0 2px}
+.cd-oval.done{font-size:1.6rem;font-weight:500;padding:26px 34px}
+.hcd-sub{font-weight:400;font-size:1rem;line-height:1.3}
+.hcd-big{font-family:var(--display);font-style:italic;font-size:2.4rem;line-height:1.05;margin:2px 0}
+.start-hint{margin-top:6px;font-size:.85rem;font-weight:500}
+@media (min-width:900px){ .cd-unit b{font-size:3.4rem} .cd-oval i{font-size:2.8rem} .cd-unit small{font-size:.8rem} .hcd-sub{font-size:1.1rem} .hcd-big{font-size:3.2rem} .hcd{padding-top:48px} }
+
+/* the scene stays put (sticky) while the guest scrolls through the track; JS maps scroll progress 0..1 to the animation */
+.ptrack{position:relative;width:100%;height:150vh}
+.pstage{position:sticky;top:calc(50vh - 170px);height:340px}
+@supports (height:100svh){ .pstage{top:calc(50svh - 170px)} }
+.pscene{position:relative;width:min(400px,100%);height:100%;margin:0 auto;overflow:hidden}
+.boy,.girl{position:absolute;bottom:104px;will-change:transform}
+.boy{left:13%;height:150px;aspect-ratio:489/600;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:12px}
+.boy:focus-visible{outline:3px solid rgba(62,90,68,.55);outline-offset:4px}
+.boy img,.boy .boxlid{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;-webkit-user-drag:none}
+/* two copies of his drawing: A without the ring-box area, B with only that area (fades in once the lid opens) */
+.boy .boy-a{clip-path:polygon(0 0,100% 0,100% 20.6%,70.5% 20.6%,70.5% 38.7%,100% 38.7%,100% 100%,0 100%)}
+.boy .boy-b{clip-path:inset(20.6% 0 61.3% 70.5%);opacity:0}
+.boy .boy-closed{opacity:1}
+.boy.has-closed .boy-a{clip-path:none;opacity:0}
+.boy.has-closed .boy-b,.boy.has-closed .boxlid{display:none}
+.boxlid{overflow:visible}
+.boxlid .lid{transform-box:view-box;transform-origin:368px 226px}
+.sparks{position:absolute;left:90.4%;top:28%;width:0;height:0}
+.sparks span{position:absolute;left:-6px;top:-6px;width:12px;height:12px;opacity:0;background:var(--c);
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.girl{right:8%;height:160px;width:auto}
+.ground{position:absolute;bottom:94px;height:22px;border-radius:50%;background:radial-gradient(closest-side,rgba(62,90,68,.18),transparent)}
+.ground.g1{left:10%;width:38%} .ground.g2{right:4%;width:36%}
+.p-hearts{position:absolute;inset:0;pointer-events:none}
+.p-hearts span{position:absolute;left:50%;top:150px;width:var(--s);height:var(--s);margin-left:calc(var(--s) / -2);opacity:0;will-change:transform,opacity}
+.p-hearts svg{display:block;width:100%;height:100%}
+.p-cap{position:absolute;left:0;right:0;bottom:50px;font-family:var(--display);font-style:italic;font-size:1.9rem;line-height:1.2;opacity:0}
+.p-more{position:absolute;left:50%;bottom:0;transform:translateX(-50%);opacity:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.scroll-hint{display:inline-flex;flex-direction:column;align-items:center;gap:0;color:var(--ink);text-decoration:none;font-size:.85rem;font-weight:500}
+.scroll-hint svg{width:28px;height:28px;animation:bob 1.8s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(6px)}}
+@media (min-width:900px){
+  .pstage{height:420px;top:calc(50vh - 210px)}
+  .pscene{width:min(520px,100%)}
+  .boy,.girl{bottom:120px} .boy{height:190px;left:16%} .girl{height:200px;right:12%} .ground{bottom:108px}
+  .p-hearts span{top:180px} .p-cap{font-size:2.3rem;bottom:56px}
+}
 
 /* our story: polaroid flip cards */
 .story-row{display:flex;gap:16px;width:calc(100% + 40px);margin:6px -20px 0;padding:14px 12.5% 22px;overflow-x:auto;scroll-snap-type:x mandatory;
@@ -360,28 +379,56 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 <!-- ============ INVITATION ============ -->
 <main>
 
-    <section class="hero">
-      <div class="arch" id="arch">
-        <span class="arch-frame">
-          <img class="photo" src="img/hero.jpg" alt="Joshua and Rochelle">
-          <span class="arch-pair" aria-hidden="true"><img src="img/groom.png" alt=""><img src="img/bride.png" alt=""></span>
-        </span>
-        <img class="side l" src="img/groom.png" alt="" aria-hidden="true">
-        <img class="side r" src="img/bride.png" alt="" aria-hidden="true">
-      </div>
-      <p class="tag">together with our families</p>
-      <h1 class="names">Joshua<em>&amp;</em>Rochelle</h1>
-      <p class="tag">are tying the knot in the rainforest</p>
-      <div class="hcd">
-        <p class="hcd-count" id="hcd-count"><span class="n" id="cd-d">–</span> <span class="u" id="cd-du">days</span> <span class="n" id="cd-h">–</span> <span class="u" id="cd-hu">hours</span> <span class="n" id="cd-m">–</span> <span class="u" id="cd-mu">minutes</span></p>
+    <section class="hero" id="hero">
+      <div class="hcd" tabindex="-1">
+        <div class="cd-oval" id="cd-oval">
+          <svg class="oval doodle" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M150 4 C260 2 298 30 296 52 C294 80 240 97 150 96 C60 96 4 82 4 50 C4 22 50 6 158 8" fill="none" stroke="#3e5a44" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          </svg>
+          <div class="cd-unit"><b id="cd-d">–</b><small>days</small></div><i aria-hidden="true">:</i>
+          <div class="cd-unit"><b id="cd-h">–</b><small>hours</small></div><i aria-hidden="true">:</i>
+          <div class="cd-unit"><b id="cd-m">–</b><small>mins</small></div><i aria-hidden="true">:</i>
+          <div class="cd-unit"><b id="cd-s">–</b><small>secs</small></div>
+        </div>
         <p class="hcd-sub">until Joshua and Rochelle say</p>
-        <p class="hcd-big">AbsolutLEE I Do</p>
-        <p class="hcd-date">on 17 July 2027</p>
+        <p class="hcd-big">absolut<span>LEE</span>, I do</p>
+        <p class="hcd-sub">on 17 July 2027</p>
+        <p class="start-hint" id="start-hint" aria-hidden="true">scroll ↓</p>
       </div>
-      <a class="scroll-hint" href="#story" aria-label="Scroll down to read more">
-        <span aria-hidden="true">scroll</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </a>
+
+      <!-- scroll-to-propose scene -->
+      <div class="ptrack" id="ptrack">
+        <div class="pstage" id="pstage">
+          <div class="pscene" id="pscene">
+            <p class="sr-only">Joshua kneels with a ring and proposes to Rochelle. She said yes.</p>
+            <span class="ground g1" aria-hidden="true"></span><span class="ground g2" aria-hidden="true"></span>
+            <div class="p-hearts" id="p-hearts" aria-hidden="true"></div>
+            <button class="boy" id="p-boy" type="button" aria-label="Play the proposal">
+              <img class="boy-closed" id="boy-closed" src="img/boy-kneel-closed.png" alt="" hidden>
+              <img class="boy-a" id="boy-a" src="img/boy-kneel.png" alt="">
+              <img class="boy-b" id="boy-b" src="img/boy-kneel.png" alt="">
+              <svg class="boxlid" id="boxlid" viewBox="0 0 489 600" aria-hidden="true">
+                <!-- closed ring box drawn over the open one in his hand (same colours as the drawing) -->
+                <path d="M368 223 H489 V236 H368 Z" fill="#bbcd84"/>
+                <path d="M368 223 V236 M489 223 V236" stroke="#668455" stroke-width="3.5"/>
+                <g class="lid" id="lid">
+                  <path d="M368 226 V212 Q368 199 382 199 H475 Q489 199 489 212 V226 Z" fill="#bbcd84" stroke="#668455" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                  <path id="lid-in" d="M376 223 V214 Q376 206 384 206 H472 Q481 206 481 214 V223 Z" fill="#3d4d2e" opacity="0"/>
+                  <path d="M376 207 Q380 204 386 204" fill="none" stroke="#e6eab9" stroke-width=".8" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                </g>
+                <rect x="360" y="219" width="17" height="13" rx="6" fill="#aac096" stroke="#668455" stroke-width="3"/>
+              </svg>
+              <span class="sparks" id="sparks" aria-hidden="true"><span style="--c:#bfe3f5"></span><span style="--c:#f6e09c"></span><span style="--c:#bfe3f5"></span><span style="--c:#f6e09c"></span><span style="--c:#bfe3f5"></span></span>
+            </button>
+            <img class="girl" id="p-girl" src="img/girl-heart.png" alt="">
+            <p class="p-cap" id="p-cap">she said yes! ♡</p>
+            <a class="scroll-hint p-more" id="p-more" href="#story" aria-label="Scroll down to read more">
+              <span aria-hidden="true">scroll</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <div class="sheet">
@@ -786,16 +833,9 @@ document.getElementById("cal-link").href = "https://calendar.google.com/calendar
   function openSite(){
     if(gate.classList.contains("gone")) return;
     done=true; gate.classList.add("gone"); gate.setAttribute("aria-hidden","true"); document.body.classList.remove("locked");
-    const h=document.querySelector(".hero .names"); h.setAttribute("tabindex","-1"); h.focus({preventScroll:true});
+    document.querySelector(".hero .hcd").focus({preventScroll:true});
   }
   document.getElementById("skip").addEventListener("click",openSite);
-})();
-
-/* Hero photo: show it if img/hero.jpg exists, otherwise the two characters stand inside the arch */
-(function(){
-  const arch=document.getElementById("arch"), img=arch.querySelector("img.photo");
-  const ok=()=>{ if(img.naturalWidth) arch.classList.add("has-img"); };
-  if(img.complete) ok(); else img.addEventListener("load", ok);
 })();
 
 /* Our story: polaroid flip cards built from CONFIG.story */
@@ -831,18 +871,83 @@ document.getElementById("cal-link").href = "https://calendar.google.com/calendar
   row.addEventListener("scroll",()=>requestAnimationFrame(sync),{passive:true}); sync();
 })();
 
-/* Hero countdown: days / hours / minutes to CONFIG.start, refreshed every 30 seconds */
+/* Hero countdown: days : hours : mins : secs to CONFIG.start, every second */
 const target = new Date(CONFIG.start).getTime();
+const pad = n => String(n).padStart(2, "0");
 function tick(){
   const left = target - Date.now();
-  if (left <= 0){ document.getElementById("hcd-count").textContent = "today's the day!"; return; }
-  let m = Math.floor(left / 60000);
-  const d = Math.floor(m / 1440); m %= 1440;
-  const h = Math.floor(m / 60); m %= 60;
-  const set = (id, v, word) => { document.getElementById(id).textContent = v; document.getElementById(id + "u").textContent = v === 1 ? word : word + "s"; };
-  set("cd-d", d, "day"); set("cd-h", h, "hour"); set("cd-m", m, "minute");
+  if (left <= 0){ const o=document.getElementById("cd-oval"); if(!o.classList.contains("done")){ o.classList.add("done"); o.innerHTML=o.querySelector("svg").outerHTML+"<span style=\"position:relative\">today's the day!</span>"; } return; }
+  let s = Math.floor(left / 1000);
+  const d = Math.floor(s / 86400); s %= 86400;
+  const h = Math.floor(s / 3600); s %= 3600;
+  const m = Math.floor(s / 60); s %= 60;
+  document.getElementById("cd-d").textContent = d;
+  document.getElementById("cd-h").textContent = pad(h);
+  document.getElementById("cd-m").textContent = pad(m);
+  document.getElementById("cd-s").textContent = pad(s);
 }
-tick(); setInterval(tick, 30000);
+tick(); setInterval(tick, 1000);
+
+/* Scroll-to-propose: scroll progress 0..1 through the track drives the scene (tap the boy to auto-play) */
+(function(){
+  const track=document.getElementById("ptrack"), stage=document.getElementById("pstage"), scene=document.getElementById("pscene");
+  const boy=document.getElementById("p-boy"), girl=document.getElementById("p-girl"), lid=document.getElementById("lid"), lidIn=document.getElementById("lid-in"), boxlid=document.getElementById("boxlid");
+  const boyB=document.getElementById("boy-b"), boyA=document.getElementById("boy-a"), closed=document.getElementById("boy-closed");
+  const sparks=[...document.querySelectorAll("#sparks span")], cap=document.getElementById("p-cap"), more=document.getElementById("p-more"), hint=document.getElementById("start-hint");
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // optional drawing with a closed box: if img/boy-kneel-closed.png exists we crossfade instead of using the SVG lid
+  let hasClosed=false;
+  const useClosed=()=>{ if(closed.naturalWidth){ hasClosed=true; closed.hidden=false; boy.classList.add("has-closed"); render(); } };
+  if(closed.complete) useClosed(); else closed.addEventListener("load",useClosed);
+  // floating hearts (fixed, gentle randomness so every guest sees the same thing)
+  const hb=document.getElementById("p-hearts"), cols=["#f2b6c4","#f5c29a","#cbbde9"], hearts=[];
+  for(let i=0;i<12;i++){ const el=document.createElement("span"), r=k=>((Math.sin(i*12.9898+k*78.233)*43758.5453)%1+1)%1;
+    const sz=14+Math.round(r(1)*12); el.style.setProperty("--s",sz+"px");
+    el.innerHTML=`<svg viewBox="14 26 72 62"><use href="#heartP" fill="${cols[i%3]}" stroke="#3e5a44" stroke-width="3"/></svg>`;
+    hb.appendChild(el); hearts.push({el, x0:(r(2)-.5)*70, sway:(r(3)-.5)*40, rise:70+r(4)*110, delay:r(5)*.45, rot:(r(6)-.5)*30}); }
+  const seg=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
+  const ease=t=>1-Math.pow(1-t,3), easeIO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  let scrollP=reduce?1:0, autoP=0, last=-1;
+  function render(){
+    const p=Math.max(scrollP,autoP); if(p===last) return; last=p;
+    const off=boy.offsetLeft+0.4*boy.offsetWidth;            // he starts with 40% of himself off the left edge
+    boy.style.transform=`translateX(${(-off*(1-easeIO(seg(p,0,.30)))).toFixed(1)}px)`;
+    const o=seg(p,.30,.55);                                   // ring box opens
+    if(hasClosed){ closed.style.opacity=1-seg(o,.3,.8); boyA.style.opacity=seg(o,.3,.8); }
+    else{ const k=ease(seg(o,0,.55));                        // lid swings up on its hinge and its dark inside comes into view
+      lid.style.transform=`rotate(${(-102*k).toFixed(1)}deg) scale(${(1-.12*k).toFixed(3)},${(1+1.15*k).toFixed(3)})`; lidIn.style.opacity=k.toFixed(2);
+      boxlid.style.opacity=1-seg(o,.55,.9); boyB.style.opacity=seg(o,.5,.9); }
+    const sp=seg(p,.45,.62);                                  // sparkle burst from the ring
+    sparks.forEach((el,i)=>{ const a=(-150+i*30)*Math.PI/180, d=6+sp*26; el.style.opacity=reduce?0:Math.sin(Math.PI*sp).toFixed(2);
+      el.style.transform=`translate(${(Math.cos(a)*d).toFixed(1)}px,${(Math.sin(a)*d).toFixed(1)}px) scale(${(.5+sp).toFixed(2)})`; });
+    const hop=seg(p,.55,.80);                                 // happy hop
+    girl.style.transform=`translateY(${(reduce?0:-Math.sin(Math.PI*hop)*16).toFixed(1)}px)`;
+    const ht=seg(p,.55,.85);                                  // hearts float up and settle above them
+    hearts.forEach(h=>{ const t=seg(ht,h.delay,h.delay+.55), e=ease(t);
+      h.el.style.opacity=t>0?Math.min(1,t*4).toFixed(2):0;
+      h.el.style.transform=`translate(${(h.x0+h.sway*Math.sin(t*Math.PI*1.5)).toFixed(1)}px,${(-h.rise*e).toFixed(1)}px) rotate(${(h.rot*e).toFixed(1)}deg)`; });
+    const c=seg(p,.80,.92); cap.style.opacity=c; cap.style.transform=`translateY(${((1-c)*10).toFixed(1)}px)`;
+    more.style.opacity=seg(p,.92,1); more.style.pointerEvents=p>.92?"auto":"none";
+  }
+  function measure(){
+    if(reduce){ render(); return; }
+    const r=track.getBoundingClientRect(), stick=parseFloat(getComputedStyle(stage).top)||0;
+    const span=track.offsetHeight-stage.offsetHeight;
+    scrollP=Math.min(1,Math.max(0,(stick-r.top)/span));
+    hint.style.opacity=Math.max(0,1-scrollY/120).toFixed(2);
+    render();
+  }
+  let ticking=false;
+  const onScroll=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ ticking=false; measure(); }); } };
+  addEventListener("scroll",onScroll,{passive:true}); addEventListener("resize",onScroll);
+  measure();
+  // tap fallback: play the whole sequence in ~2.5s
+  boy.addEventListener("click",()=>{
+    if(reduce) return; const from=Math.max(scrollP,autoP); if(from>=1) return; const t0=performance.now(), dur=2500*(1-from);
+    const step=now=>{ autoP=from+(1-from)*Math.min(1,(now-t0)/dur); last=-1; render(); if(autoP<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+})();
 
 /* RSVP form */
 (function(){
