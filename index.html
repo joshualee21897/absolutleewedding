@@ -19,9 +19,9 @@
 <link rel="icon" href="img/groom.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Instrument+Serif:ital@0;1&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Instrument+Serif:ital@0;1&family=Quicksand:wght@400;500;600&family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Serif+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
 <style>
-/* Layout idea: a mini hedge maze over cream drapes opens into one narrow
+/* Layout idea: a heart-shaped hedge maze over a pastel meadow sky opens into one narrow
    hand-doodled card, with Mandai animals and pastel wildflowers in the margins. */
 :root{
   --paper:#fbf7ef;   /* linen card */
@@ -36,6 +36,8 @@
   --hand:"Caveat", "Comic Sans MS", cursive;
   --serif:"Instrument Serif", Georgia, serif;
   --body:"Quicksand", "Helvetica Neue", Arial, sans-serif;
+  --gsans:"Be Vietnam Pro", "Helvetica Neue", Arial, sans-serif;   /* intro screen */
+  --gserif:"Noto Serif Display", Georgia, serif;                   /* intro screen */
   color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -47,31 +49,37 @@ h1,h2{font-weight:400;text-wrap:balance}
 svg.defs{position:absolute;width:0;height:0}
 .doodle{filter:url(#sketch)}
 
-/* ---------- maze gate with drapes ---------- */
-#gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;overflow:hidden;
-  background:
-    radial-gradient(140% 60% at 50% -10%, rgba(255,255,255,.75), transparent 60%),
-    repeating-linear-gradient(90deg, #f4eee2 0 22px, #e7dfcd 34px, #f6f1e6 50px, #e9e1d0 64px, #f4eee2 78px);
+/* ---------- intro gate: heart maze over a painted meadow sky ---------- */
+#gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px 16px 28px;overflow:hidden;
+  background:#eef0f8 url("img/bg.jpg") center/cover no-repeat;
   transition:opacity .9s ease, visibility .9s}
-#gate::before{content:"";position:absolute;left:-10%;right:-10%;top:-40px;height:120px;background:#e2d8c3;
-  -webkit-mask:radial-gradient(70px 60px at 70px 0, #000 98%, transparent) 0 0/140px 60px repeat-x;
-  mask:radial-gradient(70px 60px at 70px 0, #000 98%, transparent) 0 0/140px 60px repeat-x}
+/* wide screens: use img/bg-desktop.jpg if you add one (falls back to bg.jpg); anchor to the bottom so the meadow shows */
+@media (min-width:900px){
+  #gate{background-image:url("img/bg-desktop.jpg"), url("img/bg.jpg");background-position:center bottom}
+}
 #gate.gone{opacity:0;visibility:hidden}
-.gate-top{text-align:center;display:flex;flex-direction:column;gap:2px;position:relative;z-index:2}
-.gate-top .to{font-family:var(--serif);font-style:italic;font-size:1.25rem}
-.gate-top .names{font-family:var(--hand);font-weight:700;font-size:clamp(2.2rem,10vw,3.2rem);line-height:1}
-.gate-top .date{font-size:.8rem;letter-spacing:.3em;font-weight:600}
+.gate-top{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:14px 26px 16px;border-radius:28px;background:rgba(251,247,239,.72);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(120,110,150,.12);
+  font-family:var(--gsans);color:var(--ink)}
+.gate-top .sm{font-family:var(--gsans);font-weight:500;font-size:.95rem;letter-spacing:.02em}
+.gate-top .big{font-family:var(--gserif);font-style:italic;font-weight:400;font-size:clamp(2.6rem,12vw,3.6rem);line-height:1}
+.gate-top .muted{font-weight:400;font-size:.88rem;opacity:.7;margin-top:6px}
+.gate-top .help-line{font-family:var(--gsans);font-weight:400;font-size:1rem;line-height:1.35}
+.gate-top .help-line em,.gate-top .win-line em{font-family:var(--gserif);font-style:italic;font-weight:500;font-size:1.65em;line-height:1}
+.gate-top [hidden]{display:none}
+.gate-meadow{position:absolute;left:0;right:0;bottom:-6px;width:100%;height:80px;z-index:1}
 
-.gate-meadow{position:absolute;left:0;right:0;bottom:-6px;height:80px;z-index:1}
-
-/* mini maze */
+/* heart maze */
 .maze-wrap{position:relative;z-index:2;touch-action:none}
-#maze{display:block;width:min(300px,86vw,calc(48vh * 288 / 336));height:auto;touch-action:none;filter:drop-shadow(0 14px 24px rgba(80,70,40,.18));border-radius:18px}
+#maze{display:block;width:min(360px,90vw,calc((100vh - 330px) * 396 / 360));height:auto;touch-action:none;overflow:visible;
+  filter:drop-shadow(0 12px 18px rgba(90,80,120,.22))}
+@supports (height:100dvh){ #maze{width:min(360px,90vw,calc((100dvh - 330px) * 396 / 360))} }
+@media (min-width:900px){ #maze{width:min(440px,calc((100vh - 330px) * 396 / 360))} }
 .burst{position:absolute;left:50%;top:40%;pointer-events:none}
 .burst span{position:absolute;font-size:22px;color:#e79aae;animation:pop 1.2s ease-out forwards}
 @keyframes pop{from{transform:translate(0,0) scale(.3);opacity:1}to{transform:translate(var(--x),var(--y)) scale(1.2);opacity:0}}
-.reveal-date{font-family:var(--hand);font-weight:700;font-size:1.7rem;position:relative;z-index:2;min-height:2.2rem;line-height:1.2}
-.skip{font:600 .85rem var(--body);background:none;border:0;color:var(--ink);text-decoration:underline;cursor:pointer;opacity:.75;position:relative;z-index:2}
+.skip{font:500 .85rem var(--gsans);background:rgba(251,247,239,.6);border:0;border-radius:20px;padding:6px 14px;color:var(--ink);text-decoration:underline;cursor:pointer;position:relative;z-index:2}
 .gate-critter{position:absolute;z-index:2;width:78px;height:78px}
 
 /* ---------- card ---------- */
@@ -355,27 +363,32 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
   <symbol id="moon" viewBox="0 0 60 60"><path d="M38 10 Q18 14 18 32 Q18 50 40 52 Q26 44 26 31 Q26 18 38 10Z" fill="#f6e09c" stroke="#3e5a44" stroke-width="2"/><path d="M46 18 l1.5 3 3 1.5 -3 1.5 -1.5 3 -1.5 -3 -3 -1.5 3 -1.5Z" fill="#3e5a44"/></symbol>
 </svg>
 
-<!-- ============ ENVELOPE ============ -->
-<div id="gate" role="dialog" aria-modal="true" aria-label="Wedding invitation: mini maze">
-  <div class="gate-top">
-    <span class="to">you're invited to</span>
-    <span class="names">Joshua + Rochelle</span>
-    <span class="date">17 · 07 · 2027</span>
+<!-- ============ INTRO: HEART MAZE ============ -->
+<div id="gate" role="dialog" aria-modal="true" aria-label="Wedding invitation: heart maze">
+  <div class="gate-top" aria-live="polite">
+    <div id="msg-start">
+      <span class="sm">we're getting</span><br>
+      <span class="big">married!</span>
+      <p class="sm muted">but first...</p>
+      <p class="help-line">help <em>Joshua</em> find his <em>Rochelle</em></p>
+    </div>
+    <div id="msg-win" hidden>
+      <span class="big win-line"><em style="font-size:1em">found</em> <span class="sm" style="font-size:.38em;font-style:normal">her! ♡</span></span>
+      <p class="sm" style="margin-top:6px">see you on 17 · 07 · 2027</p>
+    </div>
   </div>
-  <span class="hint" id="hint">help the groom find his bride ♡</span>
   <div class="maze-wrap">
-    <svg id="maze" viewBox="0 0 288 336" role="img" aria-label="A garden maze. Drag the groom at the top through the paths to reach the bride at the bottom.">
-      <rect x="0" y="0" width="288" height="336" rx="18" fill="#f7f2e6"/>
+    <svg id="maze" viewBox="0 0 396 360" role="img" aria-label="A heart-shaped garden maze. Drag Joshua from the top of the left side of the heart to Rochelle at the bottom tip.">
+      <g id="cells"></g>
       <g id="walls"></g>
-      <image id="bride-img" href="img/bride.png" width="38" height="52"/>
-      <g id="groom-g" style="cursor:grab"><circle id="groom-halo" r="22" fill="#f2b6c4" opacity=".35"/><image href="img/groom.png" x="-17" y="-26" width="34" height="52"/></g>
+      <image id="bride-img" href="img/bride.png" width="30" height="40"/>
+      <g id="groom-g" style="cursor:grab"><circle id="groom-halo" r="17" fill="#f2b6c4" opacity=".4"/><image href="img/groom.png" x="-13" y="-21" width="26" height="40"/></g>
     </svg>
     <div class="burst" id="burst"></div>
   </div>
-  <p class="reveal-date" id="reveal" aria-live="polite"></p>
   <button class="skip" id="skip">Skip and open the invite</button>
   <svg class="gate-critter doodle" style="right:6%;bottom:74px;width:70px;height:70px" aria-hidden="true"><use href="#hornbill"/></svg>
-  <svg class="gate-meadow" data-meadow="26" aria-hidden="true"></svg>
+  <svg class="gate-meadow" data-meadow="26" data-fit aria-hidden="true"></svg>
 </div>
 
 <!-- ============ INVITATION ============ -->
@@ -657,47 +670,61 @@ document.getElementById("cal-link").href = "https://calendar.google.com/calendar
   g.innerHTML = h;
 })();
 
-/* Meadows of wildflowers */
-document.querySelectorAll("[data-meadow]").forEach(svg=>{
-  const n = +svg.dataset.meadow, cols = ["#f2b6c4","#f6e09c","#bcd2f1","#cbbde9","#f5c29a","#f7d0dc"];
-  svg.setAttribute("viewBox","0 0 400 90"); svg.setAttribute("preserveAspectRatio","xMidYMax slice");
+/* Meadows of wildflowers. data-fit = stretch across the full width at any screen size */
+function drawMeadow(svg){
+  const cols = ["#f2b6c4","#f6e09c","#bcd2f1","#cbbde9","#f5c29a","#f7d0dc"];
+  let W = 400, n = +svg.dataset.meadow;
+  if (svg.hasAttribute("data-fit")){ const r = svg.getBoundingClientRect(); if (r.width && r.height){ W = Math.max(400, r.width / r.height * 90); n = Math.round(W / 15); } }
+  svg.setAttribute("viewBox", `0 0 ${W} 90`); svg.setAttribute("preserveAspectRatio","xMidYMax slice");
   let out = "";
   for (let i=0;i<n;i++){
-    const x = (i/(n-1))*400 - 14 + (Math.sin(i*7)*8), s = .7 + ((i*37)%10)/16;
+    const x = (i/(n-1))*W - 14 + (Math.sin(i*7)*8), s = .7 + ((i*37)%10)/16;
     const sym = i%3===1 ? "#bell" : "#flower";
     out += `<use href="${sym}" x="${x}" y="${90-70*s}" width="${40*s}" height="${70*s}" style="--p:${cols[i%cols.length]}"/>`;
   }
   svg.innerHTML = out;
-});
+}
+document.querySelectorAll("[data-meadow]").forEach(drawMeadow);
+addEventListener("resize", ()=>document.querySelectorAll("[data-meadow][data-fit]").forEach(drawMeadow));
 
-/* Mini maze: guide the groom to his bride */
+/* Heart maze: guide the groom to his bride */
 (function(){
   const gate=document.getElementById("gate"), svg=document.getElementById("maze");
-  const COLS=6, ROWS=7, C=48, R=12, HALF=4;            // cell size, groom radius, wall half-thickness
-  // deterministic maze (same for every guest): seeded depth-first carve
-  let seed=1707; const rnd=()=>((seed=(seed*16807)%2147483647)/2147483647);
-  const wall=[]; for(let y=0;y<ROWS;y++){wall.push([]);for(let x=0;x<COLS;x++)wall[y].push({n:1,e:1,s:1,w:1,v:0});}
-  (function carve(x,y){ wall[y][x].v=1;
-    const dirs=[[0,-1,"n","s"],[1,0,"e","w"],[0,1,"s","n"],[-1,0,"w","e"]].sort(()=>rnd()-.5);
-    for(const [dx,dy,a,b] of dirs){ const nx=x+dx, ny=y+dy;
-      if(nx>=0&&ny>=0&&nx<COLS&&ny<ROWS&&!wall[ny][nx].v){ wall[y][x][a]=0; wall[ny][nx][b]=0; carve(nx,ny); } } })(0,0);
-  // wall segments
+  const COLS=11, ROWS=10, C=36, R=12, HALF=4;          // cell size, groom radius, wall half-thickness (corridor = 28 > 2*R)
+  // which cells are inside the heart: test each cell centre against (x²+y²−1)³ − x²y³ ≤ 0
+  const inside=[];
+  for(let y=0;y<ROWS;y++){ inside.push([]); for(let x=0;x<COLS;x++){
+    const hx=((x+.5)/COLS*2-1)*1.2, hy=1.28-((y+.5)/ROWS)*2.35, a=hx*hx+hy*hy-1;
+    inside[y].push(a*a*a - hx*hx*hy*hy*hy <= 0); } }
+  const isIn=(x,y)=>x>=0&&y>=0&&x<COLS&&y<ROWS&&inside[y][x];
+  // start = top cell of the left lobe; goal = bottom tip
+  let start=null; for(let y=0;y<ROWS&&!start;y++) for(let x=0;x<COLS/2-.5;x++) if(inside[y][x]){ start=[x,y]; break; }
+  let tip=null; for(let y=ROWS-1;y>=0&&!tip;y--){ const xs=[]; for(let x=0;x<COLS;x++) if(inside[y][x]) xs.push(x); if(xs.length) tip=[xs[Math.floor(xs.length/2)],y]; }
+  // deterministic maze (same for every guest, every browser): seeded depth-first carve over heart cells only
+  let seed=3258; const rnd=()=>((seed=(seed*16807)%2147483647)/2147483647);
+  const wall=inside.map(r=>r.map(()=>({n:1,e:1,s:1,w:1,v:0})));
+  const D=[[0,-1,"n","s"],[1,0,"e","w"],[0,1,"s","n"],[-1,0,"w","e"]];
+  const stack=[start]; wall[start[1]][start[0]].v=1;
+  while(stack.length){ const [x,y]=stack[stack.length-1];
+    const opts=D.filter(([dx,dy])=>isIn(x+dx,y+dy)&&!wall[y+dy][x+dx].v);
+    if(!opts.length){ stack.pop(); continue; }
+    const [dx,dy,a,b]=opts[Math.floor(rnd()*opts.length)];
+    wall[y][x][a]=0; wall[y+dy][x+dx][b]=0; wall[y+dy][x+dx].v=1; stack.push([x+dx,y+dy]); }
+  // walls: heart outline (inside cell next to outside) + remaining inner walls (each edge once)
   const segs=[];
-  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){ const c=wall[y][x], X=x*C, Y=y*C;
-    if(c.n && !(x===0&&y===0)) segs.push([X,Y,X+C,Y]);
-    if(c.w) segs.push([X,Y,X,Y+C]);
-    if(y===ROWS-1 && !(x===COLS-1)) segs.push([X,Y+C,X+C,Y+C]);
-    if(y===ROWS-1 && x===COLS-1) segs.push([X,Y+C,X+C,Y+C]);
-    if(x===COLS-1) segs.push([X+C,Y,X+C,Y+C]); }
-  const g=document.getElementById("walls"); let h="";
-  for(const [x1,y1,x2,y2] of segs) h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#8fae7e" stroke-width="${HALF*2}" stroke-linecap="round"/>`;
-  const fcols=["#f2b6c4","#f6e09c","#bcd2f1","#cbbde9","#f5c29a"]; let k=0;
-  for(const [x1,y1] of segs) if((k++)%3===0) h+=`<circle cx="${x1}" cy="${y1}" r="4.5" fill="${fcols[k%5]}" stroke="#3e5a44" stroke-width="1"/>`;
-  g.innerHTML=h;
+  for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){ if(!inside[y][x]) continue; const c=wall[y][x], X=x*C, Y=y*C;
+    if(!isIn(x,y-1) || c.n) segs.push([X,Y,X+C,Y]);
+    if(!isIn(x-1,y) || c.w) segs.push([X,Y,X,Y+C]);
+    if(!isIn(x,y+1)) segs.push([X,Y+C,X+C,Y+C]);
+    if(!isIn(x+1,y)) segs.push([X+C,Y,X+C,Y+C]); }
+  let cells=""; for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++) if(inside[y][x]) cells+=`<rect x="${x*C-.5}" y="${y*C-.5}" width="${C+1}" height="${C+1}" fill="#fbf7ef"/>`;
+  document.getElementById("cells").innerHTML=cells;
+  let h=""; for(const [x1,y1,x2,y2] of segs) h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#8fae7e" stroke-width="${HALF*2}" stroke-linecap="round"/>`;
+  document.getElementById("walls").innerHTML=h;
   // characters
-  const goal={x:(COLS-.5)*C, y:(ROWS-.5)*C};
-  document.getElementById("bride-img").setAttribute("x",goal.x-19); document.getElementById("bride-img").setAttribute("y",goal.y-30);
-  const groom=document.getElementById("groom-g"); let pos={x:C/2, y:C/2}, done=false, dragging=false, grab={x:0,y:0};
+  const goal={x:(tip[0]+.5)*C, y:(tip[1]+.5)*C};
+  const bride=document.getElementById("bride-img"); bride.setAttribute("x",goal.x-15); bride.setAttribute("y",goal.y-24);
+  const groom=document.getElementById("groom-g"); let pos={x:(start[0]+.5)*C, y:(start[1]+.5)*C}, done=false, dragging=false, grab={x:0,y:0};
   const draw=()=>groom.setAttribute("transform",`translate(${pos.x} ${pos.y})`); draw();
   function hits(px,py){
     if(px<R||py<R||px>COLS*C-R||py>ROWS*C-R) return true;
@@ -713,22 +740,21 @@ document.querySelectorAll("[data-meadow]").forEach(svg=>{
       if(!hits(pos.x,pos.y+sy)){pos.y+=sy;moved=true;}
       if(!moved) break; }
     draw();
-    if(Math.hypot(pos.x-goal.x,pos.y-goal.y)<30) win();
+    if(Math.hypot(pos.x-goal.x,pos.y-goal.y)<24) win();
   }
   svg.addEventListener("pointerdown",e=>{ if(done) return; const p=toSvg(e);
-    if(Math.hypot(p.x-pos.x,p.y-pos.y)<34){ dragging=true; grab={x:p.x-pos.x,y:p.y-pos.y}; svg.setPointerCapture(e.pointerId); groom.style.cursor="grabbing"; e.preventDefault(); } });
+    if(Math.hypot(p.x-pos.x,p.y-pos.y)<32){ dragging=true; grab={x:p.x-pos.x,y:p.y-pos.y}; svg.setPointerCapture(e.pointerId); groom.style.cursor="grabbing"; e.preventDefault(); } });
   svg.addEventListener("pointermove",e=>{ if(!dragging||done) return; const p=toSvg(e); moveToward(p.x-grab.x,p.y-grab.y); });
   const end=()=>{ dragging=false; groom.style.cursor="grab"; };
   svg.addEventListener("pointerup",end); svg.addEventListener("pointercancel",end);
 
   function win(){
     if(done) return; done=true; dragging=false;
-    pos={x:goal.x-24,y:goal.y+4}; draw(); document.getElementById("bride-img").setAttribute("x",goal.x-14); document.getElementById("groom-halo").setAttribute("opacity","0");
+    pos={x:goal.x-14,y:goal.y+2}; draw(); bride.setAttribute("x",goal.x-3); document.getElementById("groom-halo").setAttribute("opacity","0");
     const burst=document.getElementById("burst"); burst.style.left=(goal.x-10)/(COLS*C)*100+"%"; burst.style.top=goal.y/(ROWS*C)*100+"%";
     for(let i=0;i<14;i++){ const s=document.createElement("span"), a=(i/14)*Math.PI*2, d=70+(i%3)*25;
       s.textContent=i%2?"♥":"✿"; s.style.setProperty("--x",Math.cos(a)*d+"px"); s.style.setProperty("--y",Math.sin(a)*d+"px"); burst.appendChild(s); }
-    document.getElementById("hint").textContent="he found her! it's a date ♡";
-    document.getElementById("reveal").textContent="Saturday, 17 July 2027";
+    document.getElementById("msg-start").hidden=true; document.getElementById("msg-win").hidden=false;
     setTimeout(openSite,2400);
   }
   function openSite(){

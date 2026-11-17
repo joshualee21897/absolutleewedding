@@ -14,6 +14,8 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 |---|---|
 | `index.html` | The whole website. Your settings (the `CONFIG` section) are near the bottom of this file. |
 | `img/groom.png`, `img/bride.png` | Your two characters. |
+| `img/bg.jpg` | The painted sky-and-meadow background on the opening maze screen (compressed). Want a wider version for computers? Save it as `img/bg-desktop.jpg` and it's used automatically on screens wider than 900px. |
+| `img/originals/` | Full-quality copies of the background, kept as a backup. |
 | `og-image.png` | The picture people see when you share the link on WhatsApp. |
 | `apps-script/Code.gs` | The small Google script that saves RSVPs into your Sheet. |
 | `SETUP.md` | This guide. |
