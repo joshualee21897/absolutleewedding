@@ -15,7 +15,8 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 | `index.html` | The whole website. Your settings (the `CONFIG` section) are near the bottom of this file. |
 | `img/groom.png`, `img/bride.png` | Your two characters. |
 | `img/bg.jpg`, `img/bg-desktop.jpg` | The painted meadow backgrounds behind the whole site (compressed): the tall one for phones, the wide one for screens wider than 900px. |
-| `img/then.jpg`, `img/now.jpg` | *(you add these)* Your childhood photo and a photo of you today, for the "then & now" slider. See Part D. |
+| `img/hero.jpg` | *(you add this)* A photo of the two of you for the arch at the top of the invite. See Part D. |
+| `img/story-1.jpg` … `img/story-4.jpg` | *(you add these)* Photos for the four "our story" flip cards. See Part D. |
 | `img/originals/` | Full-quality copies of both backgrounds, kept as a backup. |
 | `og-image.png` | The picture people see when you share the link on WhatsApp. |
 | `apps-script/Code.gs` | The small Google script that saves RSVPs into your Sheet. |
@@ -125,7 +126,7 @@ Open `index.html`, search for `const CONFIG`, and fill in or check each line. Ke
 - [ ] **`parkingNote`** (optional): e.g. whether you'll validate parking.
 - [ ] Re-check the **bus timings** in the "Getting there" section closer to the day.
 
-- [ ] Add your **then & now** photos (Part D).
+- [ ] Add your **hero photo** and the four **story photos**, and write the story card text in **`CONFIG.story`** (Part D).
 
 Then do a final test on your phone:
 1. Open the live link from WhatsApp.
@@ -135,12 +136,25 @@ Then do a final test on your phone:
 
 ---
 
-## Part D: Then & now photos
+## Part D: Your photos and story cards
 
-The "How it all started" section has a slider guests drag to go from your childhood photos to you today. Until you add photos it shows cream "then" and "now" placeholders.
+Until you add photos, the site shows soft cream placeholders (and your two characters in the arch), so nothing looks broken.
 
-1. Pick two photos: one of you as kids (**then**) and one of you now (**now**).
-2. Crop both to the **same portrait shape, 4:5** (e.g. 1080 × 1350 pixels). On iPhone: Photos → Edit → Crop → the aspect icon → **4:5**. Try to line your faces up at about the same height in both, so the reveal looks neat.
-3. Name them exactly `then.jpg` and `now.jpg` and put them in the `img` folder.
-4. Keep each under **300KB** so the page loads fast on mobile data. Easiest: send them to me and I'll crop and compress them. Or use [squoosh.app](https://squoosh.app) (MozJPEG, quality about 75).
-5. Re-upload the folder to Netlify (Part B, "Updating the site later"). The photos replace the placeholders automatically.
+**Hero photo (the arch at the top)**
+- A photo of the two of you, portrait **4:5** (e.g. 1080 × 1350). Faces in the upper-middle look best, since the top is rounded.
+- Save it as `img/hero.jpg`. Once it's there, your two characters move to the bottom corners of the arch.
+
+**"Our story" flip cards (in "How it all started")**
+
+| Card | File | Title |
+|---|---|---|
+| 1 | `img/story-1.jpg` | little us (childhood) |
+| 2 | `img/story-2.jpg` | how we met |
+| 3 | `img/story-3.jpg` | the proposal |
+| 4 | `img/story-4.jpg` | pre-wedding shoot |
+
+- Crop each to portrait **4:5** too. On iPhone: Photos → Edit → Crop → the aspect icon → **4:5**.
+- Keep each photo under **250KB** (the hero under 300KB) so the page loads fast on mobile data. Easiest: send them to me and I'll crop and compress them. Or use [squoosh.app](https://squoosh.app) (MozJPEG, quality about 75).
+- The words on the back of each card live in `index.html`: search for `story:` inside `CONFIG`. For each card, change `date` (e.g. `"2019"`) and `text` (one or two short lines, around 20 words, so it fits on the small cards on computers). Remove the `[square-bracket]` placeholder notes. You can change `title` too.
+
+Re-upload the folder to Netlify afterwards (Part B, "Updating the site later").
