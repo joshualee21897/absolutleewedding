@@ -3,12 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Joshua &amp; Rochelle Wedding Invitation</title>
+<title>Joshua &amp; Rochelle · 17.07.2027</title>
+<meta name="description" content="You're invited! Tap to open our invitation">
+<meta name="theme-color" content="#fbf7ef">
+<!-- Link preview for WhatsApp etc. If your Netlify address is different, change the two URLs below (see SETUP.md) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Joshua &amp; Rochelle · 17.07.2027">
+<meta property="og:description" content="You're invited! Tap to open our invitation">
+<meta property="og:url" content="https://joshua-rochelle.netlify.app/">
+<meta property="og:image" content="https://joshua-rochelle.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Joshua and Rochelle as little cartoon characters on a cream background">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/groom.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Instrument+Serif:ital@0;1&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Layout idea: a linen envelope behind cream drapes opens into one narrow
+/* Layout idea: a mini hedge maze over cream drapes opens into one narrow
    hand-doodled card, with Mandai animals and pastel wildflowers in the margins. */
 :root{
   --paper:#fbf7ef;   /* linen card */
@@ -34,75 +47,26 @@ h1,h2{font-weight:400;text-wrap:balance}
 svg.defs{position:absolute;width:0;height:0}
 .doodle{filter:url(#sketch)}
 
-/* ---------- envelope gate with drapes ---------- */
+/* ---------- maze gate with drapes ---------- */
 #gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;overflow:hidden;
   background:
     radial-gradient(140% 60% at 50% -10%, rgba(255,255,255,.75), transparent 60%),
     repeating-linear-gradient(90deg, #f4eee2 0 22px, #e7dfcd 34px, #f6f1e6 50px, #e9e1d0 64px, #f4eee2 78px);
   transition:opacity .9s ease, visibility .9s}
-#gate::before{content:"";position:absolute;left:-10%;right:-10%;top:-40px;height:120px;
-  background:radial-gradient(60px 50px at 50% 0, transparent 0 0) ;
-  background:repeating-radial-gradient(circle at 50% -60px, transparent 0 0);
+#gate::before{content:"";position:absolute;left:-10%;right:-10%;top:-40px;height:120px;background:#e2d8c3;
   -webkit-mask:radial-gradient(70px 60px at 70px 0, #000 98%, transparent) 0 0/140px 60px repeat-x;
-  mask:radial-gradient(70px 60px at 70px 0, #000 98%, transparent) 0 0/140px 60px repeat-x;
-  background:#e2d8c3}
+  mask:radial-gradient(70px 60px at 70px 0, #000 98%, transparent) 0 0/140px 60px repeat-x}
 #gate.gone{opacity:0;visibility:hidden}
 .gate-top{text-align:center;display:flex;flex-direction:column;gap:2px;position:relative;z-index:2}
 .gate-top .to{font-family:var(--serif);font-style:italic;font-size:1.25rem}
 .gate-top .names{font-family:var(--hand);font-weight:700;font-size:clamp(2.2rem,10vw,3.2rem);line-height:1}
 .gate-top .date{font-size:.8rem;letter-spacing:.3em;font-weight:600}
 
-.env{position:relative;width:min(330px,84vw);aspect-ratio:1.45;perspective:1200px;cursor:pointer;z-index:2}
-.env-back{position:absolute;inset:0;border-radius:8px;box-shadow:0 26px 50px rgba(80,70,40,.25);
-  background:
-    radial-gradient(circle at 20% 30%, var(--blush) 0 5px, transparent 6px),
-    radial-gradient(circle at 70% 20%, var(--butter) 0 4px, transparent 5px),
-    radial-gradient(circle at 45% 55%, var(--sky) 0 5px, transparent 6px),
-    radial-gradient(circle at 85% 60%, var(--lilac) 0 4px, transparent 5px),
-    radial-gradient(circle at 10% 70%, var(--peach) 0 4px, transparent 5px),
-    #e9f0df;
-  background-size:90px 70px}
-.letter{position:absolute;left:7%;right:7%;top:9%;bottom:9%;background:var(--paper);border-radius:4px;z-index:1;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center;padding:10px;
-  transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .55s}
-.letter .s{font-family:var(--hand);font-weight:700;font-size:1.8rem;line-height:1}
-.letter .d{font-size:.66rem;letter-spacing:.28em;font-weight:600}
-.letter svg{width:54px;height:54px}
-.env-side{position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:8px;overflow:hidden}
-.env-side::before,.env-side::after{content:"";position:absolute;inset:0;background:var(--linen)}
-.env-side::before{clip-path:polygon(0 0,50% 58%,0 100%)}
-.env-side::after{clip-path:polygon(100% 0,50% 58%,100% 100%)}
-.env-bottom{position:absolute;inset:0;z-index:2;pointer-events:none;background:#f4eee2;clip-path:polygon(0 100%,50% 50%,100% 100%);border-radius:0 0 8px 8px}
-.flap{position:absolute;left:0;right:0;top:0;height:62%;z-index:3;transform-origin:top center;transition:transform .7s ease, z-index 0s .35s;
-  background:#e6ddca;clip-path:polygon(0 0,100% 0,50% 100%)}
-.seal{position:absolute;left:50%;top:62%;transform:translate(-50%,-50%) rotate(-6deg);z-index:4;width:68px;height:68px;border:0;cursor:pointer;
-  border-radius:47% 53% 50% 50% / 52% 48% 52% 48%;
-  background:radial-gradient(circle at 35% 30%, #a9c49a, #6f9265 70%);color:var(--paper);font-family:var(--serif);font-style:italic;font-size:1.35rem;
-  box-shadow:0 4px 10px rgba(60,70,40,.3), inset 0 0 0 4px rgba(255,255,255,.18);transition:transform .35s ease, opacity .35s ease;animation:pulse 2.4s ease-in-out infinite}
-@keyframes pulse{50%{box-shadow:0 4px 10px rgba(60,70,40,.3), inset 0 0 0 4px rgba(255,255,255,.18), 0 0 0 10px rgba(242,182,196,.35)}}
-.hint{font-family:var(--hand);font-size:1.4rem;position:relative;z-index:2}
-.env.open .seal{transform:translate(-50%,-50%) scale(.4);opacity:0;animation:none}
-.env.open .flap{transform:rotateX(180deg);z-index:0}
-.env.open .letter{transform:translateY(-40%)}
 .gate-meadow{position:absolute;left:0;right:0;bottom:-6px;height:80px;z-index:1}
 
 /* mini maze */
 .maze-wrap{position:relative;z-index:2;touch-action:none}
 #maze{display:block;width:min(300px,86vw,calc(48vh * 288 / 336));height:auto;touch-action:none;filter:drop-shadow(0 14px 24px rgba(80,70,40,.18));border-radius:18px}
-.maze-wrap .burst{top:85%}
-/* drag-the-couple-together unveil */
-.stage{position:relative;width:min(360px,92vw);height:230px;z-index:2;touch-action:none}
-.stage .goal{position:absolute;left:50%;top:50%;width:110px;height:110px;transform:translate(-50%,-62%);opacity:.5;animation:beat 1.6s ease-in-out infinite}
-@keyframes beat{50%{transform:translate(-50%,-62%) scale(1.08)}}
-.mover{position:absolute;top:20px;width:118px;height:165px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;transition:filter .2s}
-.mover:active{cursor:grabbing}
-.mover.dragging{filter:drop-shadow(0 10px 12px rgba(60,70,40,.25));transition:none}
-.mover.home{transition:transform .5s cubic-bezier(.3,1.4,.5,1)}
-.mover img{width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
-#bride{left:0}
-#groom{right:0}
-.stage.done .goal{opacity:0}
-.stage.done .mover{transition:transform .6s cubic-bezier(.3,1.3,.5,1)}
 .burst{position:absolute;left:50%;top:40%;pointer-events:none}
 .burst span{position:absolute;font-size:22px;color:#e79aae;animation:pop 1.2s ease-out forwards}
 @keyframes pop{from{transform:translate(0,0) scale(.3);opacity:1}to{transform:translate(var(--x),var(--y)) scale(1.2);opacity:0}}
@@ -126,6 +90,7 @@ p.copy{max-width:40ch;font-size:.98rem}
 /* hero */
 .hero .names{font-family:var(--hand);font-weight:700;font-size:clamp(3rem,14vw,4.2rem);line-height:.95}
 .hero .names em{font-family:var(--serif);font-weight:400;font-size:.62em;display:block;margin:4px 0}
+.hero .names:focus{outline:none}
 .hero .tag{font-family:var(--serif);font-style:italic;font-size:1.25rem}
 .hero .crew{display:flex;justify-content:center;align-items:flex-end;gap:2px;margin-top:4px}
 .hero .crew svg{width:96px;height:96px}
@@ -190,6 +155,22 @@ textarea{min-height:80px;resize:vertical}
 .choice input:focus-visible + label{outline:2px dashed var(--ink);outline-offset:2px}
 .note{font-size:.85rem;opacity:.8;text-align:center}
 .err{color:#b4485f;font-size:.9rem;text-align:center;min-height:1.2em;font-weight:600}
+.err:empty{min-height:0}
+.ferr{font-family:var(--body);font-size:.85rem;font-weight:600;color:#b4485f}
+.ferr:empty{display:none}
+[aria-invalid="true"]{border-color:#b4485f;background:#fff6f8}
+.choice.bad label{border-color:#b4485f}
+.field{display:flex;flex-direction:column;gap:4px}
+.qlabel{font-family:var(--hand);font-size:1.35rem;font-weight:700}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.btn[disabled]{opacity:.6;cursor:wait;transform:none}
+.fallback{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;border:2px dashed #e79aae;border-radius:16px;padding:14px}
+.fallback[hidden]{display:none}
+.thanks{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;background:#fff;border:2px solid var(--ink);border-radius:20px 16px 22px 18px;padding:26px 18px;box-shadow:4px 4px 0 var(--blush)}
+.thanks[hidden]{display:none}
+.thanks h3{font-family:var(--hand);font-weight:700;font-size:2rem;line-height:1.1}
+.thanks .couple{display:flex;align-items:flex-end}
+.thanks .couple img{height:90px;width:auto}
 
 .footer-couple{display:flex;align-items:flex-end;justify-content:center;gap:0}
 .footer-couple img{height:130px;width:auto}
@@ -212,7 +193,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
 .singles{border:2px dashed #e79aae;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px}
 .singles legend{font-family:var(--hand);font-weight:700;font-size:1.5rem;padding:0 6px}
 #single-fields{display:flex;flex-direction:column;gap:12px}
-#single-fields[hidden],#kidages-wrap[hidden]{display:none}
+#single-fields[hidden],#kidages-wrap[hidden],.yes-only[hidden]{display:none}
 #plus-names{display:flex;flex-direction:column;gap:12px}
 #plus-names:empty{display:none}
 .sign{font-family:var(--hand);font-weight:700;font-size:1.9rem;line-height:1.15}
@@ -375,7 +356,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
 </svg>
 
 <!-- ============ ENVELOPE ============ -->
-<div id="gate" role="dialog" aria-label="Wedding invitation envelope">
+<div id="gate" role="dialog" aria-modal="true" aria-label="Wedding invitation: mini maze">
   <div class="gate-top">
     <span class="to">you're invited to</span>
     <span class="names">Joshua + Rochelle</span>
@@ -536,21 +517,30 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
       <h2 class="h">Will you come?</h2>
       <p class="copy" id="rsvp-by"></p>
       <form id="form" novalidate>
+        <!-- honeypot: invisible to people, bots fill it in -->
+        <div class="hp" aria-hidden="true"><label for="f-web">Website<input id="f-web" name="website" tabindex="-1" autocomplete="off"></label></div>
+
         <label for="f-name">Full name *
-          <input id="f-name" name="name" autocomplete="name" required>
+          <input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name">
+          <small class="ferr" id="e-name"></small>
         </label>
         <label for="f-phone">Contact number *
-          <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="So we can send you reminders and updates">
+          <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="For reminders and updates" aria-describedby="e-phone">
+          <small class="ferr" id="e-phone"></small>
         </label>
-        <div class="choice" role="radiogroup" aria-label="Will you be joining us?">
-          <input type="radio" name="att" id="att-yes" value="yes"><label for="att-yes">Yes, I'll be there!</label>
-          <input type="radio" name="att" id="att-no" value="no"><label for="att-no">Sadly, I can't</label>
+        <div class="field">
+          <p class="qlabel" id="att-label">Will you be joining us? *</p>
+          <div class="choice" id="att-choice" role="radiogroup" aria-labelledby="att-label" aria-describedby="e-att">
+            <input type="radio" name="att" id="att-yes" value="yes"><label for="att-yes">Yes, I'll be there!</label>
+            <input type="radio" name="att" id="att-no" value="no"><label for="att-no">Sadly, I can't</label>
+          </div>
+          <small class="ferr" id="e-att"></small>
         </div>
 
-        <div class="yes-only" id="yes-only">
+        <div class="yes-only" id="yes-only" hidden>
           <label for="f-plus">Bringing a plus one?
             <small class="help">Only if your invite included a plus one. Not sure? Just ask us before adding one!</small>
-            <select id="f-plus" name="plus"><option value="0">No, just me</option><option value="1">Yes, 1 guest</option><option value="2">Yes, 2 guests</option></select>
+            <select id="f-plus" name="plus"><option value="0">No, just me</option><option value="1">1 guest</option><option value="2">2 guests</option></select>
           </label>
           <div id="plus-names"></div>
 
@@ -574,15 +564,16 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
             <label class="check" for="f-single"><input type="checkbox" id="f-single" name="single"> Yes, feature me in the Singles Column!</label>
             <div id="single-fields" hidden>
               <label for="f-s3">Describe yourself in 3 words
-                <input id="f-s3" name="s3">
+                <input id="f-s3" name="s3" maxlength="80">
               </label>
               <label for="f-sdate">Your ideal date, in one line
-                <input id="f-sdate" name="sdate">
+                <input id="f-sdate" name="sdate" maxlength="200">
               </label>
               <label for="f-sig">Instagram handle (optional)
-                <input id="f-sig" name="sig" placeholder="@" autocapitalize="off">
+                <input id="f-sig" name="sig" placeholder="@" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40">
               </label>
-              <label class="check" for="f-sok"><input type="checkbox" id="f-sok" name="sok"> I'm OK with my name, answers and Instagram handle appearing in the magazine at the wedding.</label>
+              <label class="check" for="f-sok"><input type="checkbox" id="f-sok" name="sok" aria-describedby="e-sok"> I'm OK with my name, answers and Instagram handle appearing in the magazine at the wedding.</label>
+              <small class="ferr" id="e-sok"></small>
             </div>
           </fieldset>
         </div>
@@ -591,9 +582,19 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
           <textarea id="f-msg" name="msg" placeholder="Words of love, advice, or a song request 🎶"></textarea>
         </label>
         <p class="err" id="err" role="alert"></p>
-        <button class="btn solid" type="submit">Send my RSVP on WhatsApp</button>
-        <p class="note">Your reply opens in WhatsApp as a message to us. Just tap send.</p>
+        <button class="btn solid" type="submit" id="send">Send my RSVP</button>
+        <div class="fallback" id="fallback" hidden>
+          <p class="help">No worries, you can send the same answers to us on WhatsApp instead. Just tap send in WhatsApp.</p>
+          <button class="btn" type="button" id="wa-btn">Send my RSVP on WhatsApp</button>
+        </div>
       </form>
+
+      <div class="thanks" id="thanks" hidden tabindex="-1">
+        <div class="couple"><img src="img/groom.png" alt=""><img src="img/bride.png" alt=""></div>
+        <h3 id="thanks-title">Thank you! We've got your RSVP ♡</h3>
+        <p class="copy" id="thanks-extra"></p>
+        <p class="help" id="thanks-contact"></p>
+      </div>
     </section>
 
     <section>
@@ -606,29 +607,42 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#6f9265;fle
 </main>
 
 <script>
-/* ===== Edit these ===== */
+/* =====================================================================
+   EDIT THESE. Everything you might want to change lives here.
+   Keep the quotes "..." around each value.
+   ===================================================================== */
 const CONFIG = {
-  whatsapp: "",                       // e.g. "6591234567" (country code, no +). Blank = guest picks the chat.
-  rsvpBy: "1 June 2027",              // RSVP deadline
+  // Google Apps Script web app URL (see SETUP.md). Leave "" until you have it.
+  sheetUrl: "",
+  // WhatsApp number for the backup "send on WhatsApp" button.
+  // Country code + number, no + or spaces, e.g. "6591234567". "" = guest picks the chat.
+  whatsapp: "",
+  rsvpBy: "1 June 2027",                                   // RSVP deadline
   dressCode: "Smart casual in pastels. Think soft wildflower colours like these:",
   kids: "Yes, little ones are welcome! Just let us know in the RSVP so we can plan for them.",
-  contact: "WhatsApp Joshua or Rochelle, or any of our bridal team.",
+  contactPerson: "Joshua or Rochelle",                     // who guests should message
+  contactNumber: "",                                       // optional, e.g. "+65 9123 4567"
   photos: "Snap away and share the love! We'll share our wedding hashtag closer to the day.",
-  parkingNote: "",                    // e.g. "Let us know at the reception and we'll validate your parking."
-  start: "2027-07-17T18:00:00+08:00"
+  hashtag: "",                                             // e.g. "#AbsoLEEwed" (shown after the photos line)
+  parkingNote: "",                                         // e.g. "Let us know at the reception and we'll validate your parking."
+  start: "2027-07-17T18:00:00+08:00"                       // used by the countdown
 };
+/* ===================================================================== */
+
+const contactLine = CONFIG.contactPerson + (CONFIG.contactNumber ? " (" + CONFIG.contactNumber + ")" : "");
 document.getElementById("rsvp-by").textContent = "Kindly let us know by " + CONFIG.rsvpBy + ".";
 document.getElementById("faq-dress").textContent = CONFIG.dressCode;
 document.getElementById("faq-rsvp").textContent = "Please RSVP by " + CONFIG.rsvpBy + " using the form below.";
 document.getElementById("faq-kids").textContent = CONFIG.kids;
-document.getElementById("faq-contact").textContent = CONFIG.contact;
-document.getElementById("faq-photos").textContent = CONFIG.photos;
+document.getElementById("faq-contact").textContent = "Message " + contactLine + ", or any of our bridal team.";
+document.getElementById("faq-photos").textContent = CONFIG.photos + (CONFIG.hashtag ? " Tag them " + CONFIG.hashtag + "." : "");
 document.getElementById("parking-note").textContent = CONFIG.parkingNote;
 document.getElementById("cal-link").href = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
   "&text=" + encodeURIComponent("Joshua & Rochelle's Wedding") +
   "&dates=20270717T100000Z/20270717T150000Z" +
-  "&location=" + encodeURIComponent("Mandai Rainforest Resort by Banyan Tree, Singapore") +
-  "&details=" + encodeURIComponent("Guests arrive 6:00pm, please be seated by 6:30pm.");
+  "&ctz=Asia/Singapore" +
+  "&location=" + encodeURIComponent("Mandai Rainforest Resort by Banyan Tree, 60 Mandai Lake Road, Singapore 729979") +
+  "&details=" + encodeURIComponent("Guests arrive 6:00pm, please be seated by 6:30pm. Ceremony 6:45pm, then dinner. Wraps up 11:00pm.");
 
 /* Calendar: July 2027 starts on a Thursday (Mon-first grid) */
 (function(){
@@ -709,15 +723,19 @@ document.querySelectorAll("[data-meadow]").forEach(svg=>{
 
   function win(){
     if(done) return; done=true; dragging=false;
-    pos={x:goal.x-24,y:goal.y}; draw(); document.getElementById("groom-halo").setAttribute("opacity","0");
-    const burst=document.getElementById("burst");
+    pos={x:goal.x-24,y:goal.y+4}; draw(); document.getElementById("bride-img").setAttribute("x",goal.x-14); document.getElementById("groom-halo").setAttribute("opacity","0");
+    const burst=document.getElementById("burst"); burst.style.left=(goal.x-10)/(COLS*C)*100+"%"; burst.style.top=goal.y/(ROWS*C)*100+"%";
     for(let i=0;i<14;i++){ const s=document.createElement("span"), a=(i/14)*Math.PI*2, d=70+(i%3)*25;
       s.textContent=i%2?"♥":"✿"; s.style.setProperty("--x",Math.cos(a)*d+"px"); s.style.setProperty("--y",Math.sin(a)*d+"px"); burst.appendChild(s); }
     document.getElementById("hint").textContent="he found her! it's a date ♡";
     document.getElementById("reveal").textContent="Saturday, 17 July 2027";
     setTimeout(openSite,2400);
   }
-  function openSite(){ done=true; gate.classList.add("gone"); document.body.classList.remove("locked"); }
+  function openSite(){
+    if(gate.classList.contains("gone")) return;
+    done=true; gate.classList.add("gone"); gate.setAttribute("aria-hidden","true"); document.body.classList.remove("locked");
+    const h=document.querySelector(".hero .names"); h.setAttribute("tabindex","-1"); h.focus({preventScroll:true});
+  }
   document.getElementById("skip").addEventListener("click",openSite);
 })();
 
@@ -738,45 +756,156 @@ tick(); setInterval(tick, 1000);
 /* RSVP form */
 (function(){
   const f = document.getElementById("form"), $ = id=>document.getElementById(id);
-  const yes = $("yes-only");
-  function syncAtt(){ const v=(f.querySelector("input[name=att]:checked")||{}).value; yes.hidden = (v==="no"); }
+  const yes = $("yes-only"), send = $("send"), err = $("err"), fallback = $("fallback");
+  const v = id=>{ const el=$(id); return el ? el.value.trim() : ""; };
+  const att = ()=>(f.querySelector("input[name=att]:checked")||{}).value;
+
+  /* show / hide the conditional bits */
+  function syncAtt(){ yes.hidden = att()!=="yes"; clearErr("att"); }
   f.querySelectorAll("input[name=att]").forEach(r=>r.addEventListener("change", syncAtt));
   $("f-plus").addEventListener("change", e=>{
-    const n=+e.target.value, box=$("plus-names"); let h="";
-    for(let i=1;i<=n;i++) h+=`<label for="f-pn${i}">Guest ${i}'s full name<input id="f-pn${i}" name="pn${i}"></label>`;
-    box.innerHTML=h;
+    const n=+e.target.value, box=$("plus-names"), keep=[];
+    box.querySelectorAll("input").forEach(i=>keep.push(i.value));   // keep names already typed
+    box.innerHTML="";
+    for(let i=1;i<=n;i++){
+      const lab=document.createElement("label"); lab.htmlFor="f-pn"+i; lab.textContent="Guest "+i+" full name *";
+      const inp=document.createElement("input"); inp.id="f-pn"+i; inp.name="pn"+i; inp.required=true; inp.autocomplete="off"; inp.value=keep[i-1]||"";
+      inp.setAttribute("aria-describedby","e-pn"+i);
+      const er=document.createElement("small"); er.className="ferr"; er.id="e-pn"+i;
+      lab.append(inp, er); box.appendChild(lab);
+    }
   });
   $("f-kids").addEventListener("change", e=>{ $("kidages-wrap").hidden = e.target.value==="0"; });
-  $("f-single").addEventListener("change", e=>{ $("single-fields").hidden = !e.target.checked; });
+  $("f-single").addEventListener("change", e=>{ $("single-fields").hidden = !e.target.checked; if(!e.target.checked) clearErr("sok"); });
 
-  f.addEventListener("submit", e=>{
-    e.preventDefault();
-    const err=$("err"), v=id=>$(id).value.trim();
-    const att=(f.querySelector("input[name=att]:checked")||{}).value;
-    if(!v("f-name")){ err.textContent="Please add your full name."; $("f-name").focus(); return; }
-    if(!v("f-phone")){ err.textContent="Please add your contact number."; $("f-phone").focus(); return; }
-    if(!att){ err.textContent="Please let us know if you can come."; return; }
-    const lines=["RSVP for Joshua & Rochelle's wedding (17 Jul 2027)","Name: "+v("f-name"),"Contact: "+v("f-phone")];
-    if(att==="no"){ lines.push("Attending: Sorry, can't make it"); }
+  /* friendly inline errors */
+  const fieldFor = {name:"f-name", phone:"f-phone", sok:"f-sok"};
+  function showErr(key, msg){
+    const box=$("e-"+key); if(box) box.textContent=msg;
+    const el = key==="att" ? $("att-choice") : $(fieldFor[key] || ("f-"+key));
+    if(key==="att") el.classList.add("bad"); else if(el) el.setAttribute("aria-invalid","true");
+  }
+  function clearErr(key){
+    const box=$("e-"+key); if(box) box.textContent="";
+    if(key==="att") $("att-choice").classList.remove("bad");
+    else { const el=$(fieldFor[key] || ("f-"+key)); if(el) el.removeAttribute("aria-invalid"); }
+  }
+  f.addEventListener("input", e=>{
+    const id=e.target.id;
+    if(id==="f-name"||id==="f-phone") clearErr(id.slice(2));
+    else if(/^f-pn\d$/.test(id)) clearErr(id.slice(2));
+    else if(id==="f-sok") clearErr("sok");
+    if(!f.querySelector(".ferr:not(:empty)")) err.textContent="";
+  });
+
+  function collect(){
+    const going = att()==="yes", n = going ? +$("f-plus").value : 0, k = going ? +$("f-kids").value : 0;
+    const names=[]; for(let i=1;i<=n;i++) names.push(v("f-pn"+i));
+    const single = going && $("f-single").checked;
+    return {
+      name: v("f-name"), phone: v("f-phone"),
+      attending: going ? "Yes" : "No",
+      plusCount: n, plusNames: names.join(", "),
+      kidsCount: k, kidsAges: k ? v("f-kidages") : "",
+      dietary: going ? v("f-diet") : "",
+      stay: going && $("f-stay").checked ? "Yes" : "No",
+      singles: single ? "Yes" : "No",
+      singlesWords: single ? v("f-s3") : "", singlesDate: single ? v("f-sdate") : "",
+      singlesInstagram: single ? v("f-sig") : "", singlesConsent: single && $("f-sok").checked ? "Yes" : "No",
+      note: v("f-msg"),
+      website: $("f-web").value   // honeypot
+    };
+  }
+
+  function validate(){
+    const problems=[];   // [key, message, element to focus]
+    ["name","phone","att","sok"].forEach(clearErr);
+    f.querySelectorAll("#plus-names input").forEach(i=>clearErr(i.id.slice(2)));
+    if(!v("f-name")) problems.push(["name","Please add your full name.",$("f-name")]);
+    const digits=v("f-phone").replace(/\D/g,"");
+    if(!digits) problems.push(["phone","Please add your contact number.",$("f-phone")]);
+    else if(digits.length<8) problems.push(["phone","That number looks a little short. Could you check it?",$("f-phone")]);
+    if(!att()) problems.push(["att","Please let us know if you can come.",$("att-yes")]);
+    if(att()==="yes"){
+      const n=+$("f-plus").value;
+      for(let i=1;i<=n;i++) if(!v("f-pn"+i)) problems.push(["pn"+i,"Please add guest "+i+"'s full name.",$("f-pn"+i)]);
+      if($("f-single").checked && !$("f-sok").checked)
+        problems.push(["sok","Please tick this box so we can feature you, or untick “feature me” above.",$("f-sok")]);
+    }
+    problems.forEach(([k,m])=>showErr(k,m));
+    if(problems.length){
+      err.textContent = problems.length===1 ? "Almost there! Please check the highlighted field." : "Almost there! Please check the highlighted fields.";
+      problems[0][2].focus();
+      return false;
+    }
+    err.textContent=""; return true;
+  }
+
+  function whatsappText(d){
+    const lines=["RSVP for Joshua & Rochelle's wedding (17 Jul 2027)","Name: "+d.name,"Contact: "+d.phone];
+    if(d.attending==="No") lines.push("Attending: Sorry, can't make it");
     else{
       lines.push("Attending: Yes!");
-      const n=+$("f-plus").value;
-      if(n){ const names=[]; for(let i=1;i<=n;i++){ const el=$("f-pn"+i); if(!el||!el.value.trim()){ err.textContent="Please add the name of guest "+i+"."; el&&el.focus(); return; } names.push(el.value.trim()); }
-        lines.push("Plus one(s): "+names.join(", ")); }
-      else lines.push("Plus one: No");
-      const k=+$("f-kids").value; lines.push("Children: "+(k? k+" (ages: "+(v("f-kidages")||"not given")+")" : "None"));
-      lines.push("Dietary: "+(v("f-diet")||"None"));
-      lines.push("Staying the night: "+($("f-stay").checked?"Interested":"No"));
-      if($("f-single").checked){
-        if(!$("f-sok").checked){ err.textContent="Please tick the box to say you're OK being featured in the Singles Column."; return; }
-        lines.push("Singles Column: YES","- 3 words: "+(v("f-s3")||"-"),"- Ideal date: "+(v("f-sdate")||"-"),"- Instagram: "+(v("f-sig")||"-"));
-      }
+      lines.push(d.plusCount ? "Plus one(s): "+d.plusNames : "Plus one: No");
+      lines.push("Children: "+(d.kidsCount ? d.kidsCount+" (ages: "+(d.kidsAges||"not given")+")" : "None"));
+      lines.push("Dietary: "+(d.dietary||"None"));
+      lines.push("Staying the night: "+(d.stay==="Yes"?"Interested":"No"));
+      if(d.singles==="Yes") lines.push("Singles Column: YES","- 3 words: "+(d.singlesWords||"-"),"- Ideal date: "+(d.singlesDate||"-"),"- Instagram: "+(d.singlesInstagram||"-"),"- OK to feature in magazine: Yes");
     }
-    if(v("f-msg")) lines.push("Note: "+v("f-msg"));
-    err.textContent="";
+    if(d.note) lines.push("Note: "+d.note);
+    return lines.join("\n");
+  }
+  function openWhatsApp(d){
     const a=document.createElement("a");
-    a.href="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(lines.join("\n"));
+    a.href="https://wa.me/"+CONFIG.whatsapp.replace(/\D/g,"")+"?text="+encodeURIComponent(whatsappText(d));
     a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function showThanks(d){
+    f.hidden=true;
+    $("thanks-title").textContent="Thank you, "+d.name+"! We've got your RSVP ♡";
+    $("thanks-extra").textContent = d.attending==="Yes"
+      ? "We can't wait to see you in the rainforest on Saturday, 17 July 2027."
+      : "We'll miss you, and we'll raise a glass to you on the night.";
+    $("thanks-contact").textContent="Need to change something? Just message us: "+contactLine+".";
+    const t=$("thanks"); t.hidden=false; t.focus({preventScroll:true});
+    t.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"center"});
+  }
+  function showFailure(msg){
+    err.textContent=msg; fallback.hidden=false;
+    send.disabled=false; send.textContent="Try sending again";
+  }
+
+  let last=null;
+  $("wa-btn").addEventListener("click", ()=>{ if(last) openWhatsApp(last); });
+
+  f.addEventListener("submit", async e=>{
+    e.preventDefault();
+    if(send.disabled) return;
+    if(!validate()) return;
+    const d=collect(); last=d;
+    if(d.website){ showThanks(d); return; }            // a bot filled the hidden field: pretend it worked
+    if(!CONFIG.sheetUrl){
+      showFailure("Oops, our RSVP list isn't connected yet. Please send your answers on WhatsApp instead.");
+      return;
+    }
+    send.disabled=true; send.textContent="Sending…"; err.textContent=""; fallback.hidden=true;
+    try{
+      const ctrl=new AbortController(), timer=setTimeout(()=>ctrl.abort(),20000);
+      const res=await fetch(CONFIG.sheetUrl,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},   // text/plain avoids a CORS preflight
+        body:JSON.stringify(d),
+        redirect:"follow",
+        signal:ctrl.signal
+      });
+      clearTimeout(timer);
+      const out=await res.json().catch(()=>({ok:false}));
+      if(res.ok && out.ok) showThanks(d);
+      else showFailure("Sorry, something went wrong saving your RSVP. Please try again, or send it on WhatsApp.");
+    }catch(_){
+      showFailure("Sorry, we couldn't reach our RSVP list (check your connection). Please try again, or send it on WhatsApp.");
+    }
   });
 })();
 </script>
