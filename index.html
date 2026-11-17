@@ -204,9 +204,18 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .cal-grid .day17 svg{position:absolute;left:50%;top:50%;width:46px;height:46px;transform:translate(-50%,-48%)}
 .cal-grid .day17 b{position:relative;z-index:1;font-weight:600}
 
-/* timeline */
-.tl{position:relative;width:100%;display:grid;grid-template-columns:1fr 34px 1fr;row-gap:20px;text-align:left;padding:8px 0}
-.tl .line{position:absolute;left:50%;top:4px;bottom:4px;width:34px;transform:translateX(-50%);height:calc(100% - 8px)}
+/* timeline: champagne pour */
+.champ{position:relative;width:100%;--bw:160px;--tw:190px}
+@media (min-width:900px){ .champ{--bw:190px;--tw:230px} }
+.champ-bottle{display:block;width:var(--bw);height:auto;margin:0 auto}
+.champ-tower{display:block;width:var(--tw);height:auto;margin:0 auto}
+/* stream runs from the bottle's mouth (100/160 of its width down) to the top coupe's rim (82/160 of the tower width up) */
+.champ-stream{position:absolute;left:50%;width:34px;transform:translateX(-50%);top:calc(var(--bw) * 100 / 160);height:calc(100% - var(--bw) * 100 / 160 - var(--tw) * 82 / 160)}
+.champ .hz{position:absolute;width:12px;height:11px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='14 26 72 62'%3E%3Cpath d='M50 86 C22 66 14 48 26 36 C36 26 48 32 50 42 C52 32 64 26 74 36 C86 48 78 66 50 86Z' fill='%23f2b6c4'/%3E%3C/svg%3E") center/contain no-repeat}
+.champ .hz.s{width:8px;height:7px}
+.champ .tl{padding:6px 0 10px}
+
+.tl{position:relative;width:100%;display:grid;grid-template-columns:1fr 34px 1fr;row-gap:22px;text-align:left}
 .tl .item{display:flex;flex-direction:column;gap:2px}
 .tl .item.l{grid-column:1;text-align:right;align-items:flex-end}
 .tl .item.r{grid-column:3}
@@ -217,13 +226,13 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .tl time{font-family:var(--display);font-style:italic;font-size:1.6rem;line-height:1.1;font-variant-numeric:tabular-nums}
 .tl .item span{font-size:.9rem;color:var(--ink2);max-width:18ch}
 
-/* countdown */
-.count{position:relative;width:min(380px,100%);display:flex;gap:4px;align-items:flex-start;justify-content:center;padding:30px 16px}
-.count .oval{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.count div{display:flex;flex-direction:column;align-items:center;min-width:54px;position:relative}
-.count b{font-family:var(--display);font-style:italic;font-weight:400;font-size:2.3rem;line-height:1.1;font-variant-numeric:tabular-nums}
-.count small{font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--ink2)}
-.count i{font-family:var(--display);font-size:1.8rem;line-height:1.2;color:var(--ink2)}
+/* countdown (top of the sheet) */
+.countdown{gap:2px}
+.cd-big{display:flex;align-items:baseline;justify-content:center;gap:10px;font-family:var(--display);font-style:italic;line-height:1}
+.cd-big b{font-weight:400;font-size:clamp(4.2rem,22vw,6.5rem);font-variant-numeric:tabular-nums}
+.cd-big span{font-size:1.8rem}
+.cd-line{font-family:var(--display);font-style:italic;font-size:clamp(1.35rem,5.6vw,1.8rem);line-height:1.25;max-width:20ch;text-wrap:balance}
+.cd-small{margin-top:8px;font-size:.85rem;font-weight:500;color:var(--ink2);font-variant-numeric:tabular-nums;letter-spacing:.04em}
 
 /* venue + buttons */
 .venue-box{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -248,11 +257,13 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .faq .ans{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
 .faq h3{font-family:var(--sans);font-weight:600;font-size:.95rem;margin-top:6px}
 .faq .fine{font-size:.82rem;color:var(--ink2)}
-.swatches{display:flex;gap:8px;flex-wrap:wrap}
-.swatches span{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink)}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.chips li{font-size:.85rem;font-weight:500;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.85);border:1px solid rgba(62,90,68,.3)}
 
 /* rsvp */
 .rsvp-box{width:100%;display:flex;flex-direction:column;gap:16px}
+.rsvp-by{text-align:center;font-family:var(--display);font-style:italic;font-size:1.35rem;line-height:1.3}
+.rsvp-by b{font-weight:400;white-space:nowrap;background:linear-gradient(transparent 62%, rgba(242,182,196,.55) 62%)}
 .rsvp-box[hidden]{display:none}
 form{width:100%;display:flex;flex-direction:column;gap:16px;text-align:left}
 label{font-family:var(--sans);font-size:.95rem;font-weight:600;display:flex;flex-direction:column;gap:6px;color:var(--ink)}
@@ -369,6 +380,14 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 
     <div class="sheet">
 
+    <section class="countdown" id="countdown">
+      <p class="cd-big"><b id="cd-d">–</b><span>days</span></p>
+      <p class="cd-line" id="cd-line"></p>
+      <p class="cd-small"><span id="cd-h">00</span>h · <span id="cd-m">00</span>m · <span id="cd-s">00</span>s</p>
+    </section>
+
+    <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
+
     <section id="story">
       <h2 class="h">How it all started</h2>
       <p class="copy">We met over coffee at the Starbucks at Suntec Convention Centre, right beside Din Tai Fung. That café has since closed, but our story kept going. Now we'd love you with us in the rainforest for the next chapter.</p>
@@ -392,10 +411,27 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 
     <section>
       <h2 class="h">What time?</h2>
-      <div class="tl">
-        <svg class="line doodle" viewBox="0 0 34 400" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M17 0 Q32 40 17 80 T17 160 T17 240 T17 320 T17 400" fill="none" stroke="#3e5a44" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <div class="champ">
+        <!-- a champagne bottle pours a golden stream down the timeline into a tower of coupes -->
+        <svg class="champ-bottle doodle" viewBox="0 0 160 110" aria-hidden="true">
+          <g transform="translate(80 100) rotate(125)" stroke="#3e5a44" stroke-width="1.6" stroke-linejoin="round">
+            <rect x="-112" y="-15" width="70" height="30" rx="7" fill="#9dbb8b"/>
+            <path d="M-44 -15 C-36 -15 -32 -5 -26 -5 L-26 5 C-32 5 -36 15 -44 15 Z" fill="#9dbb8b"/>
+            <rect x="-28" y="-5" width="28" height="10" rx="2" fill="#86a877"/>
+            <rect x="-28" y="-6" width="15" height="12" rx="2" fill="#f2b6c4"/>
+            <rect x="-92" y="-10" width="32" height="20" rx="3" fill="#fbf7ef" stroke-width="1.1"/>
+            <use href="#heartP" transform="translate(-81 -5) scale(.1)" fill="#e79aae" stroke="none"/>
+            <path d="M-104 -9 Q-100 -11 -96 -9" fill="none" stroke="#fbf7ef" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <path d="M80 100 Q78 105 80 110" fill="none" stroke="#e3ad5c" stroke-width="2.4" stroke-linecap="round"/>
+          <g fill="#f6e09c" stroke="#e3ad5c" stroke-width=".8"><circle cx="70" cy="97" r="2"/><circle cx="90" cy="95" r="1.6"/><circle cx="74" cy="90" r="1.3"/><circle cx="88" cy="103" r="1.3"/></g>
         </svg>
+        <svg class="champ-stream" viewBox="0 0 34 400" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M17 0 Q28 40 17 80 T17 160 T17 240 T17 320 T17 400" fill="none" stroke="#e3ad5c" stroke-width="2.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <span class="hz" style="left:4%;top:16%"></span><span class="hz s" style="right:6%;top:24%"></span><span class="hz" style="left:10%;top:47%"></span>
+        <span class="hz s" style="right:3%;top:58%"></span><span class="hz s" style="left:2%;top:72%"></span><span class="hz" style="right:11%;top:84%"></span>
+      <div class="tl">
         <div class="item l"><time>6:00 pm</time><span>Guests arrive. Grab a drink and say hi</span></div>
         <div class="ico l doodle"><svg aria-hidden="true"><use href="#glasses"/></svg></div>
 
@@ -411,20 +447,19 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
         <div class="item l"><time>11:00 pm</time><span>The evening wraps up</span></div>
         <div class="ico l doodle"><svg aria-hidden="true"><use href="#moon"/></svg></div>
       </div>
-    </section>
-    <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
-
-
-    <section>
-      <h2 class="h">See you in</h2>
-      <div class="count" aria-live="polite">
-        <svg class="oval doodle" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M150 4 C260 2 298 30 296 52 C294 80 240 97 150 96 C60 96 4 82 4 50 C4 22 50 6 158 8" fill="none" stroke="#3e5a44" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+        <svg class="champ-tower doodle" viewBox="0 0 160 100" aria-hidden="true">
+          <defs>
+            <g id="coupe" stroke="#d9768f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M-18 0 Q-16 13 0 14 Q16 13 18 0 Z" fill="#fbe3d2"/>
+              <path d="M-14 3 Q0 6 14 3" fill="none" stroke="#e3ad5c" stroke-width="1.2"/>
+              <path d="M0 14 L0 25 M-8 27 Q0 24 8 27" fill="none"/>
+            </g>
+          </defs>
+          <path d="M66 20 Q60 30 64 42 M94 20 Q100 30 96 42 M48 46 Q42 56 46 68 M112 46 Q118 56 114 68" fill="none" stroke="#e3ad5c" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+          <use href="#coupe" x="80" y="18"/>
+          <use href="#coupe" x="62" y="44"/><use href="#coupe" x="98" y="44"/>
+          <use href="#coupe" x="44" y="70"/><use href="#coupe" x="80" y="70"/><use href="#coupe" x="116" y="70"/>
         </svg>
-        <div><b id="cd-d">–</b><small>days</small></div><i>:</i>
-        <div><b id="cd-h">–</b><small>hours</small></div><i>:</i>
-        <div><b id="cd-m">–</b><small>mins</small></div><i>:</i>
-        <div><b id="cd-s">–</b><small>secs</small></div>
       </div>
     </section>
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
@@ -490,9 +525,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
           <summary>What should I wear?</summary>
           <div class="ans">
             <p id="faq-dress"></p>
-            <div class="swatches" aria-label="Suggested colours: sage, butter yellow, powder blue, blush, peach, lavender">
-              <span style="background:#c6d7b2"></span><span style="background:#f6e09c"></span><span style="background:#bcd2f1"></span><span style="background:#f2b6c4"></span><span style="background:#f5c29a"></span><span style="background:#cbbde9"></span>
-            </div>
+            <ul class="chips" id="dress-ideas" aria-label="Outfit ideas"></ul>
             <p>Please avoid white and cream, so the bride can shine.</p>
             <p>The resort sits in the rainforest, so pack comfortable shoes for the walkways. If you'll be outdoors before dinner, some insect repellent helps too.</p>
           </div>
@@ -506,7 +539,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <section id="rsvp">
       <h2 class="h">Will you come?</h2>
       <div class="rsvp-box" id="rsvp-panel">
-      <p class="copy" id="rsvp-by"></p>
+      <p class="rsvp-by" id="rsvp-by"></p>
       <form id="form" novalidate>
         <!-- honeypot: invisible to people, bots fill it in -->
         <div class="hp" aria-hidden="true"><label for="f-web">Website<input id="f-web" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -613,8 +646,9 @@ const CONFIG = {
   // WhatsApp number for the backup "send on WhatsApp" button.
   // Country code + number, no + or spaces, e.g. "6591234567". "" = guest picks the chat.
   whatsapp: "",
-  rsvpBy: "1 June 2027",                                   // RSVP deadline
-  dressCode: "Smart casual in pastels. Think soft wildflower colours like these:",
+  rsvpBy: "17 March 2027",                                 // RSVP deadline
+  dressCode: "Animal themed! We're celebrating in the rainforest, so come dressed as (or inspired by) your favourite animal. A print, a colour, ears, wings or a tail: subtle or all-out, both are welcome. Some ideas:",
+  dressIdeas: ["red panda", "otter", "orangutan", "hornbill", "butterfly", "leopard print", "zebra stripes", "flamingo pink"],
   kids: "Yes, little ones are welcome! Just let us know in the RSVP so we can plan for them.",
   contactPerson: "Joshua or Rochelle",                     // who guests should message
   contactNumber: "",                                       // optional, e.g. "+65 9123 4567"
@@ -622,6 +656,7 @@ const CONFIG = {
   hashtag: "",                                             // e.g. "#AbsoLEEwed" (shown after the photos line)
   parkingNote: "",                                         // e.g. "Let us know at the reception and we'll validate your parking."
   start: "2027-07-17T18:00:00+08:00",                      // used by the countdown
+  countdownLine: "until we say absolutlee “I do”!",       // shown under the big number of days
   // "How it all started" flip cards: front = photo + title, back = title, date and a line or two of story.
   // Photos: portrait 4:5 (e.g. 1080x1350), under 250KB. A missing photo shows a cream placeholder.
   story: [
@@ -634,8 +669,10 @@ const CONFIG = {
 /* ===================================================================== */
 
 const contactLine = CONFIG.contactPerson + (CONFIG.contactNumber ? " (" + CONFIG.contactNumber + ")" : "");
-document.getElementById("rsvp-by").textContent = "Kindly let us know by " + CONFIG.rsvpBy + ".";
+document.getElementById("cd-line").textContent = CONFIG.countdownLine;
+document.getElementById("rsvp-by").innerHTML = "Kindly RSVP by <b></b>"; document.querySelector("#rsvp-by b").textContent = CONFIG.rsvpBy;
 document.getElementById("faq-dress").textContent = CONFIG.dressCode;
+CONFIG.dressIdeas.forEach(t=>{ const li=document.createElement("li"); li.textContent=t; document.getElementById("dress-ideas").appendChild(li); });
 document.getElementById("faq-rsvp").textContent = "Please RSVP by " + CONFIG.rsvpBy + " using the form below.";
 document.getElementById("faq-kids").textContent = CONFIG.kids;
 document.getElementById("faq-contact").textContent = "Message " + contactLine + ", or any of our bridal team.";
@@ -806,6 +843,7 @@ function tick(){
   const h = Math.floor(s/3600); s%=3600;
   const m = Math.floor(s/60); s%=60;
   document.getElementById("cd-d").textContent = d;
+  document.querySelector(".cd-big span").textContent = d===1 ? "day" : "days";
   document.getElementById("cd-h").textContent = String(h).padStart(2,"0");
   document.getElementById("cd-m").textContent = String(m).padStart(2,"0");
   document.getElementById("cd-s").textContent = String(s).padStart(2,"0");

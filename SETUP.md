@@ -118,8 +118,9 @@ Open `index.html`, search for `const CONFIG`, and fill in or check each line. Ke
 
 - [ ] **`sheetUrl`**: your Google Apps Script web app URL (Part A, step 4).
 - [ ] **`whatsapp`**: the number for the backup "Send on WhatsApp" button, country code first with no + or spaces, e.g. `"6591234567"`.
-- [ ] **`rsvpBy`**: your RSVP deadline (currently `"1 June 2027"`).
-- [ ] **`dressCode`**: your dress code wording.
+- [ ] **`rsvpBy`**: your RSVP deadline (currently `"17 March 2027"`). It shows above the form and in the FAQ.
+- [ ] **`dressCode`** and **`dressIdeas`**: the animal-themed dress code wording and the outfit idea chips under it.
+- [ ] **`countdownLine`**: the words under the big countdown number (currently `until we say absolutlee “I do”!`).
 - [ ] **`contactPerson`** (and optionally **`contactNumber`**): who guests should message with questions or changes.
 - [ ] **`kids`**: your children policy.
 - [ ] **`photos`** and **`hashtag`**: your photo wording and wedding hashtag, e.g. `"#AbsoLEEwed"`.
