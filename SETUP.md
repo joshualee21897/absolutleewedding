@@ -16,11 +16,12 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 | `img/groom.png`, `img/bride.png` | Your two characters. |
 | `img/bg.jpg`, `img/bg-desktop.jpg` | The painted meadow backgrounds behind the whole site (compressed): the tall one for phones, the wide one for screens wider than 900px. |
 | `img/dress-capybara.png`, `img/dress-leopard.png`, `img/dress-flamingo.png`, `img/dress-zebra.png` | The four dress code examples in "What should I wear?". |
-| `img/champagne-tower.png` | The champagne pour in "What time?" (compressed; the original is in `img/originals/`). |
+| `img/champagne-tower.png` | The champagne pour in "Wedding programme" (compressed; the original is in `img/originals/`). |
+| `img/icon-cocktail.png`, `icon-chair.png`, `icon-rings.png`, `icon-cutlery.png`, `icon-moon.png` | *(optional)* Your own icons for the programme. If a file with that name exists, it replaces the drawn watercolour icon automatically (transparent PNG, square, about 120×120px). |
 | `img/boy-kneel.png`, `img/girl-heart.png` | The proposal scene at the top of the invite (he kneels with the ring, she holds a heart). |
 | `img/boy-kneel-closed.png` | *(optional)* The kneeling drawing with the ring box **closed**. If you add it, the box opening becomes a crossfade between your two drawings instead of the drawn-on lid. |
 | `img/card-*.webp` / `.png` | The illustrated playing-card artwork for "How it all started" (J giraffe, Q red panda, K leopard, A flamingo, and the card back). WebP is used; the PNGs are a fallback for very old browsers. Originals are in `img/originals/`. |
-| `img/story-1.jpg` … `img/story-4.jpg` | *(you add these)* Photos that show through each card's window. See Part D. |
+| `img/story-1.jpg` … `img/story-6.jpg` | *(you add these)* Photos that show through each card's window. See Part D. |
 | `img/originals/` | Full-quality copies of both backgrounds, kept as a backup. |
 | `og-image.png` | The picture people see when you share the link on WhatsApp. |
 | `apps-script/Code.gs` | The small Google script that saves RSVPs into your Sheet. |
@@ -146,16 +147,18 @@ Until you add photos, the site shows soft cream placeholders, so nothing looks b
 
 **"Our story" flip cards (in "How it all started")**
 
-| Card | File | Title |
-|---|---|---|
-| 1 | `img/story-1.jpg` | little us (childhood) |
-| 2 | `img/story-2.jpg` | how we met |
-| 3 | `img/story-3.jpg` | the proposal |
-| 4 | `img/story-4.jpg` | pre-wedding shoot |
+| Card | Photo | Title | Frame |
+|---|---|---|---|
+| 1 | `img/story-1.jpg` | little us | J giraffe |
+| 2 | `img/story-2.jpg` | how we met | Q red panda |
+| 3 | `img/story-3.jpg` | officially dating | J giraffe |
+| 4 | `img/story-4.jpg` | travelling | Q red panda |
+| 5 | `img/story-5.jpg` | the proposal | K leopard |
+| 6 | `img/story-6.jpg` | pre-wedding shoot | A flamingo |
 
 - Portrait photos work best (the card window is slightly taller than wide). Faces in the upper-middle look best. On iPhone: Photos → Edit → Crop → the aspect icon → **4:5**.
 - Keep each photo under **250KB** so the page loads fast on mobile data. Easiest: send them to me and I'll crop and compress them. Or use [squoosh.app](https://squoosh.app) (MozJPEG, quality about 75).
 - The words on the back of each card live in `index.html`: search for `story:` inside `CONFIG`. For each card, change `date` (e.g. `"2019"`) and `text` (one or two short lines, around 20 words, so it fits on the small cards on computers). Remove the `[square-bracket]` placeholder notes. You can change `title` too.
-- Each card uses illustrated artwork, set by `card` (e.g. `"card-j-giraffe"`). The back shows up to **4 lines** of story, so keep each `text` to about 15 words; longer text is cut off with "…" on phones.
+- Each card's artwork is set by `frame` (e.g. `"card-j-giraffe"`), so you can swap frames later. The back shows up to **4 lines** of story, so keep each `text` to about 15 words; longer text is cut off with "…" on phones.
 
 Re-upload the folder to Netlify afterwards (Part B, "Updating the site later").
