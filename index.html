@@ -124,6 +124,8 @@ section{position:relative;display:flex;flex-direction:column;align-items:center;
 .h{position:relative;flex:none;width:min(340px,88vw);aspect-ratio:1394/459;margin:0 auto;color:var(--ink);
   background:url("img/banner.png") center/100% 100% no-repeat;
   background-image:image-set(url("img/banner.webp") type("image/webp"), url("img/banner.png") type("image/png"))}
+.h-arc{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.h-arc text{fill:var(--ink);font-family:var(--display);font-style:italic;font-weight:400}
 .h-txt{position:absolute;left:20%;right:20%;top:10%;height:50%;display:flex;align-items:center;justify-content:center;
   font-family:var(--display);font-style:italic;font-weight:400;font-size:2rem;line-height:1;white-space:nowrap}
 @media (min-width:900px){ .h{width:440px} }
@@ -282,10 +284,10 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .cal-grid .day17 b{position:relative;z-index:1;font-weight:600}
 
 /* timeline: the champagne pours down as you scroll; times sit along the stream (positions are % of the image) */
-.pour{position:relative;left:20px;width:220px;margin:6px auto 24px}   /* nudged right so the stream (45% across the image) sits in the middle */
+.pour{position:relative;left:28px;width:220px;margin:6px auto 24px}   /* nudged right so the stream (left of centre in the picture) has room on both sides */
 .pour-img{display:block;width:100%;height:auto;clip-path:inset(0 0 var(--hide,100%) 0);will-change:clip-path}
 /* --g: pointer length, --pg: gap from the pointer to the icon, --ih: icon height (--s scales wide icons, --r is each icon's width/height), --ig: gap from the icon to the time */
-.pour{--g:8px;--pg:14px;--ih:32px;--ig:10px}
+.pour{--g:30px;--pg:12px;--ih:32px;--ig:10px}
 .tlc{position:absolute;top:var(--y);height:1px;width:var(--g);background:var(--ink);opacity:0;transition:opacity .5s ease}
 .tlc::after{content:"";position:absolute;top:-2.5px;width:6px;height:6px;border-radius:50%;background:var(--ink)}
 .tlc.l{right:calc(100% - var(--x))} .tlc.l::after{right:-3px}
@@ -304,10 +306,12 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .bub{position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s) / -2);border-radius:50%;border:1px solid rgba(201,164,58,.7);background:rgba(255,248,220,.6);
   pointer-events:none;animation:bubble var(--d) ease-out var(--dl) forwards;opacity:0}
 @keyframes bubble{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-70px)}}
-@media (max-width:400px){ .pour{width:205px;left:22px;--ih:30px} .tlp time{font-size:1.2rem} }
-@media (max-width:380px){ .pour{width:190px;left:18px;--ih:28px} .tlp{width:5.6em} .tlp time{font-size:1.15rem} .tlp > span{font-size:.8rem} }
+/* phones: step the picture, icons and text down so the long pointers and gaps still fit */
+@media (max-width:400px){ .pour{width:210px;left:27px;--g:28px;--ih:28px} .tlp{width:5em} .tlp time{font-size:1.15rem} .tlp > span{font-size:.82rem} }
+@media (max-width:385px){ .pour{width:185px;left:23px;--ih:26px} .tlp{width:4.8em} .tlp time{font-size:1.05rem} .tlp > span{font-size:.78rem} }
+@media (max-width:365px){ .pour{width:170px;left:19px;--g:26px} .tlp time{font-size:1rem} .tlp > span{font-size:.75rem} }
 .pour .wide{--s:.8}
-@media (min-width:900px){ .pour .wide{--s:1} .pour{width:300px;left:15px;--g:22px;--ih:48px} .tlp{width:9em} .tlp time{font-size:1.4rem} .tlp > span{font-size:.9rem} }
+@media (min-width:900px){ .pour .wide{--s:1} .pour{width:300px;left:15px;--g:32px;--ih:48px} .tlp{width:9em} .tlp time{font-size:1.4rem} .tlp > span{font-size:.9rem} }
 
 /* venue + buttons */
 .venue-box{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -382,6 +386,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 .singles{border:2px dashed #e79aae;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .singles legend{font-family:var(--display);font-style:italic;font-weight:400;font-size:1.35rem;padding:0 6px}
 #single-fields{display:flex;flex-direction:column;gap:12px}
+.single-yay{font-size:.88rem;color:var(--ink2);margin-top:-4px}
 #single-fields[hidden],#kidages-wrap[hidden],.yes-only[hidden]{display:none}
 #plus-names{display:flex;flex-direction:column;gap:12px}
 #plus-names:empty{display:none}
@@ -498,7 +503,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <div class="sheet">
 
     <section id="story">
-      <h2 class="h">Our story</h2>
+      <h2 class="h">Our Story</h2>
       <div class="hearts" id="hearts">
         <!-- childhood photos sit behind the frame artwork, clipped to a heart -->
         <span class="hp-photo l"><img src="img/childhood-joshua.jpg" alt="Joshua as a child" loading="lazy" decoding="async"></span>
@@ -522,7 +527,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
 
     <section>
-      <h2 class="h">Save the date</h2>
+      <h2 class="h">Save The Date</h2>
       <p class="scratch-hint" id="scratch-hint" aria-live="polite">scratch to reveal when's the big day! ✨</p>
       <div class="cal" id="cal-wrap">
         <div class="cal-dow" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
@@ -540,27 +545,28 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 
 
     <section>
-      <h2 class="h">Wedding programme</h2>
+      <h2 class="h">Wedding Programme</h2>
       <div class="pour" id="pour">
         <img class="pour-img" id="pour-img" src="img/champagne-tower.png" alt="A champagne bottle pouring into a tower of glasses">
         <!-- each stop: pointer (tlc), watercolour icon (tli, its width from the image ratio --r), then the time and text (tlp) -->
-        <span class="tlc l" style="--y:15%;--x:43%"></span><img class="tli l" src="img/icon-cocktail.png" alt="" style="--y:15%;--x:43%;--r:.71">
-        <p class="tlp l" style="--y:15%;--x:43%;--r:.71"><time>6:00 pm</time><span>Cocktail reception outside the ballroom</span></p>
-        <span class="tlc r" style="--y:30%;--x:49.5%"></span><img class="tli r" src="img/icon-chair.png" alt="" style="--y:30%;--x:49.5%;--r:.62">
-        <p class="tlp r" style="--y:30%;--x:49.5%;--r:.62"><time>6:30 pm</time><span>All guests to be seated</span></p>
-        <span class="tlc l" style="--y:45%;--x:40%"></span><img class="tli l wide" src="img/icon-rings.png" alt="" style="--y:45%;--x:40%;--r:1.35">
-        <p class="tlp l wide" style="--y:45%;--x:40%;--r:1.35"><time>6:45 pm</time><span>Ceremony begins</span></p>
-        <span class="tlc r" style="--y:72%;--x:50.5%"></span><img class="tli r wide" src="img/icon-cutlery.png" alt="" style="--y:72%;--x:50.5%;--r:1.29">
-        <p class="tlp r wide" style="--y:72%;--x:50.5%;--r:1.29"><time>Dinner</time><span>Food, drinks, games &amp; lots of fun!</span></p>
-        <span class="tlc l" style="--y:83%;--x:28%"></span><img class="tli l" src="img/icon-moon.png" alt="" style="--y:83%;--x:28%;--r:.99">
-        <p class="tlp l" style="--y:83%;--x:28%;--r:.99"><time>10:45 pm</time><span>End of evening ♡</span></p>
+<!-- five stops at equal steps (14, 31, 48, 65, 82% of the picture height); --x is where each pointer touches the stream or tower -->
+        <span class="tlc l" style="--y:14%;--x:42%"></span><img class="tli l" src="img/icon-cocktail.png" alt="" style="--y:14%;--x:42%;--r:.71">
+        <p class="tlp l" style="--y:14%;--x:42%;--r:.71"><time>6:00 pm</time><span>Cocktail reception outside the ballroom</span></p>
+        <span class="tlc r" style="--y:31%;--x:49.5%"></span><img class="tli r" src="img/icon-chair.png" alt="" style="--y:31%;--x:49.5%;--r:.62">
+        <p class="tlp r" style="--y:31%;--x:49.5%;--r:.62"><time>6:30 pm</time><span>All guests to be seated</span></p>
+        <span class="tlc l" style="--y:48%;--x:41%"></span><img class="tli l wide" src="img/icon-rings.png" alt="" style="--y:48%;--x:41%;--r:1.35">
+        <p class="tlp l wide" style="--y:48%;--x:41%;--r:1.35"><time>6:45 pm</time><span>Ceremony begins</span></p>
+        <span class="tlc r" style="--y:65%;--x:45.5%"></span><img class="tli r wide" src="img/icon-cutlery.png" alt="" style="--y:65%;--x:45.5%;--r:1.29">
+        <p class="tlp r wide" style="--y:65%;--x:45.5%;--r:1.29"><time>Dinner</time><span>Food, drinks, games &amp; lots of fun!</span></p>
+        <span class="tlc l" style="--y:82%;--x:28%"></span><img class="tli l" src="img/icon-moon.png" alt="" style="--y:82%;--x:28%;--r:.99">
+        <p class="tlp l" style="--y:82%;--x:28%;--r:.99"><time>10:45 pm</time><span>End of evening ♡</span></p>
       </div>
     </section>
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
 
 
     <section>
-      <h2 class="h">The venue</h2>
+      <h2 class="h">The Venue</h2>
       <div class="venue-box">
       <img class="venue-art" id="venue-art" src="img/icon-resort.png" alt="" hidden>
       <p class="venue">Mandai Rainforest Resort<br>by Banyan Tree</p>
@@ -575,7 +581,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 
 
     <section id="faq">
-      <h2 class="h">Good to know</h2>
+      <h2 class="h">FAQ</h2>
       <div class="faq">
 
         <details open>
@@ -605,7 +611,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
         </details>
 
         <details>
-          <summary>Guest information</summary>
+          <summary>RSVP details</summary>
           <div class="ans">
             <h3>When do I need to RSVP by?</h3>
             <p id="faq-rsvp"></p>
@@ -640,7 +646,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
 
     <section id="rsvp">
-      <h2 class="h">We'd love to have you there!</h2>
+      <h2 class="h">We'd Love To Have You There!</h2>
       <div class="rsvp-box" id="rsvp-panel">
       <p class="rsvp-by" id="rsvp-by"></p>
       <form id="form" novalidate>
@@ -667,13 +673,13 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
         <div class="yes-only" id="yes-only" hidden>
           <label for="f-plus">Bringing a plus one?
             <small class="help">Only if your invite included a plus one. Not sure? Just ask us before adding one!</small>
-            <select id="f-plus" name="plus"><option value="0">No, just me</option><option value="1">1 guest</option><option value="2">2 guests</option></select>
+            <select id="f-plus" name="plus"><option value="0">No, just me</option><option value="1">1 guest</option><option value="2">2 guests</option><option value="3">3 guests</option></select>
           </label>
           <div id="plus-names"></div>
 
           <label for="f-kids">Bringing children?
             <small class="help">So we can plan kids' meals and high chairs</small>
-            <select id="f-kids" name="kids"><option value="0">No</option><option value="1">1 child</option><option value="2">2 children</option><option value="3">3 children</option></select>
+            <select id="f-kids" name="kids"><option value="0">No</option><option value="1">1 child</option><option value="2">2 children</option><option value="3">3 children</option><option value="4">4 children</option><option value="5">5 children</option></select>
           </label>
           <label for="f-kidages" id="kidages-wrap" hidden>Their ages
             <input id="f-kidages" name="kidages" placeholder="e.g. 4 and 7">
@@ -701,6 +707,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
             <p class="help">We're putting together a Singles Column for our wedding magazine! If you're single and up for meeting new people, we'd love to feature you.</p>
             <label class="check" for="f-single"><input type="checkbox" id="f-single" name="single"> Yes, feature me in the Singles Column!</label>
             <div id="single-fields" hidden>
+              <p class="single-yay">Yay! 💌 We'll reach out for a photo of you to feature in the magazine.</p>
               <label for="f-s3">Describe yourself in 3 words
                 <input id="f-s3" name="s3" maxlength="80">
               </label>
@@ -710,8 +717,6 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
               <label for="f-sig">Instagram handle (optional)
                 <input id="f-sig" name="sig" placeholder="@" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40">
               </label>
-              <label class="check" for="f-sok"><input type="checkbox" id="f-sok" name="sok" aria-describedby="e-sok"> I'm OK with my name, answers and Instagram handle appearing in the magazine at the wedding.</label>
-              <small class="ferr" id="e-sok"></small>
             </div>
           </fieldset>
         </div>
@@ -775,12 +780,12 @@ const CONFIG = {
   // frame = the artwork file name in img/ (a .webp and a .png of each). Keep each story to about 15 words so it fits.
   // Photos: portrait, under 250KB (a missing photo shows "photo coming soon").
   story: [
-    { title: "little us",         frame: "card-j-giraffe",  img: "img/story-1.jpg", date: "19XX",       text: "[A line about us as kids.]" },
-    { title: "how we met",        frame: "card-q-redpanda", img: "img/story-2.jpg", date: "20XX",       text: "Coffee at the Starbucks at Suntec, beside Din Tai Fung." },
-    { title: "officially dating", frame: "card-j-giraffe",  img: "img/story-3.jpg", date: "20XX",       text: "[When we made it official.]" },
-    { title: "travelling",        frame: "card-q-redpanda", img: "img/story-4.jpg", date: "20XX",       text: "[A favourite trip together.]" },
-    { title: "the proposal",      frame: "card-k-leopard",  img: "img/story-5.jpg", date: "20XX",       text: "[Where and how it happened.]" },
-    { title: "pre-wedding shoot", frame: "card-a-flamingo", img: "img/story-6.jpg", date: "1 Feb 2027", text: "River Wonders, Mandai. [A line about the day.]" }
+    { title: "first few dates",       frame: "card-j-giraffe",  img: "img/story-1.jpg", date: "[year]",     text: "[a line about this moment]" },
+    { title: "officially dating",     frame: "card-q-redpanda", img: "img/story-2.jpg", date: "[year]",     text: "[a line about this moment]" },
+    { title: "first overseas trip",   frame: "card-j-giraffe",  img: "img/story-3.jpg", date: "[year]",     text: "[a line about this moment]" },
+    { title: "first Disneyland trip", frame: "card-q-redpanda", img: "img/story-4.jpg", date: "[year]",     text: "[a line about this moment]" },
+    { title: "the proposal",          frame: "card-k-leopard",  img: "img/story-5.jpg", date: "[year]",     text: "[a line about this moment]" },
+    { title: "pre-wedding shoot",     frame: "card-a-flamingo", img: "img/story-6.jpg", date: "1 Feb 2027", text: "River Wonders, Mandai. [a line about this moment]" }
   ]
 };
 /* ===================================================================== */
@@ -921,12 +926,25 @@ document.getElementById("cal-link").href = "https://calendar.google.com/calendar
 const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:["#f6e09c","#c9a43a"],
               sage:["#c6d7b2","#7f9f6a"], blue:["#bcd2f1","#6f95cf"], lavender:["#cbbde9","#9480c9"] };
 
-/* Section headings: wrap the words and shrink them until they fit the banner's front band (max 2rem, min 1rem) */
+/* Section headings: the words follow a gentle arc across the banner's front band, shrinking to fit (2rem down to 1rem) */
 (function(){
-  const hs=[...document.querySelectorAll(".h")];
-  hs.forEach(h=>{ if(!h.querySelector(".h-txt")){ const t=document.createElement("span"); t.className="h-txt"; t.textContent=h.textContent.trim(); h.textContent=""; h.appendChild(t); } });
-  function fit(){ hs.forEach(h=>{ const t=h.querySelector(".h-txt"); let size=32; t.style.fontSize=size+"px";
-    while(size>16 && (t.scrollWidth>t.clientWidth+.5 || t.scrollHeight>t.clientHeight+.5)){ size-=.5; t.style.fontSize=size+"px"; } }); }
+  const NS="http://www.w3.org/2000/svg", hs=[...document.querySelectorAll(".h")];
+  // the band runs 20%-80% across the 1394x459 banner; this centre line rises ~50 units in the middle, like the ribbon
+  const ARC="M236 222 Q697 112 1158 222";   // runs the full width of the front band, between the folds
+  hs.forEach((h,i)=>{
+    const words=h.textContent.trim(); h.textContent=""; h.setAttribute("aria-label",words);
+    const svg=document.createElementNS(NS,"svg"); svg.setAttribute("class","h-arc"); svg.setAttribute("viewBox","0 0 1394 459"); svg.setAttribute("aria-hidden","true");
+    svg.innerHTML=`<path id="harc${i}" d="${ARC}" fill="none"/><g><text text-anchor="middle"><textPath href="#harc${i}" startOffset="50%"></textPath></text></g>`;
+    svg.querySelector("textPath").textContent=words;
+    h.appendChild(svg);
+  });
+  function fit(){ hs.forEach(h=>{
+    const svg=h.querySelector("svg"), path=svg.querySelector("path"), text=svg.querySelector("text"), g=svg.querySelector("g");
+    const w=h.getBoundingClientRect().width; if(!w) return;
+    const unit=1394/w, room=path.getTotalLength()*0.97;       // px -> banner units; leave a little air at the ends
+    let px=32; const set=()=>{ text.setAttribute("font-size",(px*unit).toFixed(1)); g.setAttribute("transform",`translate(0 ${(px*unit*0.34).toFixed(1)})`); };
+    set(); while(px>16 && text.getComputedTextLength()>room){ px-=.5; set(); }
+  }); }
   fit(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit); addEventListener("resize",fit);
 })();
 
@@ -1119,10 +1137,10 @@ tick(); setInterval(tick, 1000);
     }
   });
   $("f-kids").addEventListener("change", e=>{ $("kidages-wrap").hidden = e.target.value==="0"; });
-  $("f-single").addEventListener("change", e=>{ $("single-fields").hidden = !e.target.checked; if(!e.target.checked) clearErr("sok"); });
+  $("f-single").addEventListener("change", e=>{ $("single-fields").hidden = !e.target.checked; });
 
   /* friendly inline errors */
-  const fieldFor = {name:"f-name", phone:"f-phone", sok:"f-sok"};
+  const fieldFor = {name:"f-name", phone:"f-phone"};
   function showErr(key, msg){
     const box=$("e-"+key); if(box) box.textContent=msg;
     const el = key==="att" ? $("att-choice") : $(fieldFor[key] || ("f-"+key));
@@ -1137,7 +1155,6 @@ tick(); setInterval(tick, 1000);
     const id=e.target.id;
     if(id==="f-name"||id==="f-phone") clearErr(id.slice(2));
     else if(/^f-pn\d$/.test(id)) clearErr(id.slice(2));
-    else if(id==="f-sok") clearErr("sok");
     if(!f.querySelector(".ferr:not(:empty)")) err.textContent="";
   });
 
@@ -1155,7 +1172,7 @@ tick(); setInterval(tick, 1000);
       song: going ? v("f-song") : "",
       singles: single ? "Yes" : "No",
       singlesWords: single ? v("f-s3") : "", singlesDate: single ? v("f-sdate") : "",
-      singlesInstagram: single ? v("f-sig") : "", singlesConsent: single && $("f-sok").checked ? "Yes" : "No",
+      singlesInstagram: single ? v("f-sig") : "", singlesConsent: single ? "Yes (opted in)" : "No",   // opting in counts as consent
       note: v("f-msg"),
       website: $("f-web").value   // honeypot
     };
@@ -1163,7 +1180,7 @@ tick(); setInterval(tick, 1000);
 
   function validate(){
     const problems=[];   // [key, message, element to focus]
-    ["name","phone","att","sok"].forEach(clearErr);
+    ["name","phone","att"].forEach(clearErr);
     f.querySelectorAll("#plus-names input").forEach(i=>clearErr(i.id.slice(2)));
     if(!v("f-name")) problems.push(["name","Please add your full name.",$("f-name")]);
     const digits=v("f-phone").replace(/\D/g,"");
@@ -1173,8 +1190,6 @@ tick(); setInterval(tick, 1000);
     if(att()==="yes"){
       const n=+$("f-plus").value;
       for(let i=1;i<=n;i++) if(!v("f-pn"+i)) problems.push(["pn"+i,"Please add guest "+i+"'s full name.",$("f-pn"+i)]);
-      if($("f-single").checked && !$("f-sok").checked)
-        problems.push(["sok","Please tick this box so we can feature you, or untick “feature me” above.",$("f-sok")]);
     }
     problems.forEach(([k,m])=>showErr(k,m));
     if(problems.length){

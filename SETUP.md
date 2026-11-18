@@ -155,10 +155,10 @@ Until you add photos, the site shows soft cream placeholders, so nothing looks b
 
 | Card | Photo | Title | Frame |
 |---|---|---|---|
-| 1 | `img/story-1.jpg` | little us | J giraffe |
-| 2 | `img/story-2.jpg` | how we met | Q red panda |
-| 3 | `img/story-3.jpg` | officially dating | J giraffe |
-| 4 | `img/story-4.jpg` | travelling | Q red panda |
+| 1 | `img/story-1.jpg` | first few dates | J giraffe |
+| 2 | `img/story-2.jpg` | officially dating | Q red panda |
+| 3 | `img/story-3.jpg` | first overseas trip | J giraffe |
+| 4 | `img/story-4.jpg` | first Disneyland trip | Q red panda |
 | 5 | `img/story-5.jpg` | the proposal | K leopard |
 | 6 | `img/story-6.jpg` | pre-wedding shoot | A flamingo |
 
