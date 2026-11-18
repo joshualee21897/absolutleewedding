@@ -130,6 +130,9 @@ section{position:relative;display:flex;flex-direction:column;align-items:center;
 .panel{width:100%;background:var(--panel);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;padding:22px 18px}
 .panel[hidden]{display:none}
 p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
+.story-copy{display:flex;flex-direction:column;gap:12px;text-align:center}
+.story-copy b{font-weight:600}
+.red-string{color:#d9574f;font-weight:500}
 .sec{color:var(--ink2)}
 
 /* hero: one pinned screen: countdown, "until Joshua and Rochelle say", the proposal, then "absolutLEE, I do" */
@@ -279,37 +282,32 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .cal-grid .day17 b{position:relative;z-index:1;font-weight:600}
 
 /* timeline: the champagne pours down as you scroll; times sit along the stream (positions are % of the image) */
-.pour{position:relative;left:12px;width:240px;margin:6px auto 92px}   /* nudged right so the stream (45% across the image) sits in the middle */
+.pour{position:relative;left:20px;width:220px;margin:6px auto 24px}   /* nudged right so the stream (45% across the image) sits in the middle */
 .pour-img{display:block;width:100%;height:auto;clip-path:inset(0 0 var(--hide,100%) 0);will-change:clip-path}
-/* --g: pointer length, --ic: icon size, --ig: gap between icon and text */
-.pour{--g:10px;--ih:40px;--ig:8px}
+/* --g: pointer length, --pg: gap from the pointer to the icon, --ih: icon height (--s scales wide icons, --r is each icon's width/height), --ig: gap from the icon to the time */
+.pour{--g:8px;--pg:14px;--ih:32px;--ig:10px}
 .tlc{position:absolute;top:var(--y);height:1px;width:var(--g);background:var(--ink);opacity:0;transition:opacity .5s ease}
 .tlc::after{content:"";position:absolute;top:-2.5px;width:6px;height:6px;border-radius:50%;background:var(--ink)}
 .tlc.l{right:calc(100% - var(--x))} .tlc.l::after{right:-3px}
 .tlc.r{left:var(--x)} .tlc.r::after{left:-3px}
-.tlc.v{left:var(--x);width:1px;height:calc(100% - var(--y) + 12px)} .tlc.v::after{top:-3px;left:-2.5px}
-.tlp{position:absolute;top:var(--y);display:flex;flex-direction:column;gap:2px;width:6.1em;opacity:0;transition:opacity .6s ease, transform .6s ease}
-.tlp time{font-family:var(--display);font-style:italic;font-size:1.4rem;line-height:1.1;white-space:nowrap}
+.tlp{position:absolute;top:var(--y);display:flex;flex-direction:column;gap:2px;width:6em;opacity:0;transition:opacity .6s ease, transform .6s ease}
+.tlp time{font-family:var(--display);font-style:italic;font-size:1.3rem;line-height:1.1;white-space:nowrap}
 .tlp > span{font-size:.85rem;line-height:1.35;color:var(--ink2)}
-.tlp.l{right:calc(100% - var(--x) + var(--g) + var(--ih) * var(--s,1) * var(--r,1) + var(--ig));text-align:right;align-items:flex-end;transform:translate(-12px,-.85em)}
-.tlp.r{left:calc(var(--x) + var(--g) + var(--ih) * var(--s,1) * var(--r,1) + var(--ig));text-align:left;align-items:flex-start;transform:translate(12px,-.85em)}
-.tlp.c{top:100%;left:var(--x);width:max-content;max-width:14em;text-align:center;align-items:center;transform:translate(-50%,22px)}
-.tl-row{display:flex;align-items:center;gap:var(--ig)}
+.tlp.l{right:calc(100% - var(--x) + var(--g) + var(--pg) + var(--ih) * var(--s,1) * var(--r,1) + var(--ig));text-align:right;align-items:flex-end;transform:translate(-12px,-.85em)}
+.tlp.r{left:calc(var(--x) + var(--g) + var(--pg) + var(--ih) * var(--s,1) * var(--r,1) + var(--ig));text-align:left;align-items:flex-start;transform:translate(12px,-.85em)}
 /* watercolour icons float between the pointer and the time */
 .tli{position:absolute;top:var(--y);height:calc(var(--ih) * var(--s,1));width:calc(var(--ih) * var(--s,1) * var(--r,1));transform:translateY(-50%);opacity:0;transition:opacity .6s ease .1s;object-fit:contain;display:block}
-.tlp.narrow{width:5.3em}
-.tli.l{right:calc(100% - var(--x) + var(--g))}
-.tli.r{left:calc(var(--x) + var(--g))}
-.tli.c{position:static;transform:none;opacity:1;flex:none}
+.tli.l{right:calc(100% - var(--x) + var(--g) + var(--pg))}
+.tli.r{left:calc(var(--x) + var(--g) + var(--pg))}
 .pour .on{opacity:1}
 .tlp.l.on,.tlp.r.on{transform:translate(0,-.85em)}
-.tlp.c.on{transform:translate(-50%,14px)}
 .bub{position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s) / -2);border-radius:50%;border:1px solid rgba(201,164,58,.7);background:rgba(255,248,220,.6);
   pointer-events:none;animation:bubble var(--d) ease-out var(--dl) forwards;opacity:0}
 @keyframes bubble{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-70px)}}
-@media (max-width:370px){ .pour{width:215px;left:10px;--g:8px;--ih:34px;--ig:6px} .tlp{width:5.8em} .tlp.narrow{width:5em} }
+@media (max-width:400px){ .pour{width:205px;left:22px;--ih:30px} .tlp time{font-size:1.2rem} }
+@media (max-width:380px){ .pour{width:190px;left:18px;--ih:28px} .tlp{width:5.6em} .tlp time{font-size:1.15rem} .tlp > span{font-size:.8rem} }
 .pour .wide{--s:.8}
-@media (min-width:900px){ .pour .wide{--s:1} .pour{width:300px;left:15px;--g:22px;--ih:48px} .tlp,.tlp.narrow{width:9em} .tlp > span{font-size:.9rem} }
+@media (min-width:900px){ .pour .wide{--s:1} .pour{width:300px;left:15px;--g:22px;--ih:48px} .tlp{width:9em} .tlp time{font-size:1.4rem} .tlp > span{font-size:.9rem} }
 
 /* venue + buttons */
 .venue-box{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -508,7 +506,10 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
         <picture><source srcset="img/heart-frames.webp" type="image/webp"><img class="hearts-art" src="img/heart-frames.png" alt="" loading="lazy" decoding="async"></picture>
         <img class="hearts-knot" src="img/heart-knot.png" alt="" aria-hidden="true">
       </div>
-      <p class="copy">We met over coffee at the Starbucks at Suntec Convention Centre, right beside Din Tai Fung. That café has since closed, but our story kept going. Now we'd love you with us in the rainforest for the next chapter.</p>
+      <div class="story-copy">
+        <p class="copy">Here's a plot twist: we grew up in the <b>same children's church</b>. Our families knew each other. Rochelle even played with Joshua's younger sisters! And yet… neither of us remembers ever seeing the other. Not once. 🤷</p>
+        <p class="copy">Maybe the <span class="red-string">red string</span> was just waiting for the right timing. Years later, it finally tugged us together, and now we'd love you with us in the rainforest for the next chapter. ❤️</p>
+      </div>
       <div class="story-scroller">
         <button class="story-arrow prev" id="story-prev" type="button" aria-label="Previous cards" hidden>‹</button>
         <div class="story-row" id="story-row" role="group" aria-label="Our story in six photos. Each card flips to show the story behind it."></div>
@@ -548,11 +549,11 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
         <span class="tlc r" style="--y:30%;--x:49.5%"></span><img class="tli r" src="img/icon-chair.png" alt="" style="--y:30%;--x:49.5%;--r:.62">
         <p class="tlp r" style="--y:30%;--x:49.5%;--r:.62"><time>6:30 pm</time><span>All guests to be seated</span></p>
         <span class="tlc l" style="--y:45%;--x:40%"></span><img class="tli l wide" src="img/icon-rings.png" alt="" style="--y:45%;--x:40%;--r:1.35">
-        <p class="tlp l narrow wide" style="--y:45%;--x:40%;--r:1.35"><time>6:45 pm</time><span>Ceremony begins</span></p>
+        <p class="tlp l wide" style="--y:45%;--x:40%;--r:1.35"><time>6:45 pm</time><span>Ceremony begins</span></p>
         <span class="tlc r" style="--y:72%;--x:50.5%"></span><img class="tli r wide" src="img/icon-cutlery.png" alt="" style="--y:72%;--x:50.5%;--r:1.29">
-        <p class="tlp r narrow wide" style="--y:72%;--x:50.5%;--r:1.29"><time>Dinner</time><span>Food, drinks, games &amp; lots of fun!</span></p>
-        <span class="tlc v" style="--y:93%;--x:45%"></span>
-        <p class="tlp c" style="--y:100%;--x:45%"><span class="tl-row"><img class="tli c" src="img/icon-moon.png" alt="" style="--r:.99"><time>10:45 pm</time></span><span>End of evening ♡</span></p>
+        <p class="tlp r wide" style="--y:72%;--x:50.5%;--r:1.29"><time>Dinner</time><span>Food, drinks, games &amp; lots of fun!</span></p>
+        <span class="tlc l" style="--y:83%;--x:28%"></span><img class="tli l" src="img/icon-moon.png" alt="" style="--y:83%;--x:28%;--r:.99">
+        <p class="tlp l" style="--y:83%;--x:28%;--r:.99"><time>10:45 pm</time><span>End of evening ♡</span></p>
       </div>
     </section>
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
@@ -639,7 +640,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
 
     <section id="rsvp">
-      <h2 class="h">Will you come?</h2>
+      <h2 class="h">We'd love to have you there!</h2>
       <div class="rsvp-box" id="rsvp-panel">
       <p class="rsvp-by" id="rsvp-by"></p>
       <form id="form" novalidate>
@@ -763,7 +764,7 @@ const CONFIG = {
   photos: "Snap away and share the love! We'll share our wedding hashtag closer to the day.",
   hashtag: "",                                             // e.g. "#AbsoLEEwed" (shown after the photos line)
   parkingNote: "",
-  venueRoom: "[BALLROOM NAME], Level [X]",                 // shown in bold in "The venue"
+  venueRoom: "Meranti Ballroom",                           // shown in bold in "The venue"
   // "Want to make a night of it?": who to contact. Add a WhatsApp number (e.g. "6591234567") and the name becomes a chat link.
   stay: {
     resort:   { name: "Joshua",   whatsapp: "" },

@@ -133,7 +133,7 @@ Open `index.html`, search for `const CONFIG`, and fill in or check each line. Ke
 - [ ] **`kids`**: your children policy.
 - [ ] **`photos`** and **`hashtag`**: your photo wording and wedding hashtag, e.g. `"#AbsoLEEwed"`.
 - [ ] **`parkingNote`** (optional): e.g. whether you'll validate parking.
-- [ ] **`venueRoom`**: the ballroom name and level, e.g. `"Rainforest Ballroom, Level 1"` (shown in bold under "The venue").
+- [ ] **`venueRoom`**: the ballroom name and level, e.g. `"Meranti Ballroom"` (shown in bold under "The venue").
 - [ ] **`stay`**: who guests contact about resort rooms (Joshua) and glamping (Rochelle). Add a WhatsApp number to either and the name becomes a chat link.
 - [ ] Re-check the **bus timings** in the "Getting there" section closer to the day.
 
