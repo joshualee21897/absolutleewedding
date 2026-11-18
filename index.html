@@ -646,7 +646,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
 
     <section id="rsvp">
-      <h2 class="h">We'd Love To Have You There!</h2>
+      <h2 class="h">RSVP Here</h2>
       <div class="rsvp-box" id="rsvp-panel">
       <p class="rsvp-by" id="rsvp-by"></p>
       <form id="form" novalidate>
@@ -934,16 +934,17 @@ const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:[
   hs.forEach((h,i)=>{
     const words=h.textContent.trim(); h.textContent=""; h.setAttribute("aria-label",words);
     const svg=document.createElementNS(NS,"svg"); svg.setAttribute("class","h-arc"); svg.setAttribute("viewBox","0 0 1394 459"); svg.setAttribute("aria-hidden","true");
-    svg.innerHTML=`<path id="harc${i}" d="${ARC}" fill="none"/><g><text text-anchor="middle"><textPath href="#harc${i}" startOffset="50%"></textPath></text></g>`;
-    svg.querySelector("textPath").textContent=words;
+    svg.innerHTML=`<path id="harc${i}" d="${ARC}" fill="none"/><g><text text-anchor="middle"><textPath href="#harc${i}" startOffset="50%"></textPath></text></g><text class="h-measure" visibility="hidden"></text>`;
+    svg.querySelector("textPath").textContent=words; svg.querySelector(".h-measure").textContent=words;
     h.appendChild(svg);
   });
   function fit(){ hs.forEach(h=>{
-    const svg=h.querySelector("svg"), path=svg.querySelector("path"), text=svg.querySelector("text"), g=svg.querySelector("g");
+    // measure on a hidden straight line: Safari only reports the part of curved text that fits, so it would never look too long
+    const svg=h.querySelector("svg"), path=svg.querySelector("path"), text=svg.querySelector("g text"), g=svg.querySelector("g"), ruler=svg.querySelector(".h-measure");
     const w=h.getBoundingClientRect().width; if(!w) return;
     const unit=1394/w, room=path.getTotalLength()*0.97;       // px -> banner units; leave a little air at the ends
-    let px=32; const set=()=>{ text.setAttribute("font-size",(px*unit).toFixed(1)); g.setAttribute("transform",`translate(0 ${(px*unit*0.34).toFixed(1)})`); };
-    set(); while(px>16 && text.getComputedTextLength()>room){ px-=.5; set(); }
+    let px=32; const set=()=>{ const fs=(px*unit).toFixed(1); text.setAttribute("font-size",fs); ruler.setAttribute("font-size",fs); g.setAttribute("transform",`translate(0 ${(px*unit*0.34).toFixed(1)})`); };
+    set(); while(px>16 && ruler.getComputedTextLength()>room){ px-=.5; set(); }
   }); }
   fit(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit); addEventListener("resize",fit);
 })();
