@@ -928,25 +928,140 @@ const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:[
 
 /* Section headings: the words follow a gentle arc across the banner's front band, shrinking to fit (2rem down to 1rem) */
 (function(){
-  const NS="http://www.w3.org/2000/svg", hs=[...document.querySelectorAll(".h")];
+  const NS="http://www.w3.org/2000/svg", hs=[...document.querySelectorAll(".h")], mctx=document.createElement("canvas").getContext("2d");
   // the band runs 20%-80% across the 1394x459 banner; this centre line rises ~50 units in the middle, like the ribbon
   const ARC="M236 222 Q697 112 1158 222";   // runs the full width of the front band, between the folds
   hs.forEach((h,i)=>{
     const words=h.textContent.trim(); h.textContent=""; h.setAttribute("aria-label",words);
     const svg=document.createElementNS(NS,"svg"); svg.setAttribute("class","h-arc"); svg.setAttribute("viewBox","0 0 1394 459"); svg.setAttribute("aria-hidden","true");
-    svg.innerHTML=`<path id="harc${i}" d="${ARC}" fill="none"/><g><text text-anchor="middle"><textPath href="#harc${i}" startOffset="50%"></textPath></text></g><text class="h-measure" visibility="hidden"></text>`;
-    svg.querySelector("textPath").textContent=words; svg.querySelector(".h-measure").textContent=words;
+    svg.innerHTML=`<path id="harc${i}" d="${ARC}" fill="none"/><g><text text-anchor="middle"><textPath href="#harc${i}" startOffset="50%"></textPath></text></g>`;
+    svg.querySelector("textPath").textContent=words;
     h.appendChild(svg);
   });
   function fit(){ hs.forEach(h=>{
-    // measure on a hidden straight line: Safari only reports the part of curved text that fits, so it would never look too long
-    const svg=h.querySelector("svg"), path=svg.querySelector("path"), text=svg.querySelector("g text"), g=svg.querySelector("g"), ruler=svg.querySelector(".h-measure");
+    const svg=h.querySelector("svg"), path=svg.querySelector("path"), text=svg.querySelector("g text"), g=svg.querySelector("g");
     const w=h.getBoundingClientRect().width; if(!w) return;
     const unit=1394/w, room=path.getTotalLength()*0.97;       // px -> banner units; leave a little air at the ends
-    let px=32; const set=()=>{ const fs=(px*unit).toFixed(1); text.setAttribute("font-size",fs); ruler.setAttribute("font-size",fs); g.setAttribute("transform",`translate(0 ${(px*unit*0.34).toFixed(1)})`); };
-    set(); while(px>16 && ruler.getComputedTextLength()>room){ px-=.5; set(); }
+    // width of the words in px, measured with a 2D canvas (same result in every browser, unlike curved SVG text)
+    const words=h.getAttribute("aria-label"), roomPx=room/unit;
+    const widthAt=size=>{ mctx.font=`italic 400 ${size}px "Noto Serif Display", Georgia, serif`; return mctx.measureText(words).width; };
+    let px=32; while(px>16 && widthAt(px)>roomPx) px-=.5;
+    const fs=(px*unit).toFixed(1); text.setAttribute("font-size",fs); g.setAttribute("transform",`translate(0 ${(px*unit*0.34).toFixed(1)})`);
   }); }
   fit(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit); addEventListener("resize",fit);
+})();
+
+/* Save the date: scratch-to-reveal coating over the month and dates */
+(function(){
+  const wrap=document.getElementById("cal-wrap"), area=document.getElementById("scratch-area"), cv=document.getElementById("scratch");
+  const hint=document.getElementById("scratch-hint"), skip=document.getElementById("scratch-skip"), btn=document.getElementById("cal-link");
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx=cv.getContext("2d");
+  let W=0, H=0, dpr=1, revealed=false, scratched=false, nearly=false, lastPt=null, brush=null, checkT=0;
+  const R=()=>innerWidth>=900?26:22;                                // brush radius
+  const COLS=["#f2b6c4","#f5c29a","#f6e09c","#c6d7b2","#cbbde9"], DARK=["#e48aa3","#e3a06a","#d9b94e","#93b07b","#a693d4"];
+  let seed=17; const rnd=()=>((seed=(seed*16807)%2147483647)/2147483647);
+
+  function roundRect(c,x,y,w,h,r,wob){                              // rounded rectangle with slightly uneven edges
+    c.beginPath(); const pts=[], step=12;
+    const edge=(x0,y0,x1,y1)=>{ const len=Math.hypot(x1-x0,y1-y0), n=Math.max(2,Math.round(len/step));
+      for(let i=0;i<n;i++){ const t=i/n, nx=-(y1-y0)/len, ny=(x1-x0)/len, j=(rnd()-.5)*wob; pts.push([x0+(x1-x0)*t+nx*j, y0+(y1-y0)*t+ny*j]); } };
+    edge(x+r,y,x+w-r,y); pts.push([x+w-r*.29,y+r*.29]); edge(x+w,y+r,x+w,y+h-r); pts.push([x+w-r*.29,y+h-r*.29]);
+    edge(x+w-r,y+h,x+r,y+h); pts.push([x+r*.29,y+h-r*.29]); edge(x,y+h-r,x,y+r); pts.push([x+r*.29,y+r*.29]);
+    c.moveTo(pts[0][0],pts[0][1]); for(let i=1;i<pts.length;i++){ const p=pts[i], q=pts[(i+1)%pts.length]; c.quadraticCurveTo(p[0],p[1],(p[0]+q[0])/2,(p[1]+q[1])/2); }
+    c.closePath();
+  }
+  function heart(c,x,y,s,col){ c.save(); c.translate(x,y); c.scale(s/60,s/60); c.translate(-50,-56); c.fillStyle=col;
+    c.beginPath(); c.moveTo(50,86); c.bezierCurveTo(22,66,14,48,26,36); c.bezierCurveTo(36,26,48,32,50,42); c.bezierCurveTo(52,32,64,26,74,36); c.bezierCurveTo(86,48,78,66,50,86); c.fill(); c.restore(); }
+  function paw(c,x,y,s,col,rot){ c.save(); c.translate(x,y); c.rotate(rot||0); c.fillStyle=col; const u=s/10;
+    c.beginPath(); c.ellipse(0,u*1.6,u*3,u*2.4,0,0,7); c.fill();
+    [[-3.6,-1.6],[-1.3,-3.6],[1.3,-3.6],[3.6,-1.6]].forEach(([a,b])=>{ c.beginPath(); c.ellipse(a*u,b*u,u*1.25,u*1.55,0,0,7); c.fill(); }); c.restore(); }
+
+  function drawCoating(){
+    seed=17; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation="source-over"; ctx.clearRect(0,0,W,H);
+    ctx.save(); roundRect(ctx,1.5,1.5,W-3,H-3,16,3); ctx.clip();
+    ctx.fillStyle="#f9efe2"; ctx.fillRect(0,0,W,H);                  // opaque base so nothing shows through
+    for(let i=0;i<16;i++){                                           // soft overlapping watercolour blooms in the palette
+      const x=rnd()*W, y=rnd()*H, r=50+rnd()*90, c=COLS[i%COLS.length];
+      const g=ctx.createRadialGradient(x,y,r*.1,x,y,r); g.addColorStop(0,c+"e6"); g.addColorStop(.6,c+"99"); g.addColorStop(1,c+"00");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); }
+    for(let i=0;i<10;i++){                                           // darker pigment pooled in blotches
+      const x=rnd()*W, y=rnd()*H, r=14+rnd()*26, c=DARK[i%DARK.length];
+      const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,c+"00"); g.addColorStop(.55,c+"14"); g.addColorStop(.8,c+"24"); g.addColorStop(1,c+"00");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); }
+    const tex=document.createElement("canvas"); tex.width=tex.height=64; const tc=tex.getContext("2d"), id=tc.createImageData(64,64);
+    for(let i=0;i<id.data.length;i+=4){ const v=rnd()*255; id.data[i]=id.data[i+1]=id.data[i+2]=v>128?255:60; id.data[i+3]=rnd()*26; }
+    tc.putImageData(id,0,0); ctx.fillStyle=ctx.createPattern(tex,"repeat"); ctx.fillRect(0,0,W,H);   // faint paper grain
+    for(let i=0;i<14;i++){                                           // tiny hearts and paw prints
+      const x=12+rnd()*(W-24), y=12+rnd()*(H-24), cx=W/2, cy=H/2;
+      if(Math.abs(x-cx)<W*.28 && Math.abs(y-cy)<38) continue;        // keep the middle clear for the label
+      const col=DARK[i%DARK.length]+"8c"; i%2 ? heart(ctx,x,y,9+rnd()*4,col) : paw(ctx,x,y,10+rnd()*4,col,(rnd()-.5)*.8); }
+    ctx.restore();
+    ctx.strokeStyle="rgba(167,140,120,.25)"; ctx.lineWidth=1.5; roundRect(ctx,1.5,1.5,W-3,H-3,16,3); ctx.stroke();  // pooled edge
+    ctx.fillStyle="rgba(62,90,68,.7)"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.font=`italic 400 ${Math.round(1.6*16)}px "Noto Serif Display", Georgia, serif`; ctx.fillText("scratch here",W/2,H/2-8);
+    paw(ctx,W/2,H/2+22,14,"rgba(62,90,68,.6)",0);
+  }
+  function makeBrush(){                                              // soft-edged round brush
+    const r=R(), b=document.createElement("canvas"); b.width=b.height=Math.ceil(r*2*dpr); const c=b.getContext("2d");
+    const g=c.createRadialGradient(r*dpr,r*dpr,0,r*dpr,r*dpr,r*dpr); g.addColorStop(0,"rgba(0,0,0,1)"); g.addColorStop(.6,"rgba(0,0,0,1)"); g.addColorStop(1,"rgba(0,0,0,0)");
+    c.fillStyle=g; c.fillRect(0,0,b.width,b.height); brush=b;
+  }
+  function size(force){
+    const r=area.getBoundingClientRect(); const w=Math.round(r.width), h=Math.round(r.height);
+    if(!force && w===W && h===H) return;                             // iOS fires resize while scrolling: only redraw on a real size change
+    W=w; H=h; dpr=Math.min(2,window.devicePixelRatio||1); cv.width=W*dpr; cv.height=H*dpr; makeBrush(); if(!revealed){ scratched=false; drawCoating(); }
+  }
+  function stamp(x,y){ ctx.setTransform(1,0,0,1,0,0); ctx.globalCompositeOperation="destination-out"; const r=R()*dpr; ctx.drawImage(brush,x*dpr-r,y*dpr-r); }
+  function line(a,b){ const d=Math.hypot(b.x-a.x,b.y-a.y), n=Math.max(1,Math.ceil(d/(R()/3))); for(let i=1;i<=n;i++) stamp(a.x+(b.x-a.x)*i/n, a.y+(b.y-a.y)*i/n); }
+  const pt=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
+  function cleared(x0,y0,w,h){                                       // share of the coating already scratched away
+    x0=Math.max(0,Math.floor(x0*dpr)); y0=Math.max(0,Math.floor(y0*dpr)); w=Math.min(cv.width-x0,Math.ceil(w*dpr)); h=Math.min(cv.height-y0,Math.ceil(h*dpr));
+    if(w<=0||h<=0) return 0; const d=ctx.getImageData(x0,y0,w,h).data; let clear=0, n=0;
+    for(let i=3;i<d.length;i+=16){ n++; if(d[i]<128) clear++; } return clear/n;
+  }
+  function check(){
+    if(revealed) return;
+    const all=cleared(0,0,W,H), d=document.querySelector("#cal .day17").getBoundingClientRect(), a=cv.getBoundingClientRect();
+    const day=cleared(d.left-a.left,d.top-a.top,d.width,d.height);
+    if(all>=.4 || day>=.6) return reveal(true);
+    if(all>=.15 && !nearly){ nearly=true; hint.textContent="keep going… almost there!"; }
+  }
+  function confetti(){
+    const d=document.querySelector("#cal .day17").getBoundingClientRect(), w=wrap.getBoundingClientRect();
+    const cx=d.left-w.left+d.width/2, cy=d.top-w.top+d.height/2, cols=[...COLS,"#e48aa3"];
+    for(let i=0;i<18;i++){ const el=document.createElement("span"); el.className="confetti"; const a=Math.random()*Math.PI*2, dist=40+Math.random()*70;
+      el.style.cssText=`--cx:${cx}px;--cy:${cy}px;--s:${9+Math.random()*8}px;--dx:${Math.cos(a)*dist}px;--dy:${Math.sin(a)*dist-40}px;--r:${(Math.random()-.5)*160}deg`;
+      const c=cols[i%cols.length];
+      el.innerHTML= i%2 ? `<svg viewBox="14 26 72 62"><use href="#heartP" fill="${c}"/></svg>`
+        : `<svg viewBox="-6 -6 12 12"><g fill="${c}"><ellipse cx="0" cy="1.6" rx="3" ry="2.4"/><ellipse cx="-3.6" cy="-1.6" rx="1.25" ry="1.55"/><ellipse cx="-1.3" cy="-3.6" rx="1.25" ry="1.55"/><ellipse cx="1.3" cy="-3.6" rx="1.25" ry="1.55"/><ellipse cx="3.6" cy="-1.6" rx="1.25" ry="1.55"/></g></svg>`;
+      wrap.appendChild(el); setTimeout(()=>el.remove(),1700); }
+  }
+  function reveal(animate){
+    if(revealed) return; revealed=true;
+    try{ getSelection().removeAllRanges(); }catch(_){}
+    try{ sessionStorage.setItem("jr-date-revealed","1"); }catch(_){}
+    cv.classList.add("gone"); cv.setAttribute("tabindex","-1"); cv.setAttribute("aria-hidden","true"); skip.hidden=true;
+    setTimeout(()=>{ cv.style.display="none"; }, animate?550:0);
+    hint.textContent="see you on Saturday, 17 July 2027! ♡"; hint.classList.add("done");
+    btn.hidden=false;
+    if(animate){ wrap.classList.add("revealed"); btn.classList.add("pop"); if(!reduce) confetti(); }
+    else { wrap.classList.add("revealed"); const s=document.querySelector("#cal .day17 svg"); s.style.animation="none"; s.style.opacity="1"; s.style.transform="translate(-50%,-48%)"; }
+  }
+  // pointer scratching (touch, pen or mouse)
+  cv.addEventListener("pointerdown",e=>{ if(revealed) return; cv.setPointerCapture(e.pointerId); lastPt=pt(e); stamp(lastPt.x,lastPt.y); scratched=true; e.preventDefault(); });
+  cv.addEventListener("pointermove",e=>{ if(!lastPt||revealed) return; const p=pt(e); line(lastPt,p); lastPt=p;
+    const now=performance.now(); if(now-checkT>140){ checkT=now; check(); } });
+  const up=()=>{ if(lastPt){ lastPt=null; check(); } };
+  cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
+  cv.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); reveal(true); } });
+  skip.addEventListener("click",()=>reveal(true));
+  // already revealed earlier in this visit? keep it uncovered
+  let seen=false; try{ seen=sessionStorage.getItem("jr-date-revealed")==="1"; }catch(_){}
+  if(seen) reveal(false);
+  else { size(true); addEventListener("resize",()=>size(false));
+    // redraw once the handwriting font is ready, unless the guest has already started scratching
+    (document.fonts&&document.fonts.load ? document.fonts.load('italic 400 26px "Noto Serif Display"') : Promise.resolve()).then(()=>{ if(!scratched&&!revealed) drawCoating(); }); }
 })();
 
 /* Our story: childhood photos in the heart frames, and the little string heart pulses once when it comes into view */
