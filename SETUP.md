@@ -15,6 +15,8 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 | `index.html` | The whole website. Your settings (the `CONFIG` section) are near the bottom of this file. |
 | `img/groom.png`, `img/bride.png` | Your two characters. |
 | `img/bg.jpg`, `img/bg-desktop.jpg` | The painted meadow backgrounds behind the whole site (compressed): the tall one for phones, the wide one for screens wider than 900px. |
+| `img/dress-capybara.png`, `img/dress-leopard.png`, `img/dress-flamingo.png`, `img/dress-zebra.png` | The four dress code examples in "What should I wear?". |
+| `img/champagne-tower.png` | The champagne pour in "What time?" (compressed; the original is in `img/originals/`). |
 | `img/boy-kneel.png`, `img/girl-heart.png` | The proposal scene at the top of the invite (he kneels with the ring, she holds a heart). |
 | `img/boy-kneel-closed.png` | *(optional)* The kneeling drawing with the ring box **closed**. If you add it, the box opening becomes a crossfade between your two drawings instead of the drawn-on lid. |
 | `img/story-1.jpg` … `img/story-4.jpg` | *(you add these)* Photos for the four "our story" playing cards (shown inside a heart). See Part D. |
@@ -120,7 +122,7 @@ Open `index.html`, search for `const CONFIG`, and fill in or check each line. Ke
 - [ ] **`sheetUrl`**: your Google Apps Script web app URL (Part A, step 4).
 - [ ] **`whatsapp`**: the number for the backup "Send on WhatsApp" button, country code first with no + or spaces, e.g. `"6591234567"`.
 - [ ] **`rsvpBy`**: your RSVP deadline (currently `"17 March 2027"`). It shows above the form and in the FAQ.
-- [ ] **`dressCode`** and **`dressIdeas`**: the animal-themed dress code wording and the outfit idea chips under it.
+- [ ] **`dressCode`**: the animal-themed dress code line above the four example characters.
 - [ ] **`contactPerson`** (and optionally **`contactNumber`**): who guests should message with questions or changes.
 - [ ] **`kids`**: your children policy.
 - [ ] **`photos`** and **`hashtag`**: your photo wording and wedding hashtag, e.g. `"#AbsoLEEwed"`.

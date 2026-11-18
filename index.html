@@ -221,27 +221,29 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .cal-grid .day17 svg{position:absolute;left:50%;top:50%;width:46px;height:46px;transform:translate(-50%,-48%)}
 .cal-grid .day17 b{position:relative;z-index:1;font-weight:600}
 
-/* timeline: champagne pour */
-.champ{position:relative;width:100%;--bw:160px;--tw:190px}
-@media (min-width:900px){ .champ{--bw:190px;--tw:230px} }
-.champ-bottle{display:block;width:var(--bw);height:auto;margin:0 auto}
-.champ-tower{display:block;width:var(--tw);height:auto;margin:0 auto}
-/* stream runs from the bottle's mouth (100/160 of its width down) to the top coupe's rim (82/160 of the tower width up) */
-.champ-stream{position:absolute;left:50%;width:34px;transform:translateX(-50%);top:calc(var(--bw) * 100 / 160);height:calc(100% - var(--bw) * 100 / 160 - var(--tw) * 82 / 160)}
-.champ .hz{position:absolute;width:12px;height:11px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='14 26 72 62'%3E%3Cpath d='M50 86 C22 66 14 48 26 36 C36 26 48 32 50 42 C52 32 64 26 74 36 C86 48 78 66 50 86Z' fill='%23f2b6c4'/%3E%3C/svg%3E") center/contain no-repeat}
-.champ .hz.s{width:8px;height:7px}
-.champ .tl{padding:6px 0 10px}
-
-.tl{position:relative;width:100%;display:grid;grid-template-columns:1fr 34px 1fr;row-gap:22px;text-align:left}
-.tl .item{display:flex;flex-direction:column;gap:2px}
-.tl .item.l{grid-column:1;text-align:right;align-items:flex-end}
-.tl .item.r{grid-column:3}
-.tl .ico{display:flex;align-items:center;justify-content:center}
-.tl .ico.l{grid-column:3;justify-content:flex-start}
-.tl .ico.r{grid-column:1;justify-content:flex-end}
-.tl .ico svg{width:56px;height:56px}
-.tl time{font-family:var(--display);font-style:italic;font-size:1.6rem;line-height:1.1;font-variant-numeric:tabular-nums}
-.tl .item span{font-size:.9rem;color:var(--ink2);max-width:18ch}
+/* timeline: the champagne pours down as you scroll; times sit along the stream (positions are % of the image) */
+.pour{position:relative;left:12px;width:240px;margin:6px auto 92px}   /* nudged right so the stream (45% across the image) sits in the middle */
+.pour-img{display:block;width:100%;height:auto;clip-path:inset(0 0 var(--hide,100%) 0);will-change:clip-path}
+.tlc{position:absolute;top:var(--y);height:1px;width:calc(var(--g,28px) - 6px);background:var(--ink);opacity:0;transition:opacity .5s ease}
+.tlc::after{content:"";position:absolute;top:-2.5px;width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.tlc.l{right:calc(100% - var(--x))} .tlc.l::after{right:-3px}
+.tlc.r{left:var(--x)} .tlc.r::after{left:-3px}
+.tlc.v{left:var(--x);width:1px;height:calc(100% - var(--y) + 14px)} .tlc.v::after{top:-3px;left:-2.5px}
+.tlp{position:absolute;top:var(--y);display:flex;flex-direction:column;gap:2px;width:6.6em;opacity:0;transition:opacity .6s ease, transform .6s ease}
+.tlp time{font-family:var(--display);font-style:italic;font-size:1.4rem;line-height:1.1;white-space:nowrap}
+.tlp span{font-size:.9rem;line-height:1.35;color:var(--ink2)}
+.tlp.l{right:calc(100% - var(--x) + var(--g,28px));text-align:right;align-items:flex-end;transform:translate(-12px,-.85em)}
+.tlp.r{left:calc(var(--x) + var(--g,28px));text-align:left;align-items:flex-start;transform:translate(12px,-.85em)}
+.tlp.tight{width:6em}
+.tlp.c{top:100%;left:var(--x);width:max-content;max-width:14em;text-align:center;align-items:center;transform:translate(-50%,24px)}
+.pour .on{opacity:1}
+.tlp.l.on,.tlp.r.on{transform:translate(0,-.85em)}
+.tlp.c.on{transform:translate(-50%,16px)}
+.bub{position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s) / -2);border-radius:50%;border:1px solid rgba(201,164,58,.7);background:rgba(255,248,220,.6);
+  pointer-events:none;animation:bubble var(--d) ease-out var(--dl) forwards;opacity:0}
+@keyframes bubble{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-70px)}}
+@media (max-width:370px){ .pour{width:215px;left:10px} }
+@media (min-width:900px){ .pour{width:300px;left:15px} .tlp,.tlp.tight{width:9em} }
 
 /* venue + buttons */
 .venue-box{display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -266,8 +268,18 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .faq .ans{padding:0 18px 18px;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
 .faq h3{font-family:var(--sans);font-weight:600;font-size:.95rem;margin-top:6px}
 .faq .fine{font-size:.82rem;color:var(--ink2)}
-.chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
-.chips li{font-size:.85rem;font-weight:500;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.85);border:1px solid rgba(62,90,68,.3)}
+/* dress code examples */
+.dress-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 10px;margin:8px 0 4px}
+.dress-fig{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dress-img{height:110px;display:flex;align-items:flex-end;justify-content:center}
+.dress-img img{height:100%;width:auto;transition:transform .3s ease}
+.dress-fig:hover img,.dress-fig.bounce img{transform:translateY(-6px)}
+.dress-fig figcaption{line-height:1.3}
+.dress-fig b{display:block;font-size:.88rem;font-weight:600}
+.dress-fig small{display:block;font-size:.76rem;color:var(--ink2)}
+.dress-tease{text-align:center;font-family:var(--display);font-style:italic;font-size:.95rem;color:#5f6f5a;margin:4px 0 2px}
+@media (min-width:900px){ .dress-grid{grid-template-columns:repeat(4,1fr)} .dress-img{height:140px} }
+@media (prefers-reduced-motion: reduce){ .dress-fig:hover img,.dress-fig.bounce img{transform:none} }
 
 /* rsvp */
 .rsvp-box{width:100%;display:flex;flex-direction:column;gap:16px}
@@ -342,12 +354,6 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <path id="heartP" d="M50 86 C22 66 14 48 26 36 C36 26 48 32 50 42 C52 32 64 26 74 36 C86 48 78 66 50 86Z"/>
   </defs>
 
-  <!-- small icons -->
-  <symbol id="glasses" viewBox="0 0 60 60"><g fill="none" stroke="#3e5a44" stroke-width="2" stroke-linecap="round"><path d="M10 14 Q12 28 20 28 Q28 28 30 14Z" fill="#f6e09c"/><path d="M20 28 V46 M14 46 H26"/><path d="M32 18 Q34 32 42 32 Q50 32 52 18Z" fill="#f2b6c4" transform="rotate(10 42 25)"/><path d="M41 32 L38 50 M33 49 L44 51"/></g></symbol>
-  <symbol id="rings" viewBox="0 0 60 60"><g fill="none" stroke="#3e5a44" stroke-width="2.4"><circle cx="24" cy="34" r="13"/><circle cx="38" cy="34" r="13"/><path d="M20 20 L24 14 L28 20Z" fill="#bcd2f1"/></g></symbol>
-  <symbol id="leafbowl" viewBox="0 0 60 60"><g fill="none" stroke="#3e5a44" stroke-width="2" stroke-linecap="round"><path d="M8 30 H52 Q50 48 30 48 Q10 48 8 30Z" fill="#c6d7b2"/><path d="M22 24 Q24 14 30 10 M34 24 Q34 16 38 12"/></g></symbol>
-  <symbol id="seat" viewBox="0 0 60 60"><g fill="none" stroke="#3e5a44" stroke-width="2" stroke-linecap="round"><path d="M18 10 V50 M42 10 V50 M18 30 H42 M18 10 H42" /><path d="M18 30 Q30 22 42 30" fill="#f5c29a"/></g></symbol>
-  <symbol id="moon" viewBox="0 0 60 60"><path d="M38 10 Q18 14 18 32 Q18 50 40 52 Q26 44 26 31 Q26 18 38 10Z" fill="#f6e09c" stroke="#3e5a44" stroke-width="2"/><path d="M46 18 l1.5 3 3 1.5 -3 1.5 -1.5 3 -1.5 -3 -3 -1.5 3 -1.5Z" fill="#3e5a44"/></symbol>
 </svg>
 
 <!-- ============ INTRO: HEART MAZE ============ -->
@@ -441,55 +447,18 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
 
     <section>
       <h2 class="h">What time?</h2>
-      <div class="champ">
-        <!-- a champagne bottle pours a golden stream down the timeline into a tower of coupes -->
-        <svg class="champ-bottle doodle" viewBox="0 0 160 110" aria-hidden="true">
-          <g transform="translate(80 100) rotate(125)" stroke="#3e5a44" stroke-width="1.6" stroke-linejoin="round">
-            <rect x="-112" y="-15" width="70" height="30" rx="7" fill="#9dbb8b"/>
-            <path d="M-44 -15 C-36 -15 -32 -5 -26 -5 L-26 5 C-32 5 -36 15 -44 15 Z" fill="#9dbb8b"/>
-            <rect x="-28" y="-5" width="28" height="10" rx="2" fill="#86a877"/>
-            <rect x="-28" y="-6" width="15" height="12" rx="2" fill="#f2b6c4"/>
-            <rect x="-92" y="-10" width="32" height="20" rx="3" fill="#fbf7ef" stroke-width="1.1"/>
-            <use href="#heartP" transform="translate(-81 -5) scale(.1)" fill="#e79aae" stroke="none"/>
-            <path d="M-104 -9 Q-100 -11 -96 -9" fill="none" stroke="#fbf7ef" stroke-width="2" stroke-linecap="round"/>
-          </g>
-          <path d="M80 100 Q78 105 80 110" fill="none" stroke="#e3ad5c" stroke-width="2.4" stroke-linecap="round"/>
-          <g fill="#f6e09c" stroke="#e3ad5c" stroke-width=".8"><circle cx="70" cy="97" r="2"/><circle cx="90" cy="95" r="1.6"/><circle cx="74" cy="90" r="1.3"/><circle cx="88" cy="103" r="1.3"/></g>
-        </svg>
-        <svg class="champ-stream" viewBox="0 0 34 400" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M17 0 Q28 40 17 80 T17 160 T17 240 T17 320 T17 400" fill="none" stroke="#e3ad5c" stroke-width="2.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-        </svg>
-        <span class="hz" style="left:4%;top:16%"></span><span class="hz s" style="right:6%;top:24%"></span><span class="hz" style="left:10%;top:47%"></span>
-        <span class="hz s" style="right:3%;top:58%"></span><span class="hz s" style="left:2%;top:72%"></span><span class="hz" style="right:11%;top:84%"></span>
-      <div class="tl">
-        <div class="item l"><time>6:00 pm</time><span>Guests arrive. Grab a drink and say hi</span></div>
-        <div class="ico l doodle"><svg aria-hidden="true"><use href="#glasses"/></svg></div>
-
-        <div class="ico r doodle"><svg aria-hidden="true"><use href="#seat"/></svg></div>
-        <div class="item r"><time>6:30 pm</time><span>Please be seated</span></div>
-
-        <div class="item l"><time>6:45 pm</time><span>Ceremony. Expect a few happy tears</span></div>
-        <div class="ico l doodle"><svg aria-hidden="true"><use href="#rings"/></svg></div>
-
-        <div class="ico r doodle"><svg aria-hidden="true"><use href="#leafbowl"/></svg></div>
-        <div class="item r"><time>Dinner</time><span>Food, games, a lucky draw and lots of love</span></div>
-
-        <div class="item l"><time>11:00 pm</time><span>The evening wraps up</span></div>
-        <div class="ico l doodle"><svg aria-hidden="true"><use href="#moon"/></svg></div>
-      </div>
-        <svg class="champ-tower doodle" viewBox="0 0 160 100" aria-hidden="true">
-          <defs>
-            <g id="coupe" stroke="#d9768f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M-18 0 Q-16 13 0 14 Q16 13 18 0 Z" fill="#fbe3d2"/>
-              <path d="M-14 3 Q0 6 14 3" fill="none" stroke="#e3ad5c" stroke-width="1.2"/>
-              <path d="M0 14 L0 25 M-8 27 Q0 24 8 27" fill="none"/>
-            </g>
-          </defs>
-          <path d="M66 20 Q60 30 64 42 M94 20 Q100 30 96 42 M48 46 Q42 56 46 68 M112 46 Q118 56 114 68" fill="none" stroke="#e3ad5c" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
-          <use href="#coupe" x="80" y="18"/>
-          <use href="#coupe" x="62" y="44"/><use href="#coupe" x="98" y="44"/>
-          <use href="#coupe" x="44" y="70"/><use href="#coupe" x="80" y="70"/><use href="#coupe" x="116" y="70"/>
-        </svg>
+      <div class="pour" id="pour">
+        <img class="pour-img" id="pour-img" src="img/champagne-tower.png" alt="A champagne bottle pouring into a tower of glasses">
+        <span class="tlc l" style="--y:15%;--x:43%"></span>
+        <p class="tlp l" style="--y:15%;--x:43%"><time>6:00 pm</time><span>Guests arrive, grab a drink and say hi</span></p>
+        <span class="tlc r" style="--y:30%;--x:49.5%"></span>
+        <p class="tlp r" style="--y:30%;--x:49.5%"><time>6:30 pm</time><span>Please be seated</span></p>
+        <span class="tlc l" style="--y:45%;--x:40%"></span>
+        <p class="tlp l" style="--y:45%;--x:40%"><time>6:45 pm</time><span>Ceremony, expect a few happy tears</span></p>
+        <span class="tlc r" style="--y:72%;--x:52%;--g:calc(16% + 4px)"></span>
+        <p class="tlp r tight" style="--y:72%;--x:52%;--g:calc(16% + 4px)"><time>Dinner</time><span>food, games, a lucky draw and lots of love</span></p>
+        <span class="tlc v" style="--y:93%;--x:45%"></span>
+        <p class="tlp c" style="--y:100%;--x:45%"><time>11:00 pm</time><span>The evening wraps up ♡</span></p>
       </div>
     </section>
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
@@ -551,11 +520,17 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
           </div>
         </details>
 
-        <details>
+        <details open>
           <summary>What should I wear?</summary>
           <div class="ans">
             <p id="faq-dress"></p>
-            <ul class="chips" id="dress-ideas" aria-label="Outfit ideas"></ul>
+            <div class="dress-grid">
+              <figure class="dress-fig"><span class="dress-img"><img src="img/dress-capybara.png" alt="A character in a full capybara onesie"></span><figcaption><b>Go wild</b><small>full costume welcome</small></figcaption></figure>
+              <figure class="dress-fig"><span class="dress-img"><img src="img/dress-leopard.png" alt="A character in a leopard print dress"></span><figcaption><b>Animal print</b><small>dress, shirt or scarf</small></figcaption></figure>
+              <figure class="dress-fig"><span class="dress-img"><img src="img/dress-flamingo.png" alt="A character wearing a flamingo headband"></span><figcaption><b>Fun accessories</b><small>ears, headbands, feathers</small></figcaption></figure>
+              <figure class="dress-fig"><span class="dress-img"><img src="img/dress-zebra.png" alt="A character in a zebra print top"></span><figcaption><b>Keep it subtle</b><small>one print piece is enough</small></figcaption></figure>
+            </div>
+            <p class="dress-tease">Psst, who knows, you might just take home the Best Dressed award 👀</p>
             <p>Please avoid white and cream, so the bride can shine.</p>
             <p>The resort sits in the rainforest, so pack comfortable shoes for the walkways. If you'll be outdoors before dinner, some insect repellent helps too.</p>
           </div>
@@ -677,8 +652,7 @@ const CONFIG = {
   // Country code + number, no + or spaces, e.g. "6591234567". "" = guest picks the chat.
   whatsapp: "",
   rsvpBy: "17 March 2027",                                 // RSVP deadline
-  dressCode: "Animal themed! We're celebrating in the rainforest, so come dressed as (or inspired by) your favourite animal. A print, a colour, ears, wings or a tail: subtle or all-out, both are welcome. Some ideas:",
-  dressIdeas: ["red panda", "otter", "orangutan", "hornbill", "butterfly", "leopard print", "zebra stripes", "flamingo pink"],
+  dressCode: "Our dress code is animal-themed! 🐾 Come as wild or as subtle as you like.",
   kids: "Yes, little ones are welcome! Just let us know in the RSVP so we can plan for them.",
   contactPerson: "Joshua or Rochelle",                     // who guests should message
   contactNumber: "",                                       // optional, e.g. "+65 9123 4567"
@@ -701,7 +675,8 @@ const CONFIG = {
 const contactLine = CONFIG.contactPerson + (CONFIG.contactNumber ? " (" + CONFIG.contactNumber + ")" : "");
 document.getElementById("rsvp-by").innerHTML = "Kindly RSVP by <b></b>"; document.querySelector("#rsvp-by b").textContent = CONFIG.rsvpBy;
 document.getElementById("faq-dress").textContent = CONFIG.dressCode;
-CONFIG.dressIdeas.forEach(t=>{ const li=document.createElement("li"); li.textContent=t; document.getElementById("dress-ideas").appendChild(li); });
+// dress code characters do a little bounce when tapped (hover does it on computers)
+document.querySelectorAll(".dress-fig").forEach(f=>f.addEventListener("click",()=>{ f.classList.remove("bounce"); void f.offsetWidth; f.classList.add("bounce"); setTimeout(()=>f.classList.remove("bounce"),300); }));
 document.getElementById("faq-rsvp").textContent = "Please RSVP by " + CONFIG.rsvpBy + " using the form below.";
 document.getElementById("faq-kids").textContent = CONFIG.kids;
 document.getElementById("faq-contact").textContent = "Message " + contactLine + ", or any of our bridal team.";
@@ -878,6 +853,31 @@ const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:[
     b.addEventListener("click",()=>b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true" ? "false" : "true"));
     row.appendChild(b);
   });
+})();
+
+/* Champagne timeline: the pour follows the reading position; each time appears as the pour passes it */
+(function(){
+  const wrap=document.getElementById("pour"), img=document.getElementById("pour-img");
+  const items=[...wrap.querySelectorAll(".tlc,.tlp")].map(el=>({el, y:parseFloat(el.style.getPropertyValue("--y"))}));
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let bubbled=false, last=-1;
+  function bubbles(){
+    if(bubbled||reduce) return; bubbled=true;
+    for(let i=0;i<9;i++){ const b=document.createElement("span"); b.className="bub";
+      b.style.cssText=`left:${43+Math.random()*6}%;top:${70+Math.random()*2}%;--s:${3+Math.random()*4}px;--dx:${(Math.random()-.5)*30}px;--d:${1.2+Math.random()*.8}s;--dl:${Math.random()*.6}s`;
+      wrap.appendChild(b); setTimeout(()=>b.remove(),2600); }
+  }
+  function update(){
+    const r=wrap.getBoundingClientRect();
+    const reveal=reduce?1:Math.min(1,Math.max(0,(innerHeight*0.72-r.top)/r.height));
+    if(reveal===last) return; last=reveal;
+    img.style.setProperty("--hide",((1-reveal)*100).toFixed(2)+"%");
+    items.forEach(it=>it.el.classList.toggle("on", reveal*100 >= Math.min(it.y,97)-2));
+    if(reveal>=.72) bubbles();
+  }
+  let ticking=false;
+  addEventListener("scroll",()=>{ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ ticking=false; update(); }); } },{passive:true});
+  addEventListener("resize",update); update();
 })();
 
 /* Hero countdown: days : hours : mins : secs to CONFIG.start, every second */
