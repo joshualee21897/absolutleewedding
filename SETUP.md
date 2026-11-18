@@ -19,7 +19,8 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 | `img/champagne-tower.png` | The champagne pour in "What time?" (compressed; the original is in `img/originals/`). |
 | `img/boy-kneel.png`, `img/girl-heart.png` | The proposal scene at the top of the invite (he kneels with the ring, she holds a heart). |
 | `img/boy-kneel-closed.png` | *(optional)* The kneeling drawing with the ring box **closed**. If you add it, the box opening becomes a crossfade between your two drawings instead of the drawn-on lid. |
-| `img/story-1.jpg` … `img/story-4.jpg` | *(you add these)* Photos for the four "our story" playing cards (shown inside a heart). See Part D. |
+| `img/card-*.webp` / `.png` | The illustrated playing-card artwork for "How it all started" (J giraffe, Q red panda, K leopard, A flamingo, and the card back). WebP is used; the PNGs are a fallback for very old browsers. Originals are in `img/originals/`. |
+| `img/story-1.jpg` … `img/story-4.jpg` | *(you add these)* Photos that show through each card's window. See Part D. |
 | `img/originals/` | Full-quality copies of both backgrounds, kept as a backup. |
 | `og-image.png` | The picture people see when you share the link on WhatsApp. |
 | `apps-script/Code.gs` | The small Google script that saves RSVPs into your Sheet. |
@@ -152,9 +153,9 @@ Until you add photos, the site shows soft cream placeholders, so nothing looks b
 | 3 | `img/story-3.jpg` | the proposal |
 | 4 | `img/story-4.jpg` | pre-wedding shoot |
 
-- Portrait photos work best, with faces in the middle (they're shown inside a heart). On iPhone: Photos → Edit → Crop → the aspect icon → **4:5**.
+- Portrait photos work best (the card window is slightly taller than wide). Faces in the upper-middle look best. On iPhone: Photos → Edit → Crop → the aspect icon → **4:5**.
 - Keep each photo under **250KB** so the page loads fast on mobile data. Easiest: send them to me and I'll crop and compress them. Or use [squoosh.app](https://squoosh.app) (MozJPEG, quality about 75).
 - The words on the back of each card live in `index.html`: search for `story:` inside `CONFIG`. For each card, change `date` (e.g. `"2019"`) and `text` (one or two short lines, around 20 words, so it fits on the small cards on computers). Remove the `[square-bracket]` placeholder notes. You can change `title` too.
-- Each card is a playing card: `rank` and `suit` show in the corners (currently J ♣, Q ♠, K ♦, A ♥), and `colour` sets its watercolour tint (blush, peach, butter, sage, blue or lavender).
+- Each card uses illustrated artwork, set by `card` (e.g. `"card-j-giraffe"`). The back shows up to **4 lines** of story, so keep each `text` to about 15 words; longer text is cut off with "…" on phones.
 
 Re-upload the folder to Netlify afterwards (Part B, "Updating the site later").
