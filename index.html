@@ -114,16 +114,19 @@ main > .footer{width:calc(100% - 32px);max-width:560px;margin:0 auto}
   background:rgba(251,247,239,.72);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
   border:1px solid rgba(62,90,68,.10);border-radius:28px;box-shadow:0 20px 60px rgba(60,70,40,.12)}
 .sheet > section{max-width:560px;margin:0 auto}
-.sheet .h{text-shadow:none}
 /* section divider: thin moss line with a tiny heart */
 .divider{display:flex;align-items:center;gap:10px;width:min(220px,60%);margin:36px auto}
 .divider::before,.divider::after{content:"";flex:1;height:1px;background:rgba(62,90,68,.35)}
 .divider svg{width:14px;height:12px;flex:none}
 @media (min-width:900px){ main{gap:72px;padding-bottom:46vh} .sheet{padding:72px 48px 80px} .sheet > #story{max-width:none} .divider{margin:48px auto} :root{--glow:0 0 14px rgba(251,247,239,.95), 0 0 4px rgba(251,247,239,.95), 0 0 28px rgba(251,247,239,.8)} }
 section{position:relative;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
-.h{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(2.1rem,8.5vw,2.8rem);line-height:1.1;color:var(--ink);text-shadow:var(--glow);position:relative;isolation:isolate;padding:0 .12em}
-/* watercolour highlighter swipe behind the lower ~45% of the words (inline SVG added by script) */
-.h .hl{position:absolute;left:-7%;right:-6%;bottom:7%;height:60%;width:113%;z-index:-1;overflow:visible;transform:rotate(-1.5deg);pointer-events:none}
+/* every section heading sits in the same watercolour banner; the text shrinks to fit its front band (JS) */
+.h{position:relative;flex:none;width:min(340px,88vw);aspect-ratio:1394/459;margin:0 auto;color:var(--ink);
+  background:url("img/banner.png") center/100% 100% no-repeat;
+  background-image:image-set(url("img/banner.webp") type("image/webp"), url("img/banner.png") type("image/png"))}
+.h-txt{position:absolute;left:20%;right:20%;top:10%;height:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-style:italic;font-weight:400;font-size:2rem;line-height:1;white-space:nowrap}
+@media (min-width:900px){ .h{width:440px} }
 .panel{width:100%;background:var(--panel);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;padding:22px 18px}
 .panel[hidden]{display:none}
 p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
@@ -178,13 +181,26 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
   .p-hearts span{top:200px}
 }
 
+/* our story: two heart frames with childhood photos (positions are % of the artwork, measured from its windows) */
+.hearts{position:relative;width:92%;max-width:520px;aspect-ratio:1400/572;margin:2px auto 0}
+.hearts-art{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.hp-photo{position:absolute;background:#f5efe3;clip-path:url(#heart-win);overflow:hidden}
+.hp-photo.l{left:5.2%;top:11%;width:36.2%;height:71.5%}
+.hp-photo.r{left:57.6%;top:11.8%;width:36.6%;height:73.5%}
+.hp-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:0;transition:opacity .4s}
+.hp-photo.ok img{opacity:1}
+.hearts-knot{position:absolute;left:45.36%;top:53.15%;width:8.29%;height:17.48%;transform-origin:50% 85%;pointer-events:none;opacity:0}
+.hearts.pulse .hearts-knot{animation:knot 1.1s ease-in-out .2s 1}
+@keyframes knot{0%{opacity:0;transform:scale(1)}15%{opacity:1}50%{opacity:1;transform:scale(1.28)}85%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
+
 /* our story: illustrated playing cards (700:960). Front = photo under the frame artwork; back = card-back art + story */
 /* a swipeable row: 2 cards + a peek of the 3rd on phones, ~4 with arrows on desktop */
 .story-scroller{position:relative;width:100%;margin-top:8px}
-.story-row{display:flex;gap:12px;width:100%;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
-  overscroll-behavior-x:contain;scrollbar-width:none;padding:10px 0 4px}
+/* the row reaches the sheet's edges with room above/below, so the cards' soft shadow fades out instead of being clipped into a box */
+.story-row{display:flex;gap:12px;width:calc(100% + 40px);margin:-16px -20px -18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;scrollbar-width:none;padding:26px 20px 30px;scroll-padding-inline:20px}
 .story-row::-webkit-scrollbar{display:none}
-.fc-wrap{flex:0 0 calc((100% - 24px) / 2.12);scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;min-width:0;transition:transform .25s ease}
+.fc-wrap{flex:0 0 calc((100% - 4px) / 2.12);   /* two cards + ~12% of the third, measured to the sheet edge */scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;min-width:0;transition:transform .25s ease}
 .story-dots{display:flex;gap:8px;justify-content:center;margin-top:2px}
 .story-dots span{width:7px;height:7px;border-radius:50%;background:var(--sage);transition:background .2s, transform .2s}
 .story-dots span.on{background:var(--ink);transform:scale(1.15)}
@@ -196,6 +212,10 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .fc-inner{position:relative;display:block;aspect-ratio:700/960;container-type:inline-size;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.35,.7,.3,1)}
 .fc[aria-pressed="true"] .fc-inner{transform:rotateY(180deg)}
 .fc-front,.fc-back{position:absolute;inset:0;display:block;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+/* Safari can ignore backface hiding on transformed children, so hide every child of each face too, and fade the pill when flipped */
+.fc-front{transform:rotateY(0deg)}
+.fc-front *,.fc-back *{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.fc[aria-pressed="true"] .fc-hint{opacity:0;transition:opacity .15s}
 .fc-back{transform:rotateY(180deg)}
 .fc-art{position:absolute;inset:0;width:100%;height:100%;display:block;filter:drop-shadow(0 8px 20px rgba(60,50,30,.15))}
 /* the photo sits in the frame's window (with ~1% overlap each side so no gap shows) */
@@ -262,7 +282,7 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .pour{position:relative;left:12px;width:240px;margin:6px auto 92px}   /* nudged right so the stream (45% across the image) sits in the middle */
 .pour-img{display:block;width:100%;height:auto;clip-path:inset(0 0 var(--hide,100%) 0);will-change:clip-path}
 /* --g: pointer length, --ic: icon size, --ig: gap between icon and text */
-.pour{--g:10px;--ic:34px;--ig:8px}
+.pour{--g:10px;--ih:40px;--ig:8px}
 .tlc{position:absolute;top:var(--y);height:1px;width:var(--g);background:var(--ink);opacity:0;transition:opacity .5s ease}
 .tlc::after{content:"";position:absolute;top:-2.5px;width:6px;height:6px;border-radius:50%;background:var(--ink)}
 .tlc.l{right:calc(100% - var(--x))} .tlc.l::after{right:-3px}
@@ -271,28 +291,30 @@ p.copy{max-width:42ch;margin:0 auto;font-size:1rem}
 .tlp{position:absolute;top:var(--y);display:flex;flex-direction:column;gap:2px;width:6.1em;opacity:0;transition:opacity .6s ease, transform .6s ease}
 .tlp time{font-family:var(--display);font-style:italic;font-size:1.4rem;line-height:1.1;white-space:nowrap}
 .tlp > span{font-size:.85rem;line-height:1.35;color:var(--ink2)}
-.tlp.l{right:calc(100% - var(--x) + var(--g) + var(--ic) + var(--ig));text-align:right;align-items:flex-end;transform:translate(-12px,-.85em)}
-.tlp.r{left:calc(var(--x) + var(--g) + var(--ic) + var(--ig));text-align:left;align-items:flex-start;transform:translate(12px,-.85em)}
+.tlp.l{right:calc(100% - var(--x) + var(--g) + var(--ih) * var(--s,1) * var(--r,1) + var(--ig));text-align:right;align-items:flex-end;transform:translate(-12px,-.85em)}
+.tlp.r{left:calc(var(--x) + var(--g) + var(--ih) * var(--s,1) * var(--r,1) + var(--ig));text-align:left;align-items:flex-start;transform:translate(12px,-.85em)}
 .tlp.c{top:100%;left:var(--x);width:max-content;max-width:14em;text-align:center;align-items:center;transform:translate(-50%,22px)}
 .tl-row{display:flex;align-items:center;gap:var(--ig)}
 /* watercolour icons float between the pointer and the time */
-.tli{position:absolute;top:var(--y);width:var(--ic);height:var(--ic);transform:translateY(-50%);opacity:0;transition:opacity .6s ease .1s}
-.tli svg,.tli img{display:block;width:100%;height:100%;overflow:visible}
+.tli{position:absolute;top:var(--y);height:calc(var(--ih) * var(--s,1));width:calc(var(--ih) * var(--s,1) * var(--r,1));transform:translateY(-50%);opacity:0;transition:opacity .6s ease .1s;object-fit:contain;display:block}
+.tlp.narrow{width:5.3em}
 .tli.l{right:calc(100% - var(--x) + var(--g))}
 .tli.r{left:calc(var(--x) + var(--g))}
-.tli.c{position:static;transform:none;opacity:1}
+.tli.c{position:static;transform:none;opacity:1;flex:none}
 .pour .on{opacity:1}
 .tlp.l.on,.tlp.r.on{transform:translate(0,-.85em)}
 .tlp.c.on{transform:translate(-50%,14px)}
 .bub{position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s) / -2);border-radius:50%;border:1px solid rgba(201,164,58,.7);background:rgba(255,248,220,.6);
   pointer-events:none;animation:bubble var(--d) ease-out var(--dl) forwards;opacity:0}
 @keyframes bubble{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-70px)}}
-@media (max-width:370px){ .pour{width:215px;left:10px;--g:8px;--ic:28px;--ig:6px} .tlp{width:5.8em} }
-@media (min-width:900px){ .pour{width:300px;left:15px;--g:22px;--ic:40px} .tlp{width:9em} .tlp > span{font-size:.9rem} }
+@media (max-width:370px){ .pour{width:215px;left:10px;--g:8px;--ih:34px;--ig:6px} .tlp{width:5.8em} .tlp.narrow{width:5em} }
+.pour .wide{--s:.8}
+@media (min-width:900px){ .pour .wide{--s:1} .pour{width:300px;left:15px;--g:22px;--ih:48px} .tlp,.tlp.narrow{width:9em} .tlp > span{font-size:.9rem} }
 
 /* venue + buttons */
 .venue-box{display:flex;flex-direction:column;align-items:center;gap:12px}
-.pin{width:50px;height:50px}
+.venue-art{width:120px;height:auto}
+.venue-art[hidden]{display:none}
 .venue{font-family:var(--display);font-style:italic;font-size:1.6rem;line-height:1.2}
 .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 22px;font:600 .95rem var(--sans);text-decoration:none;cursor:pointer;
@@ -340,6 +362,8 @@ textarea{min-height:88px;resize:vertical}
 .field{display:flex;flex-direction:column;gap:6px}
 .qlabel{font-family:var(--sans);font-size:.95rem;font-weight:600}
 .choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice.three{grid-template-columns:repeat(3,1fr);gap:8px}
+.choice.three label{padding:11px 4px;font-size:.88rem}
 .choice input{position:absolute;opacity:0;pointer-events:none;width:1px}
 .choice label{display:block;font-weight:500;font-size:.95rem;border:1.5px solid var(--ink);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;background:rgba(255,255,255,.7)}
 .choice input:checked + label{background:var(--ink);color:var(--paper)}
@@ -397,12 +421,8 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
       <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.55 1.15" result="ga"/>
       <feComposite in="b" in2="ga" operator="in"/>
     </filter>
-    <!-- watercolour for the programme icons: uneven edges + a soft blur -->
-    <filter id="wci" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="11" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G" result="d"/>
-      <feGaussianBlur in="d" stdDeviation="0.4"/>
-    </filter>
+    <!-- heart window for the childhood photos (scales with the box) -->
+    <clipPath id="heart-win" clipPathUnits="objectBoundingBox"><path d="M.5 .98 C.22 .78 .01 .58 .02 .32 C.03 .08 .33 -.03 .5 .19 C.67 -.03 .97 .08 .98 .32 C.99 .58 .78 .78 .5 .98Z"/></clipPath>
     <filter id="sketch"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.2"/></filter>
     <path id="heartP" d="M50 86 C22 66 14 48 26 36 C36 26 48 32 50 42 C52 32 64 26 74 36 C86 48 78 66 50 86Z"/>
   </defs>
@@ -480,7 +500,14 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
     <div class="sheet">
 
     <section id="story">
-      <h2 class="h">How it all started</h2>
+      <h2 class="h">Our story</h2>
+      <div class="hearts" id="hearts">
+        <!-- childhood photos sit behind the frame artwork, clipped to a heart -->
+        <span class="hp-photo l"><img src="img/childhood-joshua.jpg" alt="Joshua as a child" loading="lazy" decoding="async"></span>
+        <span class="hp-photo r"><img src="img/childhood-rochelle.jpg" alt="Rochelle as a child" loading="lazy" decoding="async"></span>
+        <picture><source srcset="img/heart-frames.webp" type="image/webp"><img class="hearts-art" src="img/heart-frames.png" alt="" loading="lazy" decoding="async"></picture>
+        <img class="hearts-knot" src="img/heart-knot.png" alt="" aria-hidden="true">
+      </div>
       <p class="copy">We met over coffee at the Starbucks at Suntec Convention Centre, right beside Din Tai Fung. That café has since closed, but our story kept going. Now we'd love you with us in the rainforest for the next chapter.</p>
       <div class="story-scroller">
         <button class="story-arrow prev" id="story-prev" type="button" aria-label="Previous cards" hidden>‹</button>
@@ -515,28 +542,29 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
       <h2 class="h">Wedding programme</h2>
       <div class="pour" id="pour">
         <img class="pour-img" id="pour-img" src="img/champagne-tower.png" alt="A champagne bottle pouring into a tower of glasses">
-        <!-- each stop: pointer (tlc), watercolour icon (tli: SVG, or img/icon-*.png if it exists), then the time and text (tlp) -->
-        <span class="tlc l" style="--y:15%;--x:43%"></span><span class="tli l" data-icon="cocktail" style="--y:15%;--x:43%"></span>
-        <p class="tlp l" style="--y:15%;--x:43%"><time>6:00 pm</time><span>Cocktail reception outside the ballroom</span></p>
-        <span class="tlc r" style="--y:30%;--x:49.5%"></span><span class="tli r" data-icon="chair" style="--y:30%;--x:49.5%"></span>
-        <p class="tlp r" style="--y:30%;--x:49.5%"><time>6:30 pm</time><span>All guests to be seated</span></p>
-        <span class="tlc l" style="--y:45%;--x:40%"></span><span class="tli l" data-icon="rings" style="--y:45%;--x:40%"></span>
-        <p class="tlp l" style="--y:45%;--x:40%"><time>6:45 pm</time><span>Ceremony begins</span></p>
-        <span class="tlc r" style="--y:72%;--x:50.5%"></span><span class="tli r" data-icon="cutlery" style="--y:72%;--x:50.5%"></span>
-        <p class="tlp r" style="--y:72%;--x:50.5%"><time>Dinner</time><span>Food, drinks, games &amp; lots of fun!</span></p>
+        <!-- each stop: pointer (tlc), watercolour icon (tli, its width from the image ratio --r), then the time and text (tlp) -->
+        <span class="tlc l" style="--y:15%;--x:43%"></span><img class="tli l" src="img/icon-cocktail.png" alt="" style="--y:15%;--x:43%;--r:.71">
+        <p class="tlp l" style="--y:15%;--x:43%;--r:.71"><time>6:00 pm</time><span>Cocktail reception outside the ballroom</span></p>
+        <span class="tlc r" style="--y:30%;--x:49.5%"></span><img class="tli r" src="img/icon-chair.png" alt="" style="--y:30%;--x:49.5%;--r:.62">
+        <p class="tlp r" style="--y:30%;--x:49.5%;--r:.62"><time>6:30 pm</time><span>All guests to be seated</span></p>
+        <span class="tlc l" style="--y:45%;--x:40%"></span><img class="tli l wide" src="img/icon-rings.png" alt="" style="--y:45%;--x:40%;--r:1.35">
+        <p class="tlp l narrow wide" style="--y:45%;--x:40%;--r:1.35"><time>6:45 pm</time><span>Ceremony begins</span></p>
+        <span class="tlc r" style="--y:72%;--x:50.5%"></span><img class="tli r wide" src="img/icon-cutlery.png" alt="" style="--y:72%;--x:50.5%;--r:1.29">
+        <p class="tlp r narrow wide" style="--y:72%;--x:50.5%;--r:1.29"><time>Dinner</time><span>Food, drinks, games &amp; lots of fun!</span></p>
         <span class="tlc v" style="--y:93%;--x:45%"></span>
-        <p class="tlp c" style="--y:100%;--x:45%"><span class="tl-row"><span class="tli c" data-icon="moon" style="--y:100%"></span><time>10:45 pm</time></span><span>End of evening ♡</span></p>
+        <p class="tlp c" style="--y:100%;--x:45%"><span class="tl-row"><img class="tli c" src="img/icon-moon.png" alt="" style="--r:.99"><time>10:45 pm</time></span><span>End of evening ♡</span></p>
       </div>
     </section>
     <div class="divider" aria-hidden="true"><svg viewBox="14 26 72 62" aria-hidden="true"><use href="#heartP" fill="#f2b6c4" stroke="#3e5a44" stroke-width="5"/></svg></div>
 
 
     <section>
-      <h2 class="h">Where?</h2>
+      <h2 class="h">The venue</h2>
       <div class="venue-box">
-      <svg class="pin doodle" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 54 Q12 34 12 24 A18 18 0 0 1 48 24 Q48 34 30 54Z" fill="#f2b6c4" stroke="#3e5a44" stroke-width="2"/><circle cx="30" cy="24" r="6" fill="#fbf7ef" stroke="#3e5a44" stroke-width="2"/></svg>
+      <img class="venue-art" id="venue-art" src="img/icon-resort.png" alt="" hidden>
       <p class="venue">Mandai Rainforest Resort<br>by Banyan Tree</p>
-      <p class="copy">60 Mandai Lake Road, Singapore 729979<br>The ceremony and dinner are both at the resort.</p>
+      <p class="copy">60 Mandai Lake Road, Singapore 729979</p>
+      <p class="copy">The ceremony and dinner are both held at the <b id="venue-room"></b>.</p>
       <div class="btns">
         <a class="btn solid" href="https://www.google.com/maps/search/?api=1&amp;query=Mandai+Rainforest+Resort+by+Banyan+Tree+60+Mandai+Lake+Road" target="_blank" rel="noopener">Open map</a>
       </div>
@@ -565,9 +593,13 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
         </details>
 
         <details>
-          <summary>Staying the night?</summary>
+          <summary>Want to make a night of it?</summary>
           <div class="ans">
-            <p>Make a weekend of it! The resort has rooms right in the rainforest, beside the Night Safari and River Wonders. Check-in is from 3pm and check-out is at noon. If you're keen, tick the box in the RSVP and we'll share the details.</p>
+            <p>Why not stay over and turn the celebration into a staycation? 🌿</p>
+            <h3>Mandai Rainforest Resort by Banyan Tree</h3>
+            <p>We've arranged preferential room rates for our guests at the resort. Interested? Just let <span class="who" data-who="resort"></span> know, or tick 'Resort room' in your RSVP and we'll reach out.</p>
+            <h3>Glamping at Reservoir Retreat</h3>
+            <p>Prefer something wilder? Glamping in the Wild: Reservoir Retreat at Mandai Wildlife EAST has air-conditioned safari tents that fit up to 4. <span class="who" data-who="glamping"></span> can get tent-only rates, so reach out to her if you're keen, or tick 'Glamping tent' in your RSVP!</p>
           </div>
         </details>
 
@@ -654,7 +686,14 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink);
             <input id="f-song" name="song" placeholder="Song – Artist" maxlength="150">
           </label>
 
-          <label class="check" for="f-stay"><input type="checkbox" id="f-stay" name="stay"> I'm interested in staying the night at the resort</label>
+          <div class="field">
+            <p class="qlabel" id="stay-label">Want to stay the night?</p>
+            <div class="choice three" role="radiogroup" aria-labelledby="stay-label">
+              <input type="radio" name="stay" id="stay-no" value="No thanks" checked><label for="stay-no">No thanks</label>
+              <input type="radio" name="stay" id="stay-resort" value="Resort room"><label for="stay-resort">Resort room</label>
+              <input type="radio" name="stay" id="stay-glamp" value="Glamping tent"><label for="stay-glamp">Glamping tent</label>
+            </div>
+          </div>
 
           <fieldset class="singles">
             <legend>Singles Column 💌</legend>
@@ -723,9 +762,15 @@ const CONFIG = {
   contactNumber: "",                                       // optional, e.g. "+65 9123 4567"
   photos: "Snap away and share the love! We'll share our wedding hashtag closer to the day.",
   hashtag: "",                                             // e.g. "#AbsoLEEwed" (shown after the photos line)
-  parkingNote: "",                                         // e.g. "Let us know at the reception and we'll validate your parking."
+  parkingNote: "",
+  venueRoom: "[BALLROOM NAME], Level [X]",                 // shown in bold in "The venue"
+  // "Want to make a night of it?": who to contact. Add a WhatsApp number (e.g. "6591234567") and the name becomes a chat link.
+  stay: {
+    resort:   { name: "Joshua",   whatsapp: "" },
+    glamping: { name: "Rochelle", whatsapp: "" }
+  },                                         // e.g. "Let us know at the reception and we'll validate your parking."
   start: "2027-07-17T18:00:00+08:00",                      // used by the countdown
-  // "How it all started" playing cards (a swipeable row). Front: your photo inside the card artwork; back: title, date and a line or two.
+  // "Our story" playing cards (a swipeable row). Front: your photo inside the card artwork; back: title, date and a line or two.
   // frame = the artwork file name in img/ (a .webp and a .png of each). Keep each story to about 15 words so it fits.
   // Photos: portrait, under 250KB (a missing photo shows "photo coming soon").
   story: [
@@ -749,6 +794,11 @@ document.getElementById("faq-kids").textContent = CONFIG.kids;
 document.getElementById("faq-contact").textContent = "Message " + contactLine + ", or any of our bridal team.";
 document.getElementById("faq-photos").textContent = CONFIG.photos + (CONFIG.hashtag ? " Tag them " + CONFIG.hashtag + "." : "");
 document.getElementById("parking-note").textContent = CONFIG.parkingNote;
+document.getElementById("venue-room").textContent = CONFIG.venueRoom;
+(function(){ const v=document.getElementById("venue-art"); v.addEventListener("load",()=>{ if(v.naturalWidth) v.hidden=false; }); if(v.complete&&v.naturalWidth) v.hidden=false; })();
+document.querySelectorAll(".who").forEach(el=>{ const c=CONFIG.stay[el.dataset.who]; if(!c) return;
+  if(c.whatsapp){ const a=document.createElement("a"); a.href="https://wa.me/"+c.whatsapp.replace(/\D/g,""); a.target="_blank"; a.rel="noopener"; a.textContent=c.name; el.appendChild(a); }
+  else el.textContent=c.name; });
 document.getElementById("cal-link").href = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
   "&text=" + encodeURIComponent("Joshua & Rochelle's Wedding") +
   "&dates=20270717T100000Z/20270717T144500Z" +
@@ -870,129 +920,22 @@ document.getElementById("cal-link").href = "https://calendar.google.com/calendar
 const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:["#f6e09c","#c9a43a"],
               sage:["#c6d7b2","#7f9f6a"], blue:["#bcd2f1","#6f95cf"], lavender:["#cbbde9","#9480c9"] };
 
-/* Section headings: a loose watercolour highlighter swipe behind the words, one palette colour per section */
+/* Section headings: wrap the words and shrink them until they fit the banner's front band (max 2rem, min 1rem) */
 (function(){
-  const order=["blush","peach","butter","sage","blue","lavender"];
-  const brush="M6 15 C22 4 62 3 101 4 C140 5 177 2 195 9 C201 16 199 31 190 35 C160 39 121 36 90 37 C56 38 25 39 9 34 C1 30 1 20 6 15Z";
-  document.querySelectorAll(".h").forEach((h,i)=>{
-    const [c,d]=PAL[order[i%order.length]];
-    h.insertAdjacentHTML("afterbegin",`<svg class="hl" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="${brush}" fill="${c}" fill-opacity=".55" filter="url(#wc)"/>
-      <path d="${brush}" fill="none" stroke="${d}" stroke-opacity=".3" stroke-width="1.8" filter="url(#wc)"/></svg>`);
-  });
+  const hs=[...document.querySelectorAll(".h")];
+  hs.forEach(h=>{ if(!h.querySelector(".h-txt")){ const t=document.createElement("span"); t.className="h-txt"; t.textContent=h.textContent.trim(); h.textContent=""; h.appendChild(t); } });
+  function fit(){ hs.forEach(h=>{ const t=h.querySelector(".h-txt"); let size=32; t.style.fontSize=size+"px";
+    while(size>16 && (t.scrollWidth>t.clientWidth+.5 || t.scrollHeight>t.clientHeight+.5)){ size-=.5; t.style.fontSize=size+"px"; } }); }
+  fit(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit); addEventListener("resize",fit);
 })();
 
-/* Save the date: scratch-to-reveal coating over the month and dates */
+/* Our story: childhood photos in the heart frames, and the little string heart pulses once when it comes into view */
 (function(){
-  const wrap=document.getElementById("cal-wrap"), area=document.getElementById("scratch-area"), cv=document.getElementById("scratch");
-  const hint=document.getElementById("scratch-hint"), skip=document.getElementById("scratch-skip"), btn=document.getElementById("cal-link");
-  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const ctx=cv.getContext("2d");
-  let W=0, H=0, dpr=1, revealed=false, scratched=false, nearly=false, lastPt=null, brush=null, checkT=0;
-  const R=()=>innerWidth>=900?26:22;                                // brush radius
-  const COLS=["#f2b6c4","#f5c29a","#f6e09c","#c6d7b2","#cbbde9"], DARK=["#e48aa3","#e3a06a","#d9b94e","#93b07b","#a693d4"];
-  let seed=17; const rnd=()=>((seed=(seed*16807)%2147483647)/2147483647);
-
-  function roundRect(c,x,y,w,h,r,wob){                              // rounded rectangle with slightly uneven edges
-    c.beginPath(); const pts=[], step=12;
-    const edge=(x0,y0,x1,y1)=>{ const len=Math.hypot(x1-x0,y1-y0), n=Math.max(2,Math.round(len/step));
-      for(let i=0;i<n;i++){ const t=i/n, nx=-(y1-y0)/len, ny=(x1-x0)/len, j=(rnd()-.5)*wob; pts.push([x0+(x1-x0)*t+nx*j, y0+(y1-y0)*t+ny*j]); } };
-    edge(x+r,y,x+w-r,y); pts.push([x+w-r*.29,y+r*.29]); edge(x+w,y+r,x+w,y+h-r); pts.push([x+w-r*.29,y+h-r*.29]);
-    edge(x+w-r,y+h,x+r,y+h); pts.push([x+r*.29,y+h-r*.29]); edge(x,y+h-r,x,y+r); pts.push([x+r*.29,y+r*.29]);
-    c.moveTo(pts[0][0],pts[0][1]); for(let i=1;i<pts.length;i++){ const p=pts[i], q=pts[(i+1)%pts.length]; c.quadraticCurveTo(p[0],p[1],(p[0]+q[0])/2,(p[1]+q[1])/2); }
-    c.closePath();
-  }
-  function heart(c,x,y,s,col){ c.save(); c.translate(x,y); c.scale(s/60,s/60); c.translate(-50,-56); c.fillStyle=col;
-    c.beginPath(); c.moveTo(50,86); c.bezierCurveTo(22,66,14,48,26,36); c.bezierCurveTo(36,26,48,32,50,42); c.bezierCurveTo(52,32,64,26,74,36); c.bezierCurveTo(86,48,78,66,50,86); c.fill(); c.restore(); }
-  function paw(c,x,y,s,col,rot){ c.save(); c.translate(x,y); c.rotate(rot||0); c.fillStyle=col; const u=s/10;
-    c.beginPath(); c.ellipse(0,u*1.6,u*3,u*2.4,0,0,7); c.fill();
-    [[-3.6,-1.6],[-1.3,-3.6],[1.3,-3.6],[3.6,-1.6]].forEach(([a,b])=>{ c.beginPath(); c.ellipse(a*u,b*u,u*1.25,u*1.55,0,0,7); c.fill(); }); c.restore(); }
-
-  function drawCoating(){
-    seed=17; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation="source-over"; ctx.clearRect(0,0,W,H);
-    ctx.save(); roundRect(ctx,1.5,1.5,W-3,H-3,16,3); ctx.clip();
-    ctx.fillStyle="#f9efe2"; ctx.fillRect(0,0,W,H);                  // opaque base so nothing shows through
-    for(let i=0;i<16;i++){                                           // soft overlapping watercolour blooms in the palette
-      const x=rnd()*W, y=rnd()*H, r=50+rnd()*90, c=COLS[i%COLS.length];
-      const g=ctx.createRadialGradient(x,y,r*.1,x,y,r); g.addColorStop(0,c+"e6"); g.addColorStop(.6,c+"99"); g.addColorStop(1,c+"00");
-      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); }
-    for(let i=0;i<10;i++){                                           // darker pigment pooled in blotches
-      const x=rnd()*W, y=rnd()*H, r=14+rnd()*26, c=DARK[i%DARK.length];
-      const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,c+"00"); g.addColorStop(.55,c+"14"); g.addColorStop(.8,c+"24"); g.addColorStop(1,c+"00");
-      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); }
-    const tex=document.createElement("canvas"); tex.width=tex.height=64; const tc=tex.getContext("2d"), id=tc.createImageData(64,64);
-    for(let i=0;i<id.data.length;i+=4){ const v=rnd()*255; id.data[i]=id.data[i+1]=id.data[i+2]=v>128?255:60; id.data[i+3]=rnd()*26; }
-    tc.putImageData(id,0,0); ctx.fillStyle=ctx.createPattern(tex,"repeat"); ctx.fillRect(0,0,W,H);   // faint paper grain
-    for(let i=0;i<14;i++){                                           // tiny hearts and paw prints
-      const x=12+rnd()*(W-24), y=12+rnd()*(H-24), cx=W/2, cy=H/2;
-      if(Math.abs(x-cx)<W*.28 && Math.abs(y-cy)<38) continue;        // keep the middle clear for the label
-      const col=DARK[i%DARK.length]+"8c"; i%2 ? heart(ctx,x,y,9+rnd()*4,col) : paw(ctx,x,y,10+rnd()*4,col,(rnd()-.5)*.8); }
-    ctx.restore();
-    ctx.strokeStyle="rgba(167,140,120,.25)"; ctx.lineWidth=1.5; roundRect(ctx,1.5,1.5,W-3,H-3,16,3); ctx.stroke();  // pooled edge
-    ctx.fillStyle="rgba(62,90,68,.7)"; ctx.textAlign="center"; ctx.textBaseline="middle";
-    ctx.font=`italic 400 ${Math.round(1.6*16)}px "Noto Serif Display", Georgia, serif`; ctx.fillText("scratch here",W/2,H/2-8);
-    paw(ctx,W/2,H/2+22,14,"rgba(62,90,68,.6)",0);
-  }
-  function makeBrush(){                                              // soft-edged round brush
-    const r=R(), b=document.createElement("canvas"); b.width=b.height=Math.ceil(r*2*dpr); const c=b.getContext("2d");
-    const g=c.createRadialGradient(r*dpr,r*dpr,0,r*dpr,r*dpr,r*dpr); g.addColorStop(0,"rgba(0,0,0,1)"); g.addColorStop(.6,"rgba(0,0,0,1)"); g.addColorStop(1,"rgba(0,0,0,0)");
-    c.fillStyle=g; c.fillRect(0,0,b.width,b.height); brush=b;
-  }
-  function size(force){
-    const r=area.getBoundingClientRect(); const w=Math.round(r.width), h=Math.round(r.height);
-    if(!force && w===W && h===H) return;                             // iOS fires resize while scrolling: only redraw on a real size change
-    W=w; H=h; dpr=Math.min(2,window.devicePixelRatio||1); cv.width=W*dpr; cv.height=H*dpr; makeBrush(); if(!revealed){ scratched=false; drawCoating(); }
-  }
-  function stamp(x,y){ ctx.setTransform(1,0,0,1,0,0); ctx.globalCompositeOperation="destination-out"; const r=R()*dpr; ctx.drawImage(brush,x*dpr-r,y*dpr-r); }
-  function line(a,b){ const d=Math.hypot(b.x-a.x,b.y-a.y), n=Math.max(1,Math.ceil(d/(R()/3))); for(let i=1;i<=n;i++) stamp(a.x+(b.x-a.x)*i/n, a.y+(b.y-a.y)*i/n); }
-  const pt=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
-  function cleared(x0,y0,w,h){                                       // share of the coating already scratched away
-    x0=Math.max(0,Math.floor(x0*dpr)); y0=Math.max(0,Math.floor(y0*dpr)); w=Math.min(cv.width-x0,Math.ceil(w*dpr)); h=Math.min(cv.height-y0,Math.ceil(h*dpr));
-    if(w<=0||h<=0) return 0; const d=ctx.getImageData(x0,y0,w,h).data; let clear=0, n=0;
-    for(let i=3;i<d.length;i+=16){ n++; if(d[i]<128) clear++; } return clear/n;
-  }
-  function check(){
-    if(revealed) return;
-    const all=cleared(0,0,W,H), d=document.querySelector("#cal .day17").getBoundingClientRect(), a=cv.getBoundingClientRect();
-    const day=cleared(d.left-a.left,d.top-a.top,d.width,d.height);
-    if(all>=.4 || day>=.6) return reveal(true);
-    if(all>=.15 && !nearly){ nearly=true; hint.textContent="keep going… almost there!"; }
-  }
-  function confetti(){
-    const d=document.querySelector("#cal .day17").getBoundingClientRect(), w=wrap.getBoundingClientRect();
-    const cx=d.left-w.left+d.width/2, cy=d.top-w.top+d.height/2, cols=[...COLS,"#e48aa3"];
-    for(let i=0;i<18;i++){ const el=document.createElement("span"); el.className="confetti"; const a=Math.random()*Math.PI*2, dist=40+Math.random()*70;
-      el.style.cssText=`--cx:${cx}px;--cy:${cy}px;--s:${9+Math.random()*8}px;--dx:${Math.cos(a)*dist}px;--dy:${Math.sin(a)*dist-40}px;--r:${(Math.random()-.5)*160}deg`;
-      const c=cols[i%cols.length];
-      el.innerHTML= i%2 ? `<svg viewBox="14 26 72 62"><use href="#heartP" fill="${c}"/></svg>`
-        : `<svg viewBox="-6 -6 12 12"><g fill="${c}"><ellipse cx="0" cy="1.6" rx="3" ry="2.4"/><ellipse cx="-3.6" cy="-1.6" rx="1.25" ry="1.55"/><ellipse cx="-1.3" cy="-3.6" rx="1.25" ry="1.55"/><ellipse cx="1.3" cy="-3.6" rx="1.25" ry="1.55"/><ellipse cx="3.6" cy="-1.6" rx="1.25" ry="1.55"/></g></svg>`;
-      wrap.appendChild(el); setTimeout(()=>el.remove(),1700); }
-  }
-  function reveal(animate){
-    if(revealed) return; revealed=true;
-    try{ getSelection().removeAllRanges(); }catch(_){}
-    try{ sessionStorage.setItem("jr-date-revealed","1"); }catch(_){}
-    cv.classList.add("gone"); cv.setAttribute("tabindex","-1"); cv.setAttribute("aria-hidden","true"); skip.hidden=true;
-    setTimeout(()=>{ cv.style.display="none"; }, animate?550:0);
-    hint.textContent="see you on Saturday, 17 July 2027! ♡"; hint.classList.add("done");
-    btn.hidden=false;
-    if(animate){ wrap.classList.add("revealed"); btn.classList.add("pop"); if(!reduce) confetti(); }
-    else { wrap.classList.add("revealed"); const s=document.querySelector("#cal .day17 svg"); s.style.animation="none"; s.style.opacity="1"; s.style.transform="translate(-50%,-48%)"; }
-  }
-  // pointer scratching (touch, pen or mouse)
-  cv.addEventListener("pointerdown",e=>{ if(revealed) return; cv.setPointerCapture(e.pointerId); lastPt=pt(e); stamp(lastPt.x,lastPt.y); scratched=true; e.preventDefault(); });
-  cv.addEventListener("pointermove",e=>{ if(!lastPt||revealed) return; const p=pt(e); line(lastPt,p); lastPt=p;
-    const now=performance.now(); if(now-checkT>140){ checkT=now; check(); } });
-  const up=()=>{ if(lastPt){ lastPt=null; check(); } };
-  cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
-  cv.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); reveal(true); } });
-  skip.addEventListener("click",()=>reveal(true));
-  // already revealed earlier in this visit? keep it uncovered
-  let seen=false; try{ seen=sessionStorage.getItem("jr-date-revealed")==="1"; }catch(_){}
-  if(seen) reveal(false);
-  else { size(true); addEventListener("resize",()=>size(false));
-    // redraw once the handwriting font is ready, unless the guest has already started scratching
-    (document.fonts&&document.fonts.load ? document.fonts.load('italic 400 26px "Noto Serif Display"') : Promise.resolve()).then(()=>{ if(!scratched&&!revealed) drawCoating(); }); }
+  const box=document.getElementById("hearts");
+  box.querySelectorAll(".hp-photo img").forEach(im=>{ const ok=()=>{ if(im.naturalWidth) im.parentNode.classList.add("ok"); }; if(im.complete) ok(); else im.addEventListener("load",ok); });
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+  const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ box.classList.add("pulse"); io.disconnect(); } }); },{threshold:.6});
+  io.observe(box);
 })();
 
 /* Our story: illustrated playing cards built from CONFIG.story */
@@ -1052,34 +995,9 @@ const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:[
 /* Champagne timeline: the pour follows the reading position; each time appears as the pour passes it */
 (function(){
   const wrap=document.getElementById("pour"), img=document.getElementById("pour-img");
-  // watercolour icons (inline SVG). If img/icon-<name>.png exists, it replaces the SVG.
-  const sk='fill="none" stroke="#3e5a44" stroke-opacity=".5" stroke-width="1" stroke-linecap="round" filter="url(#wci)"';   // broken, wobbly pencil line
-  const ICONS={
-    cocktail:`<g filter="url(#wci)"><path d="M6 10 Q7 21 20 21 Q33 21 34 10 Z" fill="#f6e09c" fill-opacity=".7"/><path d="M8 12 Q10 22 21 22 Q31 21 33 12 Z" transform="translate(1.2 1)" fill="#f6e09c" fill-opacity=".38"/>
-      <path d="M9 15 Q14 20.5 20 20.6 Q27 20.5 31 15" fill="none" stroke="#d9b04a" stroke-opacity=".55" stroke-width="2.2"/><path d="M19 21 L19.5 31 M12.5 33 Q20 30.4 27 33" fill="none" stroke="#e8c96a" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round"/>
-      <circle cx="16" cy="14" r="1.1" fill="#fff6d8"/><circle cx="23" cy="16" r=".9" fill="#fff6d8"/></g>
-      <path d="M6 10 Q7 21 20 21 Q30 21 33 13 M34 10 H18 M20 21 V31 M12 33 Q19 30.4 27 33" ${sk} stroke-dasharray="17 4 9 2.5 23 5 11"/>`,
-    chair:`<g filter="url(#wci)"><path d="M12 5 Q19 4 27 5 L27 20 L12 20 Z" fill="#f5c29a" fill-opacity=".65"/><path d="M9 19 H31 L30 25 H10 Z" fill="#f5c29a" fill-opacity=".7"/>
-      <path d="M13 6 Q20 5 26 6 L26 19 L13 19 Z" transform="translate(1.3 1)" fill="#f5c29a" fill-opacity=".35"/><path d="M26 6 V19" stroke="#e3a06a" stroke-opacity=".55" stroke-width="2.4" fill="none"/>
-      <path d="M12 25 L11 35 M28 25 L29 35" stroke="#e8a978" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round" fill="none"/></g>
-      <path d="M12 20 V5.5 Q19 4 27 5 V19 M9 19.5 H31 L30 25 H10 M12 25 L11 35 M28 25 L29 35" ${sk} stroke-dasharray="21 4 13 3 31 6"/>`,
-    rings:`<g filter="url(#wci)"><circle cx="20" cy="22" r="14" fill="#f2b6c4" fill-opacity=".42"/><circle cx="21" cy="23" r="10" fill="#f2b6c4" fill-opacity=".3"/>
-      <circle cx="15.5" cy="23" r="7.5" fill="none" stroke="#e3c26b" stroke-opacity=".8" stroke-width="3"/><circle cx="24.5" cy="23" r="7.5" fill="none" stroke="#e3c26b" stroke-opacity=".75" stroke-width="3"/>
-      <path d="M10 27 Q13 31 18 30" fill="none" stroke="#c99a3a" stroke-opacity=".5" stroke-width="1.8"/><path d="M13 12 L15.5 9 L18 12 L15.5 15 Z" fill="#cfe6f5" fill-opacity=".85"/></g>
-      <path d="M15.5 15.5 A7.5 7.5 0 1 0 22 19 M24.5 15.5 A7.5 7.5 0 1 1 18 27" ${sk} stroke-dasharray="15 4 22 3 9"/>`,
-    cutlery:`<g filter="url(#wci)"><circle cx="20" cy="21" r="11.5" fill="#c6d7b2" fill-opacity=".62"/><circle cx="21" cy="22" r="8" fill="#c6d7b2" fill-opacity=".35"/>
-      <path d="M12 29 Q20 34 28 28" fill="none" stroke="#93b07b" stroke-opacity=".55" stroke-width="2"/>
-      <path d="M5 6 V16 M3.5 6 V12 Q3.5 15 5 16 Q6.5 15 6.5 12 V6 M5 16 V35" stroke="#a9c49a" stroke-opacity=".8" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M35 6 Q38 12 36 19 L35 19 V35" stroke="#a9c49a" stroke-opacity=".8" stroke-width="2.2" fill="#c6d7b2" fill-opacity=".6" stroke-linecap="round"/></g>
-      <path d="M20 9.5 A11.5 11.5 0 1 0 31.5 21 M5 6 V35 M35 6 Q38 12 36 19 V35" ${sk} stroke-dasharray="19 5 11 3 26 4"/>`,
-    moon:`<g filter="url(#wci)"><path d="M24 6 A14.5 14.5 0 1 0 33 29 A11 11 0 1 1 24 6 Z" fill="#cbbde9" fill-opacity=".7"/><path d="M24 6 A14.5 14.5 0 1 0 33 29 A11 11 0 1 1 24 6 Z" transform="translate(-1.2 1)" fill="#cbbde9" fill-opacity=".35"/>
-      <path d="M14 30 Q22 35 31 30" fill="none" stroke="#9f8ccf" stroke-opacity=".5" stroke-width="2"/><path d="M32 8 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2 Z" fill="#f6e09c" fill-opacity=".9"/></g>
-      <path d="M24 6 A14.5 14.5 0 1 0 33 29 M30 26 A11 11 0 0 1 24 6" ${sk} stroke-dasharray="21 4 15 5 30"/>`
-  };
-  wrap.querySelectorAll(".tli").forEach(t=>{ const name=t.dataset.icon;
-    t.innerHTML=`<svg viewBox="0 0 40 40" aria-hidden="true">${ICONS[name]||""}</svg>`;
-    const png=new Image(); png.onload=()=>{ t.innerHTML=`<img src="img/icon-${name}.png" alt="">`; }; png.src=`img/icon-${name}.png`; });
+ // watercolour icons (PNG); each keeps its own shape, so its width comes from the image ratio (--r)
   const items=[...wrap.querySelectorAll(".tlc,.tlp,.tli:not(.c)")].map(el=>({el, y:parseFloat(el.style.getPropertyValue("--y"))}));
+  const seen=new Set();   // once a stop has appeared it stays (so the last one can't be missed)
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   let bubbled=false, last=-1;
   function bubbles(){
@@ -1093,7 +1011,7 @@ const PAL = { blush:["#f2b6c4","#d9768f"], peach:["#f5c29a","#d98a4f"], butter:[
     const reveal=reduce?1:Math.min(1,Math.max(0,(innerHeight*0.72-r.top)/r.height));
     if(reveal===last) return; last=reveal;
     img.style.setProperty("--hide",((1-reveal)*100).toFixed(2)+"%");
-    items.forEach(it=>it.el.classList.toggle("on", reveal*100 >= Math.min(it.y,97)-2));
+    items.forEach(it=>{ if(seen.has(it.el) || reveal*100 >= Math.min(it.y,90)-2){ seen.add(it.el); it.el.classList.add("on"); } });
     if(reveal>=.72) bubbles();
   }
   let ticking=false;
@@ -1232,7 +1150,7 @@ tick(); setInterval(tick, 1000);
       plusCount: n, plusNames: names.join(", "),
       kidsCount: k, kidsAges: k ? v("f-kidages") : "",
       dietary: going ? v("f-diet") : "",
-      stay: going && $("f-stay").checked ? "Yes" : "No",
+      stay: going ? ((f.querySelector("input[name=stay]:checked")||{}).value || "No thanks") : "No thanks",
       song: going ? v("f-song") : "",
       singles: single ? "Yes" : "No",
       singlesWords: single ? v("f-s3") : "", singlesDate: single ? v("f-sdate") : "",
@@ -1274,7 +1192,7 @@ tick(); setInterval(tick, 1000);
       lines.push(d.plusCount ? "Plus one(s): "+d.plusNames : "Plus one: No");
       lines.push("Children: "+(d.kidsCount ? d.kidsCount+" (ages: "+(d.kidsAges||"not given")+")" : "None"));
       lines.push("Dietary: "+(d.dietary||"None"));
-      lines.push("Staying the night: "+(d.stay==="Yes"?"Interested":"No"));
+      lines.push("Staying the night: "+d.stay);
       lines.push("Song request: "+(d.song||"-"));
       if(d.singles==="Yes") lines.push("Singles Column: YES","- 3 words: "+(d.singlesWords||"-"),"- Ideal date: "+(d.singlesDate||"-"),"- Instagram: "+(d.singlesInstagram||"-"),"- OK to feature in magazine: Yes");
     }

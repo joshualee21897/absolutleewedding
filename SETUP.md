@@ -17,12 +17,16 @@ You don't need any coding knowledge. Set aside about 20 minutes.
 | `img/bg.jpg`, `img/bg-desktop.jpg` | The painted meadow backgrounds behind the whole site (compressed): the tall one for phones, the wide one for screens wider than 900px. |
 | `img/dress-capybara.png`, `img/dress-leopard.png`, `img/dress-flamingo.png`, `img/dress-zebra.png` | The four dress code examples in "What should I wear?". |
 | `img/champagne-tower.png` | The champagne pour in "Wedding programme" (compressed; the original is in `img/originals/`). |
-| `img/icon-cocktail.png`, `icon-chair.png`, `icon-rings.png`, `icon-cutlery.png`, `icon-moon.png` | *(optional)* Your own icons for the programme. If a file with that name exists, it replaces the drawn watercolour icon automatically (transparent PNG, square, about 120×120px). |
+| `img/icon-cocktail.png`, `icon-chair.png`, `icon-rings.png`, `icon-cutlery.png`, `icon-moon.png` | The watercolour icons beside each time in "Wedding programme". |
+| `img/banner.webp` / `.png` | The watercolour ribbon behind every section heading (the heading text shrinks to fit it). |
+| `img/heart-frames.webp` / `.png`, `img/heart-knot.png` | The two heart frames in "Our story" (and the little string heart that pulses). |
+| `img/childhood-joshua.jpg`, `img/childhood-rochelle.jpg` | *(you add these)* Your childhood photos, shown inside the two hearts. Square or portrait, faces centred, under 250KB. A missing photo shows a soft cream fill. |
+| `img/icon-resort.png` | *(optional)* A watercolour illustration of the resort, shown above the venue name in "The venue" (about 120px wide). Nothing shows there until you add it. |
 | `img/boy-kneel.png`, `img/girl-heart.png` | The proposal scene at the top of the invite (he kneels with the ring, she holds a heart). |
 | `img/boy-kneel-closed.png` | *(optional)* The kneeling drawing with the ring box **closed**. If you add it, the box opening becomes a crossfade between your two drawings instead of the drawn-on lid. |
-| `img/card-*.webp` / `.png` | The illustrated playing-card artwork for "How it all started" (J giraffe, Q red panda, K leopard, A flamingo, and the card back). WebP is used; the PNGs are a fallback for very old browsers. Originals are in `img/originals/`. |
+| `img/card-*.webp` / `.png` | The illustrated playing-card artwork for "Our story" (J giraffe, Q red panda, K leopard, A flamingo, and the card back). WebP is used; the PNGs are a fallback for very old browsers. Originals are in `img/originals/`. |
 | `img/story-1.jpg` … `img/story-6.jpg` | *(you add these)* Photos that show through each card's window. See Part D. |
-| `img/originals/` | Full-quality copies of both backgrounds, kept as a backup. |
+| `img/originals/` | Full-quality copies of the artwork (backgrounds, cards, banner, heart frames, icons), kept as a backup. |
 | `og-image.png` | The picture people see when you share the link on WhatsApp. |
 | `apps-script/Code.gs` | The small Google script that saves RSVPs into your Sheet. |
 | `SETUP.md` | This guide. |
@@ -81,11 +85,11 @@ Whenever `apps-script/Code.gs` changes, paste the new code in and update the **e
 
 (If you click "New deployment" instead, you'll get a *new* URL and would have to paste it into `index.html` again.)
 
-> **Song request update:** the RSVP form now asks "Which song gets you on the dance floor?". Do the 5 steps above once so your Sheet saves it. If your RSVPs tab already has a header row, a **Song request** column is added at the far right, so older rows stay exactly as they are. On a brand-new Sheet it appears right after **Staying the night**. Until you redeploy, RSVPs still save, just without the song.
+> **If you set up the Sheet before 18 Nov 2026:** paste in the latest `apps-script/Code.gs` and redeploy (the 5 steps above). It saves the song request, and saves the RSVP stay choice as text ("No thanks", "Resort room" or "Glamping tent") instead of Yes/No. If your RSVPs tab already has a header row, a **Song request** column is added at the far right, so older rows stay exactly as they are. If you haven't set up the Sheet yet, just use the latest file and there's nothing extra to do.
 
 ### Reading your RSVPs
 - **RSVPs tab:** one row per reply, newest at the bottom, with the time in Singapore time.
-- **Summary tab:** a live count of people attending, plus ones, children, the **total guests** figure, who's interested in staying the night, how many singles opted in, and a list of everyone's dietary needs.
+- **Summary tab:** a live count of people attending, plus ones, children, the **total guests** figure, how many want a resort room and how many a glamping tent, how many singles opted in, and a list of everyone's dietary needs.
 - If someone RSVPs twice (for example to change their answer), you'll see two rows. Just use the latest one and delete the older row.
 
 ---
@@ -129,6 +133,8 @@ Open `index.html`, search for `const CONFIG`, and fill in or check each line. Ke
 - [ ] **`kids`**: your children policy.
 - [ ] **`photos`** and **`hashtag`**: your photo wording and wedding hashtag, e.g. `"#AbsoLEEwed"`.
 - [ ] **`parkingNote`** (optional): e.g. whether you'll validate parking.
+- [ ] **`venueRoom`**: the ballroom name and level, e.g. `"Rainforest Ballroom, Level 1"` (shown in bold under "The venue").
+- [ ] **`stay`**: who guests contact about resort rooms (Joshua) and glamping (Rochelle). Add a WhatsApp number to either and the name becomes a chat link.
 - [ ] Re-check the **bus timings** in the "Getting there" section closer to the day.
 
 - [ ] Add the four **story photos**, and write the story card text in **`CONFIG.story`** (Part D).
@@ -145,7 +151,7 @@ Then do a final test on your phone:
 
 Until you add photos, the site shows soft cream placeholders, so nothing looks broken.
 
-**"Our story" flip cards (in "How it all started")**
+**"Our story" flip cards**
 
 | Card | Photo | Title | Frame |
 |---|---|---|---|

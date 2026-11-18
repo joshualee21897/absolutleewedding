@@ -42,7 +42,7 @@ function doPost(e) {
       'Children (count)': going ? num_(d.kidsCount, 3) : 0,
       'Children ages': clean_(d.kidsAges),
       'Dietary': clean_(d.dietary),
-      'Staying the night': yesNo(d.stay),
+      'Staying the night': clean_(d.stay) || 'No thanks',          // No thanks / Resort room / Glamping tent
       'Song request': clean_(d.song),
       'Singles opt-in': yesNo(d.singles),
       'Singles: 3 words': clean_(d.singlesWords),
@@ -113,9 +113,9 @@ function ensureSheets_() {
       ['Plus ones', '=SUMIF(' + r + D + '2:' + D + ',"Yes",' + r + E + '2:' + E + ')'],
       ['Children', '=SUMIF(' + r + D + '2:' + D + ',"Yes",' + r + G + '2:' + G + ')'],
       ['TOTAL GUESTS (attending + plus ones + children)', '=B3+B5+B6'],
-      ['Interested in staying the night', '=COUNTIFS(' + r + D + '2:' + D + ',"Yes",' + r + J + '2:' + J + ',"Yes")'],
+      ['Staying over: resort room', '=COUNTIFS(' + r + D + '2:' + D + ',"Yes",' + r + J + '2:' + J + ',"Resort room")'],
+      ['Staying over: glamping tent', '=COUNTIFS(' + r + D + '2:' + D + ',"Yes",' + r + J + '2:' + J + ',"Glamping tent")'],
       ['Singles opted in (with consent)', '=COUNTIFS(' + r + K + '2:' + K + ',"Yes",' + r + O + '2:' + O + ',"Yes")'],
-      ['', ''],
       ['Dietary needs (name → need)', '']
     ];
     s.getRange(1, 1, rows.length, 2).setValues(rows);
